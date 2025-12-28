@@ -1,0 +1,257 @@
+﻿@model Grade
+@{
+    ViewData["Title"] = "Add Grade";
+    var student = ViewBag.Student as StudentProfile;
+}
+
+<div class="container-fluid px-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card card-teacher">
+                <div class="card-header teacher-gradient-bg text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        Add Grade
+                        @if (student != null)
+                        {
+                            <span class="opacity-75">- @student.FullName (@student.StudentId)</span>
+                        }
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddGrade" method="post" id="gradeForm">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="StudentId" />
+                        <input type="hidden" asp-for="StudentName" />
+
+                        <!-- Student Info Card -->
+                        @if (student != null)
+                        {
+                            <div class="card bg-light mb-4">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-auto">
+                                            <img src="@student.AvatarUrl"
+                                                 class="rounded-circle"
+                                                 style="width: 60px; height: 60px; object-fit: cover;"
+                                                 onerror="this.src='/images/default-avatar.png'">
+                                        </div>
+                                        <div class="col">
+                                            <h6 class="mb-1">@student.FullName</h6>
+                                            <p class="text-muted small mb-0">
+                                                <i class="fas fa-id-card me-1"></i>@student.StudentId
+                                                <span class="mx-2">•</span>
+                                                <i class="fas fa-school me-1"></i>Grade @student.GradeLevel - @student.ClassId
+                                            </p>
+                                            <p class="text-muted small mb-0">
+                                                Current GPA: <strong>@student.GPA.ToString("0.00")</strong>
+                                                <span class="mx-2">•</span>
+                                                Attendance: <strong>@student.AttendancePercentage%</strong>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Grade Details -->
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Subject" class="form-label">Subject *</label>
+                                <select asp-for="Subject" class="form-select" required>
+                                    <option value="">Select Subject</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                    <option value="Science">Science</option>
+                                    <option value="English">English</option>
+                                    <option value="History">History</option>
+                                    <option value="Geography">Geography</option>
+                                    <option value="Physics">Physics</option>
+                                    <option value="Chemistry">Chemistry</option>
+                                    <option value="Biology">Biology</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Art">Art</option>
+                                    <option value="Music">Music</option>
+                                    <option value="Physical Education">Physical Education</option>
+                                </select>
+                                <span asp-validation-for="Subject" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label asp-for="Term" class="form-label">Term *</label>
+                                <select asp-for="Term" class="form-select" required>
+                                    <option value="First">First Term</option>
+                                    <option value="Second">Second Term</option>
+                                    <option value="Third">Third Term</option>
+                                    <option value="Final">Final</option>
+                                </select>
+                                <span asp-validation-for="Term" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label asp-for="Year" class="form-label">Year *</label>
+                                <input asp-for="Year" class="form-control"
+                                       value="@DateTime.Now.Year"
+                                       min="2000" max="@(DateTime.Now.Year + 1)" required />
+                                <span asp-validation-for="Year" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Scores -->
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label asp-for="Test1" class="form-label">Test 1 (25%)</label>
+                                <input asp-for="Test1" class="form-control score-input"
+                                       type="number" step="0.01" min="0" max="25"
+                                       placeholder="0-25" oninput="calculateTotal()" />
+                                <div class="form-text">Out of 25</div>
+                                <span asp-validation-for="Test1" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label asp-for="Test2" class="form-label">Test 2 (25%)</label>
+                                <input asp-for="Test2" class="form-control score-input"
+                                       type="number" step="0.01" min="0" max="25"
+                                       placeholder="0-25" oninput="calculateTotal()" />
+                                <div class="form-text">Out of 25</div>
+                                <span asp-validation-for="Test2" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label asp-for="Exam" class="form-label">Exam (40%)</label>
+                                <input asp-for="Exam" class="form-control score-input"
+                                       type="number" step="0.01" min="0" max="40"
+                                       placeholder="0-40" oninput="calculateTotal()" />
+                                <div class="form-text">Out of 40</div>
+                                <span asp-validation-for="Exam" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label asp-for="Assignment" class="form-label">Assignment (10%)</label>
+                                <input asp-for="Assignment" class="form-control score-input"
+                                       type="number" step="0.01" min="0" max="10"
+                                       placeholder="0-10" oninput="calculateTotal()" />
+                                <div class="form-text">Out of 10</div>
+                                <span asp-validation-for="Assignment" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Total Score Preview -->
+                        <div class="card bg-light mt-4">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <h6 class="mb-0">Total Score</h6>
+                                        <small class="text-muted">Calculated automatically</small>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <div class="d-flex align-items-center justify-content-end">
+                                            <div class="me-3 text-center">
+                                                <div class="display-6 fw-bold" id="totalScoreDisplay">0</div>
+                                                <small class="text-muted">Out of 100</small>
+                                            </div>
+                                            <div>
+                                                <span class="badge bg-secondary fs-6" id="gradeLetterDisplay">F</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <label asp-for="Remarks" class="form-label">Remarks (Optional)</label>
+                            <textarea asp-for="Remarks" class="form-control" rows="3"
+                                      placeholder="Add any comments or remarks about this grade..."></textarea>
+                            <span asp-validation-for="Remarks" class="text-danger"></span>
+                        </div>
+
+                        <!-- Hidden Fields -->
+                        <input type="hidden" asp-for="TotalScore" id="totalScoreInput" />
+                        <input type="hidden" asp-for="GradeLetter" id="gradeLetterInput" />
+                        <input type="hidden" asp-for="DateRecorded" value="@DateTime.UtcNow" />
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/Teacher/ViewStudent/@Model.StudentId" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Profile
+                            </a>
+                            <div>
+                                <button type="reset" class="btn btn-secondary me-2">
+                                    <i class="fas fa-redo me-1"></i>Reset
+                                </button>
+                                <button type="submit" class="btn btn-teacher-primary">
+                                    <i class="fas fa-save me-1"></i>Save Grade
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function calculateTotal() {
+            const test1 = parseFloat($('#Test1').val()) || 0;
+            const test2 = parseFloat($('#Test2').val()) || 0;
+            const exam = parseFloat($('#Exam').val()) || 0;
+            const assignment = parseFloat($('#Assignment').val()) || 0;
+
+            const total = test1 + test2 + exam + assignment;
+
+            // Update display
+            $('#totalScoreDisplay').text(total.toFixed(2));
+            $('#totalScoreInput').val(total);
+
+            // Calculate grade letter
+            let gradeLetter = 'F';
+            if (total >= 90) gradeLetter = 'A';
+            else if (total >= 80) gradeLetter = 'B';
+            else if (total >= 70) gradeLetter = 'C';
+            else if (total >= 60) gradeLetter = 'D';
+
+            // Update grade letter display
+            $('#gradeLetterDisplay').text(gradeLetter).removeClass().addClass('badge');
+
+            // Add appropriate class based on grade
+            if (gradeLetter === 'A' || gradeLetter === 'B') {
+                $('#gradeLetterDisplay').addClass('badge-present');
+            } else if (gradeLetter === 'C') {
+                $('#gradeLetterDisplay').addClass('badge-late');
+            } else {
+                $('#gradeLetterDisplay').addClass('badge-absent');
+            }
+
+            $('#gradeLetterInput').val(gradeLetter);
+        }
+
+        $(document).ready(function() {
+            // Calculate on page load
+            calculateTotal();
+
+            // Validate form before submit
+            $('#gradeForm').on('submit', function(e) {
+                const total = parseFloat($('#totalScoreInput').val()) || 0;
+                if (total > 100) {
+                    e.preventDefault();
+                    alert('Total score cannot exceed 100. Please check your scores.');
+                    return false;
+                }
+
+                if (total === 0) {
+                    if (!confirm('Total score is 0. Are you sure you want to submit?')) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+        });
+    </script>
+}

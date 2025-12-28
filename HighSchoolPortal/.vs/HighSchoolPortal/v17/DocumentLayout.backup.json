@@ -1,0 +1,695 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\firebase-service-account.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\firebase-service-account.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\profile\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\profile\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\teacher\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\teacher\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\controllers\\teachercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\controllers\\teachercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\teacher\\recordattendance.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\teacher\\recordattendance.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\teacher\\addgrade.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\teacher\\addgrade.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\teacher\\viewstudent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\teacher\\viewstudent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\teacher\\mystudents.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\teacher\\mystudents.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\wwwroot\\css\\teacher-theme.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\wwwroot\\css\\teacher-theme.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\models\\studentprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\models\\studentprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\models\\grade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\models\\grade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\models\\class.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\models\\class.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\models\\authmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\models\\authmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\models\\attendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\models\\attendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\models\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\models\\userprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\services\\firebaseschoolservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\services\\firebaseschoolservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\services\\firebaseauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\services\\firebaseauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\models\\teacherprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\models\\teacherprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\auth\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\auth\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\auth\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\auth\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\interfaces\\ifirebaseschoolservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\interfaces\\ifirebaseschoolservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\home\\chooserole.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\home\\chooserole.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\highschoolportal.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\highschoolportal.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\controllers\\hrcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\controllers\\hrcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\hr\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\hr\\dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\interfaces\\ifirebaseauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\interfaces\\ifirebaseauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\auth\\forgotpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\auth\\forgotpassword.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\hr\\managestudents.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\hr\\managestudents.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\views\\hr\\generatereport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\views\\hr\\generatereport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|c:\\users\\princ\\source\\repos\\highschoolportal\\highschoolportal\\wwwroot\\images\\default-avatar.png||{177559E0-D141-11D0-92DF-00A0C9138C45}",
+      "RelativeMoniker": "D:0:0:{8D1F0F2A-B38F-4A8F-BAA2-99FE9E114F32}|HighSchoolPortal\\HighSchoolPortal.csproj|solutionrelative:highschoolportal\\wwwroot\\images\\default-avatar.png||{177559E0-D141-11D0-92DF-00A0C9138C45}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 10,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TeacherController.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\TeacherController.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Controllers\\TeacherController.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\TeacherController.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Controllers\\TeacherController.cs",
+              "ViewState": "AgIAAFkBAAAAAAAAAAAcwG4BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:51:12.574Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Profile\\Index.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Profile\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Profile\\Index.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Profile\\Index.cshtml",
+              "ViewState": "AgIAAK4AAAAAAAAAAAAAALsAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-28T21:35:27.516Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\appsettings.json",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\appsettings.json",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\appsettings.json",
+              "RelativeToolTip": "HighSchoolPortal\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-24T18:39:15.797Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "firebase-service-account.json",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\firebase-service-account.json",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\firebase-service-account.json",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\firebase-service-account.json",
+              "RelativeToolTip": "HighSchoolPortal\\firebase-service-account.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-26T11:01:15.176Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Teacher\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\Dashboard.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Teacher\\Dashboard.cshtml",
+              "ViewState": "AgIAAIwBAAAAAAAAAAAcwKwBAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T18:09:31.199Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ProfileController.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\ProfileController.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Controllers\\ProfileController.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\ProfileController.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Controllers\\ProfileController.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAYwA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-28T21:34:10.584Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "RecordAttendance.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\RecordAttendance.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Teacher\\RecordAttendance.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\RecordAttendance.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Teacher\\RecordAttendance.cshtml",
+              "ViewState": "AgIAANwBAAAAAAAAAAAiwOQBAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-28T21:11:50.626Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AddGrade.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\AddGrade.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Teacher\\AddGrade.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\AddGrade.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Teacher\\AddGrade.cshtml",
+              "ViewState": "AgIAALQAAAAAAAAAAAAYwAABAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-28T21:10:19.541Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAGQCAAAAAAAAAAAAwG8CAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T18:05:42.337Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "HighSchoolPortal\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAFYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-12-28T21:09:23.456Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ViewStudent.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\ViewStudent.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Teacher\\ViewStudent.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\ViewStudent.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Teacher\\ViewStudent.cshtml",
+              "ViewState": "AgIAAEgBAAAAAAAAAAAYwHMBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-28T21:08:20.793Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "MyStudents.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\MyStudents.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Teacher\\MyStudents.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\MyStudents.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Teacher\\MyStudents.cshtml",
+              "ViewState": "AgIAAE8AAAAAAAAAAAAYwGMAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T18:11:43.181Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "teacher-theme.css",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\css\\teacher-theme.css",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\wwwroot\\css\\teacher-theme.css",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\css\\teacher-theme.css",
+              "RelativeToolTip": "HighSchoolPortal\\wwwroot\\css\\teacher-theme.css",
+              "ViewState": "AgIAAPEAAAAAAAAAAAAAAB0BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-12-28T21:00:43.744Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "StudentProfile.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\StudentProfile.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Models\\StudentProfile.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\StudentProfile.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Models\\StudentProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:38:55.11Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Grade.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\Grade.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Models\\Grade.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\Grade.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Models\\Grade.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAkwCYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:41:36.154Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Class.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\Class.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Models\\Class.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\Class.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Models\\Class.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:42:37.14Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "AuthModels.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\AuthModels.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Models\\AuthModels.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\AuthModels.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Models\\AuthModels.cs",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAUwF0AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:43:25.738Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Attendance.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\Attendance.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Models\\Attendance.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\Attendance.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Models\\Attendance.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:41:54.969Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "UserProfile.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\UserProfile.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Models\\UserProfile.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\UserProfile.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Models\\UserProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:39:48.414Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "FirebaseSchoolService.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Services\\FirebaseSchoolService.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Services\\FirebaseSchoolService.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Services\\FirebaseSchoolService.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Services\\FirebaseSchoolService.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAwAUFAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:49:55.286Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "FirebaseAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Services\\FirebaseAuthService.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Services\\FirebaseAuthService.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Services\\FirebaseAuthService.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Services\\FirebaseAuthService.cs",
+              "ViewState": "AgIAABICAAAAAAAAAAAAADoCAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:49:09.444Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "TeacherProfile.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\TeacherProfile.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Models\\TeacherProfile.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Models\\TeacherProfile.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Models\\TeacherProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:40:32.202Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\Login.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Auth\\Login.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\Login.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Auth\\Login.cshtml",
+              "ViewState": "AgIAAKYAAAAAAAAAAAAiwMQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T18:59:48.831Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\Register.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Auth\\Register.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\Register.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Auth\\Register.cshtml",
+              "ViewState": "AgIAAB8BAAAAAAAAAAAiwD0BAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T19:01:19.359Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAABIBAAAAAAAAAAAUwCABAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:50:42.583Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "HighSchoolPortal.csproj",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\HighSchoolPortal.csproj",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj",
+              "RelativeToolTip": "HighSchoolPortal\\HighSchoolPortal.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-24T17:30:26.201Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "HRController.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\HRController.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Controllers\\HRController.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\HRController.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Controllers\\HRController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUBAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:56:39.686Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "IFirebaseSchoolService.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Interfaces\\IFirebaseSchoolService.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Interfaces\\IFirebaseSchoolService.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Interfaces\\IFirebaseSchoolService.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Interfaces\\IFirebaseSchoolService.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAwB8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:46:00.615Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "ChooseRole.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Home\\ChooseRole.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Home\\ChooseRole.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Home\\ChooseRole.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Home\\ChooseRole.cshtml",
+              "ViewState": "AgIAAN0AAAAAAAAAAAAQwAgBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T19:11:42.675Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Program.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Program.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Program.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Program.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAIwFcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:30:11.594Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAANYAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T19:01:40.988Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\HR\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\Dashboard.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\HR\\Dashboard.cshtml",
+              "ViewState": "AgIAANkAAAAAAAAAAAAIwO8AAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T17:59:05.865Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T20:17:42.451Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "IFirebaseAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Interfaces\\IFirebaseAuthService.cs",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Interfaces\\IFirebaseAuthService.cs",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Interfaces\\IFirebaseAuthService.cs",
+              "RelativeToolTip": "HighSchoolPortal\\Interfaces\\IFirebaseAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-24T17:44:52.286Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "ForgotPassword.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\ForgotPassword.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\Auth\\ForgotPassword.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\ForgotPassword.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\Auth\\ForgotPassword.cshtml",
+              "ViewState": "AgIAADUAAAAAAAAAAAAAAFgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T19:10:15.905Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\_ViewStart.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-26T11:01:29.903Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "ManageStudents.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\ManageStudents.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\HR\\ManageStudents.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\ManageStudents.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\HR\\ManageStudents.cshtml",
+              "ViewState": "AgIAAIIAAAAAAAAAAAAIwJEAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T18:06:45.221Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "GenerateReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\GenerateReport.cshtml",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\Views\\HR\\GenerateReport.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\GenerateReport.cshtml",
+              "RelativeToolTip": "HighSchoolPortal\\Views\\HR\\GenerateReport.cshtml",
+              "ViewState": "AgIAAG0AAAAAAAAAAAAIwKYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T18:07:59.32Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "default-avatar.png -  [English (United Kingdom)] - PNG [225x225, 8 bit, PNG]",
+              "DocumentMoniker": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\images\\default-avatar.png",
+              "RelativeDocumentMoniker": "HighSchoolPortal\\wwwroot\\images\\default-avatar.png",
+              "ToolTip": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\images\\default-avatar.png -  [English (United Kingdom)] - PNG [225x225, 8 bit, PNG]",
+              "RelativeToolTip": "HighSchoolPortal\\wwwroot\\images\\default-avatar.png -  [English (United Kingdom)] - PNG [225x225, 8 bit, PNG]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2025-12-24T18:18:49.475Z",
+              "EditorCaption": " -  [English (United Kingdom)] - PNG [225x225, 8 bit, PNG]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

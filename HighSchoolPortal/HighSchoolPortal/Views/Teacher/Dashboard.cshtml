@@ -1,0 +1,430 @@
+﻿@{
+    ViewData["Title"] = "Teacher Dashboard";
+    var studentCount = ViewBag.StudentCount ?? 0;
+    var classCount = ViewBag.ClassCount ?? 0;
+    var subjectCount = ViewBag.SubjectCount ?? 0;
+}
+
+<div class="dashboard-header animate-fade-in">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-5 fw-bold mb-3">Welcome Back, <span class="teacher-gradient-text" id="dashboardName">Teacher</span>!</h1>
+                <p class="lead mb-0 text-white">Manage your classes, students, and academic activities</p>
+                <small class="opacity-75 text-white">
+                    <i class="fas fa-clock me-1"></i>
+                    Today: @DateTime.Now.ToString("dddd, MMMM dd, yyyy")
+                </small>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="position-relative">
+                    <i class="fas fa-chalkboard-teacher fa-7x opacity-25 text-white"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3 class="stat-number" id="studentCount">@ViewBag.StudentCount</h3>
+                    <p class="stat-label">My Students</p>
+                    <small class="text-muted">Total students in your classes</small>
+                    @if (ViewBag.StudentCount == 0)
+                    {
+                        <div class="mt-2">
+                            <small class="text-warning">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                No students assigned to your classes
+                            </small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <h3 class="stat-number">@ViewBag.ClassCount</h3>
+                    <p class="stat-label">My Classes</p>
+                    <small class="text-muted">Classes you're teaching</small>
+                    @if (ViewBag.ClassCount == 0)
+                    {
+                        <div class="mt-2">
+                            <small class="text-warning">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                No classes assigned to you
+                            </small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="stat-number">@ViewBag.SubjectCount</h3>
+                    <p class="stat-label">Subjects</p>
+                    <small class="text-muted">Subjects you teach</small>
+                    @if (ViewBag.SubjectCount == 0)
+                    {
+                        <div class="mt-2">
+                            <small class="text-warning">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                No subjects assigned to you
+                            </small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-5 animate-slide-up" style="animation-delay: 0.1s">
+        <div class="col-12">
+            <div class="card card-teacher">
+                <div class="card-header teacher-gradient-bg text-white">
+                    <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <a href="/Teacher/MyStudents" class="btn btn-teacher-primary w-100 py-4 d-flex flex-column align-items-center">
+                                <i class="fas fa-user-graduate fa-2x mb-3"></i>
+                                <span class="fw-bold">My Students</span>
+                                <small class="opacity-75">View all students</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="/Teacher/AddGrade" class="btn btn-teacher-secondary w-100 py-4 d-flex flex-column align-items-center">
+                                <i class="fas fa-graduation-cap fa-2x mb-3"></i>
+                                <span class="fw-bold">Add Grades</span>
+                                <small class="opacity-75">Record student grades</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="/Teacher/RecordAttendance" class="btn btn-teacher-primary w-100 py-4 d-flex flex-column align-items-center">
+                                <i class="fas fa-clipboard-check fa-2x mb-3"></i>
+                                <span class="fw-bold">Attendance</span>
+                                <small class="opacity-75">Mark attendance</small>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="#" class="btn btn-teacher-secondary w-100 py-4 d-flex flex-column align-items-center">
+                                <i class="fas fa-tasks fa-2x mb-3"></i>
+                                <span class="fw-bold">Assignments</span>
+                                <small class="opacity-75">Create assignments</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Classes & Upcoming Schedule -->
+    <div class="row animate-slide-up" style="animation-delay: 0.2s">
+        <div class="col-lg-8">
+            <div class="card card-teacher mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-calendar-day me-2"></i>Today's Schedule</h5>
+                    <a href="#" class="btn btn-sm btn-outline-primary">View Full Schedule</a>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-success"></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <h6 class="mb-0">Mathematics - Grade 10A</h6>
+                                    <span class="badge bg-success">In Progress</span>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>08:00 AM - 09:30 AM
+                                    <i class="fas fa-door-open ms-3 me-1"></i>Room 201
+                                    <i class="fas fa-users ms-3 me-1"></i>32 Students
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <h6 class="mb-0">Science - Grade 11B</h6>
+                                    <span class="badge bg-primary">Upcoming</span>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>10:00 AM - 11:30 AM
+                                    <i class="fas fa-flask ms-3 me-1"></i>Lab 3
+                                    <i class="fas fa-users ms-3 me-1"></i>28 Students
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-marker bg-primary"></div>
+                            <div class="timeline-content">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <h6 class="mb-0">Mathematics - Grade 9C</h6>
+                                    <span class="badge bg-primary">Upcoming</span>
+                                </div>
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>01:00 PM - 02:30 PM
+                                    <i class="fas fa-door-open ms-3 me-1"></i>Room 105
+                                    <i class="fas fa-users ms-3 me-1"></i>30 Students
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="card card-teacher">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-history me-2"></i>Recent Activities</h5>
+                </div>
+                <div class="card-body">
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon bg-info">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p class="mb-1">Added grades for <strong>John Smith</strong> in Mathematics</p>
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon bg-success">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p class="mb-1">Marked attendance for Grade 10A</p>
+                                <small class="text-muted">Yesterday, 8:30 AM</small>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon bg-warning">
+                                <i class="fas fa-comment-alt"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p class="mb-1">Posted announcement about upcoming exam</p>
+                                <small class="text-muted">2 days ago</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-lg-4">
+            <!-- Notifications -->
+            <div class="card card-teacher mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-bell me-2"></i>Notifications</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <small class="text-muted">2 hours ago</small>
+                            </div>
+                            <p class="mb-1"><i class="fas fa-exclamation-circle text-warning me-2"></i>Grade submission due for Term 1</p>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <small class="text-muted">Yesterday</small>
+                            </div>
+                            <p class="mb-1"><i class="fas fa-users text-info me-2"></i>Staff meeting at 3:00 PM</p>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <small class="text-muted">2 days ago</small>
+                            </div>
+                            <p class="mb-1"><i class="fas fa-user-plus text-success me-2"></i>New student added to Grade 10A</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="card card-teacher">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-link me-2"></i>Quick Links</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="#" class="btn btn-outline-primary text-start">
+                            <i class="fas fa-upload me-2"></i>Upload Study Materials
+                        </a>
+                        <a href="#" class="btn btn-outline-success text-start">
+                            <i class="fas fa-bullhorn me-2"></i>Post Announcement
+                        </a>
+                        <a href="#" class="btn btn-outline-info text-start">
+                            <i class="fas fa-chart-bar me-2"></i>View Class Performance
+                        </a>
+                        <a href="#" class="btn btn-outline-warning text-start">
+                            <i class="fas fa-file-pdf me-2"></i>Generate Reports
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+            .timeline::before {
+                content: '';
+                position: absolute;
+                left: 15px;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: #e9ecef;
+            }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -23px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+        }
+
+        .timeline-content {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: var(--radius-md);
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Load teacher data for dashboard
+            loadDashboardData();
+
+            // Load teacher name
+            $.ajax({
+                url: '/Teacher/GetCurrentTeacher',
+                type: 'GET',
+                success: function(data) {
+                    if (data && data.fullName) {
+                        $('#dashboardName').text(data.fullName.split(' ')[0]);
+                    }
+                }
+            });
+        });
+
+        function loadDashboardData() {
+            // Always refresh dashboard data to ensure it's current
+            $.ajax({
+                url: '/Teacher/GetDashboardData',
+                type: 'GET',
+                success: function(response) {
+                    if (response && response.success) {
+                        // Update student count
+                        $('#studentCount').text(response.studentCount || 0);
+
+                        // Remove warning messages if counts are no longer 0
+                        if (response.studentCount > 0) {
+                            $('#studentCount').siblings('.text-warning').remove();
+                        }
+
+                        // Update other counts if needed
+                        if (response.classCount > 0 && $('.stat-number').eq(1).text() == '0') {
+                            $('.stat-number').eq(1).text(response.classCount);
+                            $('.stat-number').eq(1).siblings('.text-warning').remove();
+                        }
+
+                        if (response.subjectCount > 0 && $('.stat-number').eq(2).text() == '0') {
+                            $('.stat-number').eq(2).text(response.subjectCount);
+                            $('.stat-number').eq(2).siblings('.text-warning').remove();
+                        }
+                    } else {
+                        console.error('Failed to load dashboard data:', response?.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error loading dashboard data:', error);
+                }
+            });
+        }
+
+        // Update time every minute
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            $('.current-time').text(timeString);
+        }
+
+        updateTime();
+        setInterval(updateTime, 60000);
+    </script>
+
+            
+        );
+   
+}

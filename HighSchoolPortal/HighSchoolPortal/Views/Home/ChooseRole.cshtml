@@ -1,0 +1,265 @@
+﻿@{
+    ViewData["Title"] = "Welcome";
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
+}
+
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="text-center mb-5 animate-fade-in">
+        <div class="d-flex justify-content-center mb-4">
+            <div class="feature-icon" style="width: 100px; height: 100px; background: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);">
+                <i class="fas fa-school fa-3x text-white"></i>
+            </div>
+        </div>
+        <h1 class="display-5 fw-bold mb-3">
+            Welcome to <span class="text-gradient">StaffPortal</span>
+        </h1>
+        <p class="lead text-muted mb-4">
+            Your digital gateway to school staff management and resources.
+            Choose your role to get started.
+        </p>
+    </div>
+
+    <!-- Role Selection Cards -->
+    <div class="row g-4 justify-content-center">
+        <!-- Teacher Card -->
+        <div class="col-md-6">
+            <div class="card h-100 hover-lift animate-fade-in" style="animation-delay: 0.1s;">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-4" style="background: linear-gradient(135deg, #06d6a0 0%, #1b9aaa 100%);">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Teacher</h3>
+                    <p class="text-muted mb-4">For teaching staff to manage classes and students</p>
+
+                    <ul class="list-unstyled text-start mb-4">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Manage student grades
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Record attendance
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Upload study materials
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            View class performance
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Communicate with students
+                        </li>
+                    </ul>
+
+                    <div class="mt-4">
+                        <a href="/Auth/Login?role=teacher" class="btn btn-success w-100 mb-2">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login as Teacher
+                        </a>
+                        <a href="/Auth/Register?role=teacher" class="btn btn-outline-success w-100">
+                            <i class="fas fa-chalkboard-teacher me-2"></i>Register as Teacher
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HR Card -->
+        <div class="col-md-6">
+            <div class="card h-100 hover-lift animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon mb-4" style="background: linear-gradient(135deg, #f72585 0%, #7209b7 100%);">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">HR Staff</h3>
+                    <p class="text-muted mb-4">For administrative staff management</p>
+
+                    <ul class="list-unstyled text-start mb-4">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Manage staff records
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Handle teacher information
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Generate reports
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Monitor school statistics
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Administrative controls
+                        </li>
+                    </ul>
+
+                    <div class="mt-4">
+                        <a href="/Auth/Login?role=hr" class="btn btn-primary w-100 mb-2">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login as HR
+                        </a>
+                        <a href="/Auth/Register?role=hr" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-user-tie me-2"></i>Register as HR
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Already Logged In Section -->
+    @if (isAuthenticated)
+    {
+        <div class="card mt-5 animate-fade-in" style="animation-delay: 0.3s;">
+            <div class="card-body text-center p-5">
+                <h3 class="mb-3">Welcome back, @User.Identity?.Name!</h3>
+                <p class="text-muted mb-4">You're already logged in. Go to your dashboard to continue.</p>
+                @{
+                    var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+                    var dashboardUrl = userRole == "hr" ? "/HR/Dashboard" : "/Teacher/Dashboard";
+                }
+                <a href="@dashboardUrl" class="btn btn-primary px-4">
+                    <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                </a>
+            </div>
+        </div>
+    }
+
+    <!-- Features Comparison -->
+    <div class="card mt-5 animate-fade-in" style="animation-delay: 0.4s;">
+        <div class="card-header text-center">
+            <h5 class="mb-0">Staff Features Comparison</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th class="text-center">Teacher</th>
+                            <th class="text-center">HR Staff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>View Grades</td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>View Attendance</td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Add Grades</td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Record Attendance</td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Manage Users</td>
+                            <td class="text-center"><i class="fas fa-times text-danger"></i></td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Generate Reports</td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                        <tr>
+                            <td>Upload Materials</td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                            <td class="text-center"><i class="fas fa-times text-danger"></i></td>
+                        </tr>
+                        <tr>
+                            <td>System Configuration</td>
+                            <td class="text-center"><i class="fas fa-times text-danger"></i></td>
+                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .hover-lift {
+            transition: var(--transition);
+        }
+
+            .hover-lift:hover {
+                transform: translateY(-10px);
+                box-shadow: var(--shadow-hover);
+            }
+
+        .list-unstyled li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+            .list-unstyled li:last-child {
+                border-bottom: none;
+            }
+
+        .table th {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+        }
+
+        .table tbody tr {
+            transition: var(--transition);
+        }
+
+            .table tbody tr:hover {
+                background: rgba(67, 97, 238, 0.05);
+            }
+
+        .feature-icon-sm {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Add animation to cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Add click effect to role cards
+            const roleCards = document.querySelectorAll('.card.hover-lift');
+            roleCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('a')) {
+                        const link = this.querySelector('.btn:not(.btn-outline)');
+                        if (link) {
+                            window.location.href = link.href;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

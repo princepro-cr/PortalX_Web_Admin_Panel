@@ -1,0 +1,242 @@
+﻿@model IEnumerable<StudentProfile>
+@{
+    ViewData["Title"] = "Manage Students";
+    var totalStudents = Model.Count();
+    var activeStudents = Model.Count(s => s.IsActive);
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gradient">Manage Students</h1>
+            <p class="text-muted mb-0">Total: @totalStudents students | Active: @activeStudents</p>
+        </div>
+        <a href="/HR/AddStudent" class="btn btn-primary">
+            <i class="fas fa-user-plus me-2"></i>Add New Student
+        </a>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Search by name or ID..." id="searchInput">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="gradeFilter">
+                        <option value="">All Grades</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                        <option value="11">Grade 11</option>
+                        <option value="12">Grade 12</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-secondary w-100" onclick="resetFilters()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Student List</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover" id="studentsTable">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Grade</th>
+                                <th>Class</th>
+                                <th>Parent</th>
+                                <th>GPA</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model)
+                            {
+                                <tr data-grade="@student.GradeLevel" data-status="@(student.IsActive ? "active" : "inactive")">
+                                    <td><strong>@student.StudentId</strong></td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="@student.AvatarUrl"
+                                                 class="rounded-circle me-2"
+                                                 style="width: 36px; height: 36px;"
+                                                 onerror="this.src='/images/default-avatar.png'">
+                                            <div>
+                                                <div class="fw-bold">@student.FullName</div>
+                                                <small class="text-muted">@student.Phone</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@student.Email</td>
+                                    <td><span class="badge bg-secondary">Grade @student.GradeLevel</span></td>
+                                    <td>@student.ClassId</td>
+                                    <td>@student.ParentName</td>
+                                   @*  <td>
+                                        <span class="badge @(student.GPA >= 3.5 ? "bg-success" : student.GPA >= 2.5 ? "bg-warning" : "bg-danger")">
+                                            @student.GPA.ToString("0.00")
+                                        </span>
+                                    </td> *@
+                                    <td>
+                                        <span class="badge @(student.IsActive ? "bg-success" : "bg-danger")">
+                                            <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+                                            @(student.IsActive ? "Active" : "Inactive")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a href="/HR/ViewStudent/@student.Id"
+                                               class="btn btn-sm btn-info"
+                                               title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="/HR/EditStudent/@student.Id"
+                                               class="btn btn-sm btn-warning"
+                                               title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <form method="post"
+                                                  action="/HR/DeleteStudent/@student.Id"
+                                                  onsubmit="return confirmDelete('@student.FullName')"
+                                                  class="d-inline">
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-danger"
+                                                        title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Statistics Summary -->
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted">Grade 9</h6>
+                                <h4>@Model.Count(s => s.GradeLevel == "9")</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted">Grade 10</h6>
+                                <h4>@Model.Count(s => s.GradeLevel == "10")</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted">Grade 11</h6>
+                                <h4>@Model.Count(s => s.GradeLevel == "11")</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted">Grade 12</h6>
+                                <h4>@Model.Count(s => s.GradeLevel == "12")</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-user-graduate fa-4x text-muted mb-3"></i>
+                    <h5 class="text-muted">No Students Found</h5>
+                    <p class="text-muted mb-4">Start by adding students to your school</p>
+                    <a href="/HR/AddStudent" class="btn btn-primary">
+                        <i class="fas fa-user-plus me-2"></i>Add First Student
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmDelete(studentName) {
+            return confirm(`Are you sure you want to delete "${studentName}"?\nThis action cannot be undone.`);
+        }
+
+        // Filter functionality
+        document.getElementById('searchInput').addEventListener('keyup', filterStudents);
+        document.getElementById('gradeFilter').addEventListener('change', filterStudents);
+        document.getElementById('statusFilter').addEventListener('change', filterStudents);
+
+        function filterStudents() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const gradeFilter = document.getElementById('gradeFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            const rows = document.querySelectorAll('#studentsTable tbody tr');
+
+            rows.forEach(row => {
+                const name = row.cells[1].textContent.toLowerCase();
+                const studentId = row.cells[0].textContent.toLowerCase();
+                const grade = row.getAttribute('data-grade');
+                const status = row.getAttribute('data-status');
+
+                let show = true;
+
+                // Search filter
+                if (searchTerm && !name.includes(searchTerm) && !studentId.includes(searchTerm)) {
+                    show = false;
+                }
+
+                // Grade filter
+                if (gradeFilter && grade !== gradeFilter) {
+                    show = false;
+                }
+
+                // Status filter
+                if (statusFilter && status !== statusFilter) {
+                    show = false;
+                }
+
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('gradeFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            filterStudents();
+        }
+    </script>
+}

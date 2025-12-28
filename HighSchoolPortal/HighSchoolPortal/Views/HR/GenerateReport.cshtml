@@ -1,0 +1,167 @@
+﻿@{
+    ViewData["Title"] = "Generate Reports";
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gradient">Generate Reports</h1>
+            <p class="text-muted mb-0">Create and download school reports</p>
+        </div>
+    </div>
+
+    <!-- Report Types -->
+    <div class="row g-4">
+        <!-- Statistics Report -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header text-center">
+                    <i class="fas fa-chart-pie fa-3x text-primary mb-3"></i>
+                    <h5>Statistics Report</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Overview of school statistics including student counts, grades, and attendance.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Student demographics</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Grade distribution</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Attendance rates</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Teacher statistics</li>
+                    </ul>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/HR/GenerateReport?reportType=statistics" class="btn btn-primary w-100">
+                        <i class="fas fa-download me-2"></i>Generate Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade Report -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header text-center">
+                    <i class="fas fa-graduation-cap fa-3x text-success mb-3"></i>
+                    <h5>Grade Report</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Detailed grade reports for classes, terms, and individual students.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Class performance</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Term-wise grades</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Subject analysis</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Individual progress</li>
+                    </ul>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/HR/GenerateReport?reportType=grades" class="btn btn-success w-100">
+                        <i class="fas fa-download me-2"></i>Generate Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Report -->
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header text-center">
+                    <i class="fas fa-calendar-check fa-3x text-info mb-3"></i>
+                    <h5>Attendance Report</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Attendance records and patterns for students and classes.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Daily attendance</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Monthly summaries</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Absence patterns</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Attendance trends</li>
+                    </ul>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="/HR/GenerateReport?reportType=attendance" class="btn btn-info w-100">
+                        <i class="fas fa-download me-2"></i>Generate Report
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Reports -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-bolt me-2"></i>Quick Reports</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                            <h6>Student List</h6>
+                            <p class="small text-muted">Complete student directory</p>
+                            <button class="btn btn-sm btn-outline-primary" onclick="exportStudentList()">
+                                <i class="fas fa-file-excel me-1"></i>Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chalkboard-teacher fa-2x text-success mb-3"></i>
+                            <h6>Teacher List</h6>
+                            <p class="small text-muted">Teaching staff directory</p>
+                            <button class="btn btn-sm btn-outline-success" onclick="exportTeacherList()">
+                                <i class="fas fa-file-excel me-1"></i>Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <i class="fas fa-school fa-2x text-info mb-3"></i>
+                            <h6>Class List</h6>
+                            <p class="small text-muted">All class information</p>
+                            <button class="btn btn-sm btn-outline-info" onclick="exportClassList()">
+                                <i class="fas fa-file-excel me-1"></i>Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-line fa-2x text-warning mb-3"></i>
+                            <h6>Performance</h6>
+                            <p class="small text-muted">Academic performance</p>
+                            <button class="btn btn-sm btn-outline-warning" onclick="exportPerformance()">
+                                <i class="fas fa-file-excel me-1"></i>Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function exportStudentList() {
+            alert('Exporting student list...');
+            // Implement export functionality
+        }
+
+        function exportTeacherList() {
+            alert('Exporting teacher list...');
+        }
+
+        function exportClassList() {
+            alert('Exporting class list...');
+        }
+
+        function exportPerformance() {
+            alert('Exporting performance data...');
+        }
+    </script>
+}

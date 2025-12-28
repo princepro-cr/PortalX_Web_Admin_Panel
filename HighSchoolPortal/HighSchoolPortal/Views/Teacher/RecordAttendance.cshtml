@@ -1,0 +1,507 @@
+﻿@model List<Attendance>
+@{
+    ViewData["Title"] = "Record Attendance";
+    var classId = ViewBag.ClassId as string;
+    var availableClasses = ViewBag.AvailableClasses as List<string> ?? new List<string>();
+    var classStudents = ViewBag.ClassStudents as List<StudentProfile> ?? new List<StudentProfile>();
+}
+
+<div class="container-fluid px-4">
+    <!-- Header with Class Selector -->
+    <div class="card card-teacher mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="h2 mb-1 teacher-gradient-text">Record Attendance</h1>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-calendar-day me-1"></i>
+                        Date: @DateTime.Today.ToString("dddd, MMMM dd, yyyy")
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center justify-content-end">
+                        <label class="me-2 mb-0">Select Class:</label>
+                        <select class="form-select w-auto" id="classSelector" onchange="changeClass(this.value)">
+                            <option value="">-- Select a Class --</option>
+                            @foreach (var cls in availableClasses)
+                            {
+                                <option value="@cls" selected="@(cls == classId)">@cls</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(classId))
+    {
+        <!-- Quick Actions -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h5 class="mb-0">
+                    <i class="fas fa-school me-2"></i>
+                    Class: <span class="text-primary">@classId</span>
+                    <span class="badge bg-light text-dark ms-2">@Model.Count students</span>
+                </h5>
+            </div>
+            <div>
+                <button type="button" class="btn btn-outline-primary me-2" onclick="markAll('Present')">
+                    <i class="fas fa-check-circle me-1"></i>Mark All Present
+                </button>
+                <button type="button" class="btn btn-outline-warning me-2" onclick="markAll('Late')">
+                    <i class="fas fa-clock me-1"></i>Mark All Late
+                </button>
+                <button type="button" class="btn btn-outline-danger" onclick="markAll('Absent')">
+                    <i class="fas fa-times-circle me-1"></i>Mark All Absent
+                </button>
+            </div>
+        </div>
+
+        <div class="card card-teacher">
+            <div class="card-header teacher-gradient-bg text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-users me-2"></i>
+                    Class Attendance - @classId
+                </h5>
+            </div>
+
+            <form asp-action="RecordAttendance" method="post" id="attendanceForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="classId" value="@classId" />
+
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <!-- Attendance Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">#</th>
+                                        <th>Student</th>
+                                        <th>Student ID</th>
+                                        <th style="width: 150px;">Status</th>
+                                        <th>Remarks</th>
+                                        <th style="width: 180px;">Quick Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        var attendance = Model[i];
+                                        var student = classStudents.FirstOrDefault(s => s.Id == attendance.StudentId);
+
+                                        <tr class="attendance-row">
+                                            <td>@(i + 1)</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="@(student?.AvatarUrl ?? "/images/default-avatar.png")"
+                                                         class="rounded-circle me-2"
+                                                         style="width: 40px; height: 40px; object-fit: cover;"
+                                                         onerror="this.src='/images/default-avatar.png'">
+                                                    <div>
+                                                        <strong>@attendance.StudentName</strong>
+                                                        @if (student != null)
+                                                        {
+                                                            <br>
+                                                            <small class="text-muted">
+                                                                GPA: @student.GPA.ToString("0.00") |
+                                                                Att: @student.AttendancePercentage%
+                                                            </small>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="[@i].StudentId" value="@attendance.StudentId" />
+                                                <input type="hidden" name="[@i].StudentName" value="@attendance.StudentName" />
+                                                <input type="hidden" name="[@i].ClassId" value="@classId" />
+                                                <input type="hidden" name="[@i].ClassName" value="Grade @classId" />
+                                                <input type="hidden" name="[@i].Date" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                            </td>
+                                            <td>
+                                                @if (student != null)
+                                                {
+                                                    <span class="badge bg-secondary">@student.StudentId</span>
+                                                }
+                                                else
+                                                {
+                                                    <small class="text-muted">N/A</small>
+                                                }
+                                            </td>
+                                            <td>
+                                                <select name="[@i].Status" class="form-select status-select"
+                                                        data-index="@i" onchange="updateStatus(this)">
+                                                    <option value="Present" selected>✅ Present</option>
+                                                    <option value="Absent">❌ Absent</option>
+                                                    <option value="Late">⏰ Late</option>
+                                                    <option value="Excused">📝 Excused</option>
+                                                </select>
+                                                <div class="status-badge mt-1"></div>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="[@i].Remarks"
+                                                       class="form-control remarks-input"
+                                                       placeholder="e.g., Doctor's note, Family emergency..."
+                                                       maxlength="100">
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <button type="button" class="btn btn-success" onclick="setStatus(@i, 'Present')">
+                                                        <i class="fas fa-check"></i> Present
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger" onclick="setStatus(@i, 'Absent')">
+                                                        <i class="fas fa-times"></i> Absent
+                                                    </button>
+                                                    <button type="button" class="btn btn-warning" onclick="setStatus(@i, 'Late')">
+                                                        <i class="fas fa-clock"></i> Late
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Attendance Summary -->
+                        <div class="card bg-light mt-4">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h6 class="mb-3">Attendance Summary</h6>
+                                        <div class="row text-center">
+                                            <div class="col-3">
+                                                <div class="mb-2">
+                                                    <span class="badge badge-present fs-6 d-block mb-1">Present</span>
+                                                    <strong id="presentCount" class="fs-4">@Model.Count</strong>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-2">
+                                                    <span class="badge badge-absent fs-6 d-block mb-1">Absent</span>
+                                                    <strong id="absentCount" class="fs-4">0</strong>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-2">
+                                                    <span class="badge badge-late fs-6 d-block mb-1">Late</span>
+                                                    <strong id="lateCount" class="fs-4">0</strong>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="mb-2">
+                                                    <span class="badge badge-excused fs-6 d-block mb-1">Excused</span>
+                                                    <strong id="excusedCount" class="fs-4">0</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <div class="mb-2">
+                                                <small class="text-muted d-block">Total Students</small>
+                                                <strong class="fs-3">@Model.Count</strong>
+                                            </div>
+                                            <div class="progress" style="height: 10px;">
+                                                <div class="progress-bar bg-success" id="presentPercentage"
+                                                     style="width: 100%"></div>
+                                            </div>
+                                            <small class="text-muted" id="attendancePercentage">100% Present</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/Teacher/Dashboard" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                            </a>
+                            <div>
+                                <button type="button" class="btn btn-secondary me-2" onclick="resetForm()">
+                                    <i class="fas fa-redo me-1"></i>Reset All
+                                </button>
+                                <button type="submit" class="btn btn-teacher-primary" id="saveBtn">
+                                    <i class="fas fa-save me-1"></i>Save Attendance
+                                </button>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- No Students Message -->
+                        <div class="text-center py-5">
+                            <div class="empty-state-icon mb-4">
+                                <i class="fas fa-users-slash fa-4x text-muted"></i>
+                            </div>
+                            <h5 class="text-muted mb-3">No Students in this Class</h5>
+                            <p class="text-muted mb-4">
+                                There are no students enrolled in <strong>@classId</strong>.
+                                <br>Please select a different class or contact administration.
+                            </p>
+                            <a href="/Teacher/MyStudents" class="btn btn-teacher-primary">
+                                <i class="fas fa-user-graduate me-1"></i>View All Students
+                            </a>
+                        </div>
+                    }
+                </div>
+            </form>
+        </div>
+    }
+    else
+    {
+        <!-- No Class Selected -->
+        <div class="card card-teacher">
+            <div class="card-body text-center py-5">
+                <div class="empty-state-icon mb-4">
+                    <i class="fas fa-chalkboard-teacher fa-4x text-muted"></i>
+                </div>
+                <h5 class="text-muted mb-3">Select a Class</h5>
+                <p class="text-muted mb-4">
+                    Please select a class from the dropdown above to record attendance.
+                    @if (!availableClasses.Any())
+                    {
+                        <br>
+                
+                        <strong>No classes are assigned to you.</strong>
+                    }
+                </p>
+                @if (!availableClasses.Any())
+                {
+                    <a href="/Teacher/Dashboard" class="btn btn-teacher-primary">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Change class selection
+        function changeClass(classId) {
+            if (classId) {
+                window.location.href = `/Teacher/RecordAttendance?classId=${encodeURIComponent(classId)}`;
+            }
+        }
+
+        // Set status for specific student
+        function setStatus(index, status) {
+            const selectElement = $(`select[name="[${index}].Status"]`);
+            selectElement.val(status);
+            updateStatus(selectElement[0]);
+            updateSummary();
+        }
+
+        // Mark all students with same status
+        function markAll(status) {
+            if (confirm(`Mark all students as ${status}?`)) {
+                $('.status-select').each(function() {
+                    $(this).val(status);
+                    updateStatus(this);
+                });
+                updateSummary();
+            }
+        }
+
+        // Update individual status badge
+        function updateStatus(selectElement) {
+            const status = $(selectElement).val();
+            const row = $(selectElement).closest('tr');
+            const badge = row.find('.status-badge');
+
+            // Update badge text and class
+            badge.text(status).removeClass().addClass('status-badge badge');
+
+            switch(status) {
+                case 'Present':
+                    badge.addClass('badge-present');
+                    break;
+                case 'Absent':
+                    badge.addClass('badge-absent');
+                    break;
+                case 'Late':
+                    badge.addClass('badge-late');
+                    break;
+                case 'Excused':
+                    badge.addClass('badge-excused');
+                    break;
+            }
+
+            // Update row styling
+            row.removeClass('table-success table-danger table-warning table-info');
+            switch(status) {
+                case 'Present':
+                    row.addClass('table-success');
+                    break;
+                case 'Absent':
+                    row.addClass('table-danger');
+                    break;
+                case 'Late':
+                    row.addClass('table-warning');
+                    break;
+                case 'Excused':
+                    row.addClass('table-info');
+                    break;
+            }
+        }
+
+        // Update attendance summary
+        function updateSummary() {
+            let present = 0, absent = 0, late = 0, excused = 0;
+            const total = @Model.Count;
+
+            $('.status-select').each(function() {
+                const status = $(this).val();
+                switch(status) {
+                    case 'Present': present++; break;
+                    case 'Absent': absent++; break;
+                    case 'Late': late++; break;
+                    case 'Excused': excused++; break;
+                }
+            });
+
+            // Update counts
+            $('#presentCount').text(present);
+            $('#absentCount').text(absent);
+            $('#lateCount').text(late);
+            $('#excusedCount').text(excused);
+
+            // Update percentage
+            const presentPercentage = total > 0 ? Math.round((present / total) * 100) : 0;
+            $('#presentPercentage').css('width', `${presentPercentage}%`);
+            $('#attendancePercentage').text(`${presentPercentage}% Present (${present}/${total})`);
+
+            // Update progress bar color
+            const progressBar = $('#presentPercentage');
+            progressBar.removeClass('bg-success bg-warning bg-danger');
+
+            if (presentPercentage >= 90) {
+                progressBar.addClass('bg-success');
+            } else if (presentPercentage >= 75) {
+                progressBar.addClass('bg-warning');
+            } else {
+                progressBar.addClass('bg-danger');
+            }
+        }
+
+        // Reset form
+        function resetForm() {
+            if (confirm('Reset all attendance records to default (Present)?')) {
+                $('.status-select').val('Present');
+                $('.status-select').each(function() {
+                    updateStatus(this);
+                });
+                $('.remarks-input').val('');
+                updateSummary();
+            }
+        }
+
+        // Initialize on page load
+        $(document).ready(function() {
+            // Initialize status badges
+            $('.status-select').each(function() {
+                updateStatus(this);
+            });
+
+            // Update summary
+            updateSummary();
+
+            // Form submission validation
+            $('#attendanceForm').on('submit', function(e) {
+                const presentCount = parseInt($('#presentCount').text());
+                const total = @Model.Count;
+
+                // Show loading on button
+                const saveBtn = $('#saveBtn');
+                const originalText = saveBtn.html();
+                saveBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i>Saving...');
+
+                if (presentCount === 0) {
+                    e.preventDefault();
+                    saveBtn.prop('disabled', false).html(originalText);
+
+                    if (!confirm('No students marked as present. Are you sure you want to submit?')) {
+                        return false;
+                    }
+                }
+
+                // Check for duplicate submission
+                if ($(this).data('submitted')) {
+                    e.preventDefault();
+                    alert('Attendance is already being saved. Please wait...');
+                    return false;
+                }
+
+                $(this).data('submitted', true);
+                return true;
+            });
+
+            // Auto-save draft (optional feature)
+            let autoSaveTimer;
+            $('.status-select, .remarks-input').on('change input', function() {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(function() {
+                    console.log('Auto-saving attendance draft...');
+                    // Implement auto-save to localStorage if needed
+                }, 2000);
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .empty-state-icon {
+            opacity: 0.5;
+        }
+
+        .attendance-row {
+            transition: all 0.3s ease;
+        }
+
+        .status-select {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .status-select:hover {
+                transform: scale(1.02);
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+
+        .remarks-input:focus {
+            border-color: var(--primary-teal);
+            box-shadow: 0 0 0 0.25rem rgba(6, 214, 160, 0.25);
+        }
+
+        .btn-group .btn {
+            transition: all 0.2s ease;
+        }
+
+            .btn-group .btn:hover {
+                transform: translateY(-1px);
+            }
+
+        #classSelector {
+            max-width: 250px;
+            border-color: var(--primary-teal);
+        }
+
+            #classSelector:focus {
+                border-color: var(--primary-blue);
+                box-shadow: 0 0 0 0.25rem rgba(27, 154, 170, 0.25);
+            }
+
+        .progress {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+    </style>
+}

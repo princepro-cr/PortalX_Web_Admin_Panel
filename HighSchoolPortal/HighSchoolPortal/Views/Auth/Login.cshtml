@@ -1,0 +1,197 @@
+﻿@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+    var selectedRole = ViewData["SelectedRole"] as string ?? "teacher";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg animate-fade-in">
+                <div class="card-header text-center" style="background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);">
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="feature-icon" style="background: rgba(255,255,255,0.2);">
+                            <i class="fas fa-school text-white"></i>
+                        </div>
+                    </div>
+                    <h3 class="mb-1 text-white">Welcome Back!</h3>
+                    <p class="text-white-75 mb-0">Login to Staff Portal</p>
+
+                    @if (!string.IsNullOrEmpty(selectedRole))
+                    {
+                        <div class="mt-3">
+                            <span class="badge @(selectedRole == "hr" ? "bg-primary" : "bg-success")">
+                                <i class="fas @(selectedRole == "hr" ? "fa-user-tie" : "fa-chalkboard-teacher") me-2"></i>
+                                @(selectedRole == "hr" ? "HR Staff" : "Teacher")
+                            </span>
+                        </div>
+                    }
+                </div>
+
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+                    {
+                        <div class="alert alert-success animate-slide-in-left">
+                            <i class="fas fa-check-circle me-2"></i>
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+
+                    <form method="post" asp-action="Login" asp-controller="Auth" class="needs-validation" novalidate>
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">
+                                <i class="fas fa-envelope me-2 text-primary"></i>Email Address
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-at"></i>
+                                </span>
+                                <input asp-for="Email" class="form-control" placeholder="staff@school.edu" required>
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">
+                                <i class="fas fa-lock me-2 text-primary"></i>Password
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-key"></i>
+                                </span>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" required>
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3 form-check d-flex justify-content-between align-items-center">
+                            <div>
+                                <input asp-for="RememberMe" class="form-check-input">
+                                <label asp-for="RememberMe" class="form-check-label">Remember me</label>
+                            </div>
+                            <a href="/Auth/ForgotPassword" class="text-decoration-none">
+                                <i class="fas fa-key me-1"></i>Forgot password?
+                            </a>
+                        </div>
+
+                        <!-- Role Selection -->
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <i class="fas fa-user-tag me-2 text-primary"></i>Login as
+                            </label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="Role" id="roleTeacher" value="teacher" @(selectedRole == "teacher" ? "checked" : "")>
+                                <label class="btn btn-outline-success" for="roleTeacher">
+                                    <i class="fas fa-chalkboard-teacher me-2"></i>Teacher
+                                </label>
+
+                                <input type="radio" class="btn-check" name="Role" id="roleHR" value="hr" @(selectedRole == "hr" ? "checked" : "")>
+                                <label class="btn btn-outline-primary" for="roleHR">
+                                    <i class="fas fa-user-tie me-2"></i>HR Staff
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mb-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </button>
+                        </div>
+
+                        <div class="text-center">
+                            <p class="mb-2">Don't have an account?</p>
+                            <a href="/Auth/Register?role=@selectedRole" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-user-plus me-2"></i>Create Account
+                            </a>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="text-center">
+                            <p class="small text-muted">
+                                By logging in, you agree to our
+                                <a href="#" class="text-decoration-none">Terms of Service</a>
+                                and
+                                <a href="#" class="text-decoration-none">Privacy Policy</a>.
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .btn-check:checked + .btn-outline-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .btn-check:checked + .btn-outline-success {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+
+        .input-group-text {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        }
+    </style>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Toggle password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.querySelector('input[type="password"]');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        // Form validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            this.classList.add('was-validated');
+
+            // Add loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Logging in...';
+                submitBtn.disabled = true;
+            }
+        });
+
+        // Role selection updates register link
+        document.querySelectorAll('input[name="Role"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const role = this.value;
+                const registerLink = document.querySelector('a[href*="/Auth/Register"]');
+                if (registerLink) {
+                    registerLink.href = `/Auth/Register?role=${role}`;
+                }
+            });
+        });
+    </script>
+}

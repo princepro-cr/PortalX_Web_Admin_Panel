@@ -1010,8 +1010,10 @@
                 <li class="nav-section">Account</li>
                 @if (User.Identity?.IsAuthenticated == true)
                 {
+                    <!-- In the sidebar section, update the Profile link -->
                     <li class="nav-item">
-                        <a class="nav-link @(currentPath.Contains("/Profile") ? "active" : "")" href="/Profile">
+                        <a class="nav-link @(currentPath.Contains("/Teacher/Profile") ? "active" : "")"
+                           href="/Teacher/Profile">
                             <i class="fas fa-user-cog"></i>
                             <span>My Profile</span>
                         </a>

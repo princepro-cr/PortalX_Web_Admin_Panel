@@ -31,6 +31,131 @@ namespace HighSchoolPortal.Controllers
             _teacherId = userId ?? string.Empty;
         }
 
+
+        // In TeacherController.cs, add these methods:
+
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            try
+            {
+                // Get current teacher's profile
+                var teacher = await _schoolService.GetTeacherByIdAsync(_teacherId);
+
+                if (teacher == null)
+                {
+                    TempData["ErrorMessage"] = "Teacher profile not found.";
+                    return RedirectToAction("Dashboard");
+                }
+
+                // Get teacher's statistics
+                var allStudents = await _schoolService.GetAllStudentsAsync();
+
+                // Filter to teacher's classes if available
+                var teacherStudents = teacher.Classes != null && teacher.Classes.Any()
+                    ? allStudents.Where(s => teacher.Classes.Contains(s.ClassId)).ToList()
+                    : allStudents.ToList();
+
+                var stats = new TeacherProfileStats
+                {
+                    TotalStudents = teacherStudents.Count,
+                    AverageGPA = teacherStudents.Any() ?
+                        Math.Round(teacherStudents.Average(s => s.GPA), 2) : 0,
+                    AverageAttendance = teacherStudents.Any() ?
+                        (int)Math.Round(teacherStudents.Average(s => s.AttendancePercentage)) : 100,
+                    TotalClasses = teacher.Classes?.Count ?? 0,
+                    TotalSubjects = teacher.Subjects?.Count ?? 0,
+                    YearsOfService = (DateTime.Now.Year - teacher.HireDate.Year)
+                };
+
+                // Get recent activity (last 5 grades added)
+                var recentActivity = new List<Grade>();
+                foreach (var student in teacherStudents.Take(10))
+                {
+                    try
+                    {
+                        var studentGrades = await _schoolService.GetStudentGradesAsync(student.Id);
+                        if (studentGrades != null)
+                        {
+                            var teacherGrades = studentGrades
+                                .Where(g => g.TeacherId == _teacherId)
+                                .OrderByDescending(g => g.DateRecorded)
+                                .Take(2);
+                            recentActivity.AddRange(teacherGrades);
+                        }
+                    }
+                    catch { /* Ignore errors */ }
+                }
+
+                ViewBag.Stats = stats;
+                ViewBag.RecentActivity = recentActivity.OrderByDescending(g => g.DateRecorded).Take(5).ToList();
+                ViewBag.TeacherStudents = teacherStudents.Take(6).ToList(); // Show top 6 students
+
+                return View(teacher);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading teacher profile");
+                TempData["ErrorMessage"] = "Error loading profile data.";
+                return RedirectToAction("Dashboard");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfile(TeacherProfile model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    TempData["ErrorMessage"] = "Please fix validation errors.";
+                    return RedirectToAction("Profile");
+                }
+
+                // Get current teacher
+                var teacher = await _schoolService.GetTeacherByIdAsync(_teacherId);
+                if (teacher == null)
+                {
+                    TempData["ErrorMessage"] = "Teacher not found.";
+                    return RedirectToAction("Profile");
+                }
+
+                // Update basic info
+                teacher.FullName = model.FullName;
+                teacher.Email = model.Email;
+                teacher.Phone = model.Phone;
+                teacher.Address = model.Address;
+                teacher.DateOfBirth = model.DateOfBirth;
+                teacher.AvatarUrl = model.AvatarUrl;
+
+                // Update teacher-specific info
+                teacher.Department = model.Department;
+                teacher.Qualification = model.Qualification;
+                teacher.Specialization = model.Specialization;
+                teacher.UpdatedAt = DateTime.UtcNow;
+
+                await _schoolService.UpdateTeacherAsync(teacher);
+                TempData["SuccessMessage"] = "Profile updated successfully!";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating teacher profile");
+                TempData["ErrorMessage"] = $"Error updating profile: {ex.Message}";
+            }
+
+            return RedirectToAction("Profile");
+        }
+
+        // Add this class to TeacherController (inside the namespace but outside the TeacherController class)
+        public class TeacherProfileStats
+        {
+            public int TotalStudents { get; set; }
+            public decimal AverageGPA { get; set; }
+            public int AverageAttendance { get; set; }
+            public int TotalClasses { get; set; }
+            public int TotalSubjects { get; set; }
+            public int YearsOfService { get; set; }
+        }
         public async Task<IActionResult> Dashboard()
         {
             try

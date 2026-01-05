@@ -1,386 +1,359 @@
 ﻿@model IEnumerable<StudentProfile>
 @{
     ViewData["Title"] = "My Students";
+    var teacherClasses = ViewBag.TeacherClasses as List<string> ?? new List<string>();
+    var totalStudents = ViewBag.TotalStudents ?? 0;
+    var activeCount = ViewBag.ActiveCount ?? 0;
 }
 
-<div class="container-fluid px-4">
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="container-fluid py-4 px-lg-5">
+    <!-- Modern Header -->
+    <div class="page-header-modern d-flex flex-column flex-md-row justify-content-between align-items-center">
         <div>
-            <h1 class="h2 mb-1 teacher-gradient-text">My Students</h1>
-            <p class="text-muted mb-0">
-                <i class="fas fa-user-graduate me-1"></i>
-                Total: <span class="fw-bold">@Model.Count()</span> students
-                <span class="mx-2">•</span>
-                <i class="fas fa-filter me-1"></i>
-                <select class="form-select form-select-sm d-inline w-auto" id="classFilter">
-                    <option value="">All Classes</option>
-                    <option value="10A">Grade 10A</option>
-                    <option value="11B">Grade 11B</option>
-                    <option value="9C">Grade 9C</option>
+            <h1 class="h3 mb-1 text-gradient">My Students</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0" style="font-size: 0.85rem;">
+                    <li class="breadcrumb-item"><a href="/Teacher/Dashboard">Teacher Dashboard</a></li>
+                    <li class="breadcrumb-item active">Students</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+            <div class="text-end d-none d-lg-block me-3">
+                <small class="text-muted d-block">Student Overview</small>
+                <span class="fw-bold text-success">@activeCount / @totalStudents Active</span>
+            </div>
+            <button class="btn btn-teacher-primary rounded-pill px-4 shadow" onclick="refreshStudentData()">
+                <i class="fas fa-sync-alt me-2"></i>Refresh Data
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="row mb-4 g-3">
+        <div class="col-6 col-md-3">
+            <div class="mini-stat-card shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-bold">TOTAL STUDENTS</span>
+                        <h3 class="mb-0 fw-bold">@totalStudents</h3>
+                    </div>
+                    <div class="bg-light rounded-circle p-2">
+                        <i class="fas fa-users text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="mini-stat-card shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-bold">AVG GPA</span>
+                        <h3 class="mb-0 fw-bold">@((ViewBag.AverageGPA ?? 0).ToString("0.00"))</h3>
+                    </div>
+                    <div class="bg-light rounded-circle p-2">
+                        <i class="fas fa-chart-line text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="mini-stat-card shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-bold">AVG ATTENDANCE</span>
+                        <h3 class="mb-0 fw-bold">@(ViewBag.AverageAttendance ?? 0)%</h3>
+                    </div>
+                    <div class="bg-light rounded-circle p-2">
+                        <i class="fas fa-calendar-check text-warning"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="mini-stat-card shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small fw-bold">MY CLASSES</span>
+                        <h3 class="mb-0 fw-bold">@teacherClasses.Count</h3>
+                    </div>
+                    <div class="bg-light rounded-circle p-2">
+                        <i class="fas fa-school text-info"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section shadow-sm mb-4">
+        <form method="get" action="/Teacher/MyStudents" class="row g-3 align-items-center">
+            <div class="col-lg-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted">
+                        <i class="fas fa-search"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0"
+                           name="search" value="@ViewBag.SearchTerm"
+                           placeholder="Search by name, ID, or email...">
+                </div>
+            </div>
+            <div class="col-md-3 col-lg-2">
+                <select class="form-select border-0 shadow-sm" name="grade">
+                    <option value="">All Grades</option>
+                    <option value="9" selected="@(ViewBag.GradeFilter == "9")">Grade 9</option>
+                    <option value="10" selected="@(ViewBag.GradeFilter == "10")">Grade 10</option>
+                    <option value="11" selected="@(ViewBag.GradeFilter == "11")">Grade 11</option>
+                    <option value="12" selected="@(ViewBag.GradeFilter == "12")">Grade 12</option>
                 </select>
-            </p>
-        </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary" onclick="printStudentList()">
-                <i class="fas fa-print me-2"></i>Print List
-            </button>
-            <button class="btn btn-teacher-primary" onclick="exportStudentGrades()">
-                <i class="fas fa-file-excel me-2"></i>Export Grades
-            </button>
-            <button class="btn btn-teacher-secondary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-                <i class="fas fa-user-plus me-2"></i>Add Student
-            </button>
-        </div>
-    </div>
-
-    <!-- Search Bar -->
-    <div class="card card-teacher mb-4">
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-search"></i>
-                        </span>
-                        <input type="text" class="form-control" id="studentSearch"
-                               placeholder="Search students by name, ID, or class...">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-select" id="gradeFilter">
-                        <option value="">All Grades</option>
-                        <option value="9">Grade 9</option>
-                        <option value="10">Grade 10</option>
-                        <option value="11">Grade 11</option>
-                        <option value="12">Grade 12</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-select" id="statusFilter">
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                    </select>
-                </div>
             </div>
-        </div>
+            <div class="col-md-3 col-lg-2">
+                <select class="form-select border-0 shadow-sm" name="classFilter">
+                    <option value="">All Classes</option>
+                    @foreach (var className in teacherClasses)
+                    {
+                        <option value="@className" selected="@(ViewBag.ClassFilter == className)">
+                            @className
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2 col-lg-1">
+                <button type="submit" class="btn btn-teacher-primary w-100">
+                    <i class="fas fa-filter"></i>
+                </button>
+            </div>
+            <div class="col-md-1">
+                <a href="/Teacher/MyStudents" class="btn btn-light w-100 border shadow-sm">
+                    <i class="fas fa-sync-alt"></i>
+                </a>
+            </div>
+        </form>
     </div>
 
-    <!-- Students Grid -->
-    <div class="row g-4" id="studentsGrid">
-        @foreach (var student in Model)
-        {
-            <div class="col-xl-3 col-lg-4 col-md-6" data-student-id="@student.Id"
-                 data-grade="@student.GradeLevel" data-class="@student.ClassId"
-                 data-status="@(student.IsActive ? "active" : "inactive")">
-                <div class="card student-card h-100">
-                    <div class="card-body p-4">
-                        <div class="text-center mb-3">
-                            <img src="@student.AvatarUrl"
-                                 class="student-avatar mb-3"
-                                 onerror="this.src='/images/default-avatar.png'">
-
-                            <h5 class="mb-1">@student.FullName</h5>
-                            <p class="text-muted small mb-2">@student.StudentId</p>
-
-                            <div class="mb-3">
-                                <span class="badge bg-secondary">Grade @student.GradeLevel</span>
-                                <span class="badge bg-info ms-1">@student.ClassId</span>
-                            </div>
-                        </div>
-
-                        <!-- Student Stats -->
-                        <div class="row text-center mb-4">
-                            <div class="col-6">
-                                <div class="mb-2">
-                                    <small class="text-muted d-block">GPA</small>
-                                   @* <strong class="fs-5 @GetGradeClass(student.GPA)">
-                                        @student.GPA.ToString("0.00")
-                                    </strong>*@
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="mb-2">
-                                    <small class="text-muted d-block">Attendance</small>
-                                    <strong class="fs-5 @GetAttendanceClass(student.AttendancePercentage)">
-                                        @student.AttendancePercentage%
-                                    </strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Contact Info -->
-                        <div class="student-contact mb-3">
-                            <small class="text-muted d-block mb-1">
-                                <i class="fas fa-envelope me-1"></i>@student.Email
-                            </small>
-                            @if (!string.IsNullOrEmpty(student.ParentName))
+    <!-- Main Table Card -->
+    <div class="card main-card border-0">
+        <div class="card-body p-0">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0" id="studentsTable">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Student Profile</th>
+                                <th>Academic Info</th>
+                                <th>Performance Metrics</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4">Quick Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model)
                             {
-                                <small class="text-muted d-block mb-1">
-                                    <i class="fas fa-user-friends me-1"></i>Parent: @student.ParentName
-                                </small>
+                                <tr class="student-row" data-grade="@student.GradeLevel">
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="position-relative">
+                                                <img src="@student.AvatarUrl"
+                                                     class="rounded-3 shadow-sm me-3"
+                                                     style="width: 48px; height: 48px; object-fit: cover;"
+                                                     onerror="this.src='https://ui-avatars.com/api/?name=@student.FullName&background=random'">
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark">@student.FullName</div>
+                                                <div class="text-muted small">ID: @student.StudentId</div>
+                                                <div class="small text-muted">@student.Email</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info-subtle text-info border mb-1">Class: @student.ClassId</span>
+                                        <div class="text-dark fw-bold small">Grade @student.GradeLevel</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div>
+                                                <div class="small text-muted">GPA</div>
+                                                <div class="fw-bold">
+                                                    <span class="gpa-indicator @(student.GPA >= 3.5m ? "bg-success" : student.GPA >= 2.5m ? "bg-warning" : "bg-danger")"></span>
+                                                    @student.GPA.ToString("0.00")
+                                                </div>
+                                            </div>
+                                            <div class="vr mx-2" style="height: 20px;"></div>
+                                            <div>
+                                                <div class="small text-muted">Attendance</div>
+                                                <div class="fw-bold @(student.AttendancePercentage < 75 ? "text-danger" : "")">
+                                                    @student.AttendancePercentage%
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (student.IsActive)
+                                        {
+                                            <span class="badge rounded-pill bg-success-subtle text-success px-3">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill bg-danger-subtle text-danger px-3">Inactive</span>
+                                        }
+                                    </td>
+                                    <td class="pe-4">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a href="/Teacher/StudentDetails/@student.Id"
+                                               class="btn btn-circle btn-info-subtle"
+                                               title="View Details">
+                                                <i class="fas fa-eye text-info"></i>
+                                            </a>
+                                            <a href="/Teacher/AddGrade?studentId=@student.Id"
+                                               class="btn btn-circle btn-success-subtle"
+                                               title="Add Grade">
+                                                <i class="fas fa-graduation-cap text-success"></i>
+                                            </a>
+                                            <a href="/Teacher/RecordAttendance?studentId=@student.Id"
+                                               class="btn btn-circle btn-warning-subtle"
+                                               title="Record Attendance">
+                                                <i class="fas fa-clipboard-check text-warning"></i>
+                                            </a>
+                                            <button onclick="markAttendance('@student.Id')"
+                                                    class="btn btn-circle btn-primary-subtle"
+                                                    title="Quick Attendance">
+                                                <i class="fas fa-check text-primary"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
                             }
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="d-grid gap-2">
-                            <a href="/Teacher/ViewStudent/@student.Id"
-                               class="btn btn-sm btn-teacher-primary">
-                                <i class="fas fa-eye me-1"></i>View Profile
-                            </a>
-                            <div class="btn-group" role="group">
-                                <a href="/Teacher/AddGrade?studentId=@student.Id"
-                                   class="btn btn-sm btn-outline-success">
-                                    <i class="fas fa-plus-circle me-1"></i>Grade
-                                </a>
-                                <a href="#" class="btn btn-sm btn-outline-info" onclick="markAttendance('@student.Id')">
-                                    <i class="fas fa-clipboard-check me-1"></i>Attendance
-                                </a>
-                                <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-                                        data-bs-toggle="dropdown">
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-comment me-2"></i>Send Message</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-file-alt me-2"></i>View Reports</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-ban me-2"></i>Deactivate</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card Footer -->
-                    <div class="card-footer bg-transparent border-top">
-                        <small class="text-muted">
-                            <i class="fas fa-calendar me-1"></i>
-                            Enrolled: @student.EnrollmentDate.ToString("MMM dd, yyyy")
-                        </small>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        }
-    </div>
 
-    <!-- Empty State -->
-    @if (!Model.Any())
-    {
-        <div class="text-center py-5">
-            <div class="empty-state-icon mb-4">
-                <i class="fas fa-user-graduate fa-4x text-muted"></i>
-            </div>
-            <h5 class="text-muted mb-3">No Students Assigned</h5>
-            <p class="text-muted mb-4">You don't have any students assigned to your classes yet.</p>
-            <button class="btn btn-teacher-primary" data-bs-toggle="modal" data-bs-target="#addStudentModal">
-                <i class="fas fa-user-plus me-2"></i>Add Your First Student
-            </button>
-        </div>
-    }
-</div>
+                <!-- Pagination -->
+                @if (ViewBag.TotalPages > 1)
+                {
+                    <div class="d-flex justify-content-between align-items-center p-3 border-top">
+                        <div class="text-muted small">
+                            Showing @Model.Count() of @totalStudents students
+                        </div>
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination mb-0">
+                                @if (ViewBag.Page > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="/Teacher/MyStudents?page=@(ViewBag.Page - 1)&search=@ViewBag.SearchTerm&grade=@ViewBag.GradeFilter&classFilter=@ViewBag.ClassFilter&sortBy=@ViewBag.SortBy">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                }
 
-<!-- Add Student Modal -->
-<div class="modal fade" id="addStudentModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header teacher-gradient-bg text-white">
-                <h5 class="modal-title">Add New Student</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="addStudentForm">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Student ID</label>
-                            <input type="text" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Grade Level</label>
-                            <select class="form-select" required>
-                                <option value="">Select Grade</option>
-                                <option value="9">Grade 9</option>
-                                <option value="10">Grade 10</option>
-                                <option value="11">Grade 11</option>
-                                <option value="12">Grade 12</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Class</label>
-                            <select class="form-select" required>
-                                <option value="">Select Class</option>
-                                <option value="10A">10A</option>
-                                <option value="11B">11B</option>
-                                <option value="9C">9C</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Parent Name</label>
-                            <input type="text" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Parent Email</label>
-                            <input type="email" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Parent Phone</label>
-                            <input type="tel" class="form-control">
-                        </div>
+                                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                                {
+                                    <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                                        <a class="page-link"
+                                           href="/Teacher/MyStudents?page=@i&search=@ViewBag.SearchTerm&grade=@ViewBag.GradeFilter&classFilter=@ViewBag.ClassFilter&sortBy=@ViewBag.SortBy">
+                                            @i
+                                        </a>
+                                    </li>
+                                }
+
+                                @if (ViewBag.Page < ViewBag.TotalPages)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="/Teacher/MyStudents?page=@(ViewBag.Page + 1)&search=@ViewBag.SearchTerm&grade=@ViewBag.GradeFilter&classFilter=@ViewBag.ClassFilter&sortBy=@ViewBag.SortBy">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-teacher-primary">Add Student</button>
-            </div>
+                }
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-user-graduate fa-4x text-light mb-3"></i>
+                    <h5 class="text-muted">No students found</h5>
+                    <p class="text-muted mb-4">
+                        @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
+                        {
+                            <span>No students match your search criteria.</span>
+                        }
+                        else
+                        {
+                            <span>You don't have any students assigned to your classes yet.</span>
+                        }
+                    </p>
+                    <a href="/Teacher/MyStudents" class="btn btn-teacher-primary">
+                        <i class="fas fa-redo me-2"></i>Clear Filters
+                    </a>
+                </div>
+            }
         </div>
     </div>
 </div>
-
-@functions {
-   /*public string GetGradeClass(decimal gpa)
-    {
-        // if (gpa >= 3.5) return "grade-a";
-        // if (gpa >= 2.5) return "grade-b";
-        // if (gpa >= 1.5) return "grade-c";
-        // return "grade-f";
-    }*/
-
-    public string GetAttendanceClass(int attendance)
-    {
-        if (attendance >= 90) return "grade-a";
-        if (attendance >= 75) return "grade-b";
-        return "grade-f";
-    }
-}
-
-@section Styles {
-    <style>
-        .empty-state-icon {
-            opacity: 0.5;
-        }
-
-        .student-contact {
-            border-top: 1px solid #f0f0f0;
-            padding-top: 1rem;
-        }
-
-        #studentsGrid {
-            min-height: 400px;
-        }
-
-        .dropdown-toggle::after {
-            margin-left: 0.5em;
-            vertical-align: middle;
-        }
-    </style>
-}
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
-            // Search functionality
-            $('#studentSearch').on('input', filterStudents);
-            $('#gradeFilter, #classFilter, #statusFilter').on('change', filterStudents);
-
-            // Initialize tooltips
-            $('[data-bs-toggle="tooltip"]').tooltip();
-        });
-
-        function filterStudents() {
-            const searchTerm = $('#studentSearch').val().toLowerCase();
-            const gradeFilter = $('#gradeFilter').val();
-            const classFilter = $('#classFilter').val();
-            const statusFilter = $('#statusFilter').val();
-
-            $('.student-card').parent().each(function() {
-                const $card = $(this);
-                const studentName = $card.find('h5').text().toLowerCase();
-                const studentId = $card.find('p.text-muted').text().toLowerCase();
-                const studentGrade = $card.data('grade');
-                const studentClass = $card.data('class');
-                const studentStatus = $card.data('status');
-
-                let matchesSearch = studentName.includes(searchTerm) ||
-                                   studentId.includes(searchTerm) ||
-                                   studentClass.toLowerCase().includes(searchTerm);
-
-                let matchesGrade = !gradeFilter || studentGrade === gradeFilter;
-                let matchesClass = !classFilter || studentClass === classFilter;
-                let matchesStatus = !statusFilter || studentStatus === statusFilter;
-
-                if (matchesSearch && matchesGrade && matchesClass && matchesStatus) {
-                    $card.show();
-                } else {
-                    $card.hide();
-                }
-            });
-        }
-
-        function printStudentList() {
-            const printContent = document.getElementById('studentsGrid').innerHTML;
-            const originalContent = document.body.innerHTML;
-
-            document.body.innerHTML = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Student List - @DateTime.Now.ToString("MMM dd, yyyy")</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; }
-                        .print-header { text-align: center; margin-bottom: 2rem; }
-                        .student-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-                        .student-card { border: 1px solid #ddd; padding: 1rem; border-radius: 8px; }
-                        @@media print { .no-print { display: none; } }
-                    </style>
-                </head>
-                <body>
-                    <div class="print-header">
-                        <h1>Student List</h1>
-                        <p>Generated: @DateTime.Now.ToString("MMMM dd, yyyy h:mm tt")</p>
-                    </div>
-                    ${printContent}
-                    <script>
-                        window.onload = function() {
-                            window.print();
-                            setTimeout(function() {
-                                window.location.reload();
-                            }, 1000);
-                        };
-                    <\/script>
-                </body>
-                </html>
-            `;
-        }
-
-        function exportStudentGrades() {
-            // Implement export functionality
-            alert('Export feature coming soon!');
+        function refreshStudentData() {
+            window.location.reload();
         }
 
         function markAttendance(studentId) {
-            // Implement quick attendance marking
-            window.location.href = `/Teacher/RecordAttendance?studentId=${studentId}`;
+            const today = new Date().toISOString().split('T')[0];
+            const status = prompt('Enter attendance status (Present/Absent/Late):', 'Present');
+
+            if (status) {
+                fetch('/Teacher/RecordAttendance', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        studentId: studentId,
+                        date: today,
+                        status: status
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Attendance recorded successfully!');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error recording attendance');
+                });
+            }
         }
 
-        // Add click event to student cards
+        // Add search functionality
         document.addEventListener('DOMContentLoaded', function() {
-            const studentCards = document.querySelectorAll('.student-card');
-            studentCards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    if (!e.target.closest('a') && !e.target.closest('button')) {
-                        const link = this.querySelector('a[href*="/Teacher/ViewStudent/"]');
-                        if (link) {
-                            window.location.href = link.href;
-                        }
+            const searchInput = document.querySelector('input[name="search"]');
+            if (searchInput) {
+                searchInput.addEventListener('keyup', function(event) {
+                    if (event.key === 'Enter') {
+                        this.form.submit();
                     }
                 });
+            }
+
+            // Add filter functionality similar to Manage Teachers
+            const gradeFilter = document.querySelector('select[name="grade"]');
+            const classFilter = document.querySelector('select[name="classFilter"]');
+
+            if (gradeFilter) gradeFilter.addEventListener('change', function() {
+                this.form.submit();
+            });
+
+            if (classFilter) classFilter.addEventListener('change', function() {
+                this.form.submit();
             });
         });
     </script>

@@ -1,372 +1,321 @@
-﻿@model StudentProfile
+﻿@using HighSchoolPortal.Controllers
+@model StudentProfile
 @{
     ViewData["Title"] = "Student Details";
-    var grades = ViewBag.Grades as List<Grade> ?? new List<Grade>();
-    var attendance = ViewBag.Attendance as List<Attendance> ?? new List<Attendance>();
-    var recentAttendance = attendance.Take(5).ToList();
+    var grades = ViewBag.Grades as IEnumerable<Grade>;
+    var attendance = ViewBag.Attendance as IEnumerable<Attendance>;
+    var stats = ViewBag.Stats as StudentHRStats;
 }
 
 <div class="container-fluid px-4">
-    <!-- Student Header -->
-    <div class="card teacher-gradient-bg mb-4">
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-auto">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gradient">Student Details</h1>
+            <p class="text-muted mb-0">Student ID: @Model.StudentId</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("EditStudent", "HR", new { id = Model.Id })" class="btn btn-warning">
+                <i class="fas fa-edit me-2"></i>Edit Student
+            </a>
+            <a href="@Url.Action("ManageStudents", "HR")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to List
+            </a>
+        </div>
+    </div>
+
+    <!-- Student Profile -->
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
                     <img src="@Model.AvatarUrl"
-                         class="rounded-circle border border-4 border-white"
-                         style="width: 120px; height: 120px; object-fit: cover;"
+                         class="rounded-circle img-fluid"
+                         style="width: 150px; height: 150px; object-fit: cover;"
                          onerror="this.src='/images/default-avatar.png'">
-                </div>
-                <div class="col">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h1 class="h2 text-white mb-1">@Model.FullName</h1>
-                            <p class="text-white opacity-75 mb-0">
-                                <i class="fas fa-id-card me-1"></i>@Model.StudentId
-                                <span class="mx-2">•</span>
-                                <i class="fas fa-school me-1"></i>Grade @Model.GradeLevel - @Model.ClassId
-                                <span class="mx-2">•</span>
-                                <i class="fas fa-envelope me-1"></i>@Model.Email
-                            </p>
-                        </div>
-                        <div class="dropdown">
-                            <button class="btn btn-light dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Edit Profile</a></li>
-                                <li><a class="dropdown-item" href="/Teacher/AddGrade?studentId=@Model.Id"><i class="fas fa-graduation-cap me-2"></i>Add Grade</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-comment me-2"></i>Send Message</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash me-2"></i>Remove Student</a></li>
-                            </ul>
-                        </div>
+                    <h5 class="my-3">@Model.FullName</h5>
+                    <p class="text-muted mb-1">Student ID: @Model.StudentId</p>
+                    <p class="text-muted mb-1">Grade @Model.GradeLevel</p>
+                    <p class="text-muted mb-4">@Model.ClassId</p>
+
+                    <div class="d-flex justify-content-center mb-2">
+                        <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger") fs-6">
+                            <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+                            @(Model.IsActive ? "Active" : "Inactive")
+                        </span>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Quick Stats -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="card stat-card">
-                <div class="card-body text-center p-3">
-                    <div class="feature-icon mb-2" style="width: 50px; height: 50px;">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h4 class="stat-number mb-0">@Model.GPA.ToString("0.00")</h4>
-                    <p class="stat-label mb-0">Current GPA</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card stat-card">
-                <div class="card-body text-center p-3">
-                    <div class="feature-icon mb-2" style="width: 50px; height: 50px;">
-                        <i class="fas fa-calendar-check"></i>
-                    </div>
-                    <h4 class="stat-number mb-0">@Model.AttendancePercentage%</h4>
-                    <p class="stat-label mb-0">Attendance</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card stat-card">
-                <div class="card-body text-center p-3">
-                    <div class="feature-icon mb-2" style="width: 50px; height: 50px;">
-                        <i class="fas fa-book"></i>
-                    </div>
-                    <h4 class="stat-number mb-0">@Model.EnrolledSubjects.Count</h4>
-                    <p class="stat-label mb-0">Subjects</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card stat-card">
-                <div class="card-body text-center p-3">
-                    <div class="feature-icon mb-2" style="width: 50px; height: 50px;">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <h4 class="stat-number mb-0">@((DateTime.Now - Model.EnrollmentDate).Days)</h4>
-                    <p class="stat-label mb-0">Days Enrolled</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4">
-        <!-- Left Column -->
-        <div class="col-lg-8">
-            <!-- Grades -->
-            <div class="card card-teacher mb-4">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-graduation-cap me-2"></i>Grades</h5>
-                    <a href="/Teacher/AddGrade?studentId=@Model.Id" class="btn btn-sm btn-teacher-primary">
-                        <i class="fas fa-plus me-1"></i>Add Grade
-                    </a>
+            <!-- Contact Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Contact Information</h5>
                 </div>
                 <div class="card-body">
-                    @if (grades.Any())
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Email</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.Email</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Phone</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.Phone</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Address</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.Address</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Date of Birth</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.DateOfBirth.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Enrollment Date</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.EnrollmentDate.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parent Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Parent Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Parent Name</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.ParentName</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Parent Email</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.ParentEmail</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Parent Phone</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.ParentPhone</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Emergency Contact</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.EmergencyContact</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <!-- Performance Statistics -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-primary text-white mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white-50">GPA</h6>
+                                    <h4 class="mb-0">@Model.GPA.ToString("0.00")</h4>
+                                </div>
+                                <i class="fas fa-chart-line fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-success text-white mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white-50">Attendance</h6>
+                                    <h4 class="mb-0">@Model.AttendancePercentage%</h4>
+                                </div>
+                                <i class="fas fa-calendar-check fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-info text-white mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white-50">Total Grades</h6>
+                                    <h4 class="mb-0">@(stats?.TotalGrades ?? 0)</h4>
+                                </div>
+                                <i class="fas fa-graduation-cap fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-warning text-white mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white-50">Days Enrolled</h6>
+                                    <h4 class="mb-0">@(stats?.DaysEnrolled ?? 0)</h4>
+                                </div>
+                                <i class="fas fa-clock fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grades -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Grades</h5>
+                </div>
+                <div class="card-body">
+                    @if (grades?.Any() == true)
                     {
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Subject</th>
                                         <th>Term</th>
                                         <th>Test 1</th>
                                         <th>Test 2</th>
-                                        <th>Exam</th>
                                         <th>Assignment</th>
+                                        <th>Exam</th>
                                         <th>Total</th>
                                         <th>Grade</th>
-                                        <th>Actions</th>
+                                        <th>Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var grade in grades)
+                                    @foreach (var grade in grades.Take(10))
                                     {
                                         <tr>
                                             <td>@grade.Subject</td>
-                                            <td>@grade.Term @grade.Year</td>
-                                            <td>@grade.Test1</td>
-                                            <td>@grade.Test2</td>
-                                            <td>@grade.Exam</td>
-                                            <td>@grade.Assignment</td>
-                                            <td><strong>@grade.TotalScore</strong></td>
+                                            <td>@grade.Term</td>
+                                            <td>@grade.Test1.ToString("0.00")</td>
+                                            <td>@grade.Test2.ToString("0.00")</td>
+                                            <td>@grade.Assignment.ToString("0.00")</td>
+                                            <td>@grade.Exam.ToString("0.00")</td>
                                             <td>
-                                                <span class="badge @GetGradeBadgeClass(grade.GradeLetter)">
+                                                <strong>@grade.TotalScore.ToString("0.00")</strong>
+                                            </td>
+                                            <td>
+                                                <span class="badge @(grade.TotalScore >= 70 ? "bg-success" : grade.TotalScore >= 50 ? "bg-warning" : "bg-danger")">
                                                     @grade.GradeLetter
                                                 </span>
                                             </td>
-                                            <td>
-                                                <button class="btn btn-sm btn-outline-primary" onclick="editGrade('@grade.Id')">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteGrade('@grade.Id')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </td>
+                                            <td>@grade.DateRecorded.ToString("MMM dd, yyyy")</td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
                         </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-4">
-                            <i class="fas fa-graduation-cap fa-3x text-muted mb-3"></i>
-                            <p class="text-muted">No grades recorded yet</p>
-                            <a href="/Teacher/AddGrade?studentId=@Model.Id" class="btn btn-teacher-primary">
-                                <i class="fas fa-plus me-1"></i>Add First Grade
-                            </a>
-                        </div>
-                    }
-                </div>
-            </div>
-
-            <!-- Attendance History -->
-            <div class="card card-teacher">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Attendance History</h5>
-                    <a href="/Teacher/RecordAttendance?classId=@Model.ClassId" class="btn btn-sm btn-teacher-primary">
-                        <i class="fas fa-plus me-1"></i>Mark Attendance
-                    </a>
-                </div>
-                <div class="card-body">
-                    @if (recentAttendance.Any())
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Class</th>
-                                        <th>Status</th>
-                                        <th>Remarks</th>
-                                        <th>Recorded By</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var record in recentAttendance)
-                                    {
-                                        <tr>
-                                            <td>@record.Date.ToString("MMM dd, yyyy")</td>
-                                            <td>@record.ClassName</td>
-                                            <td>
-                                                <span class="badge @GetAttendanceBadgeClass(record.Status)">
-                                                    @record.Status
-                                                </span>
-                                            </td>
-                                            <td>@record.Remarks</td>
-                                            <td>@record.RecordedBy</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                        @if (attendance.Count > 5)
+                        @if (grades.Count() > 10)
                         {
-                            <div class="text-center mt-3">
-                                <a href="#" class="btn btn-outline-primary btn-sm">
-                                    View All Attendance Records (@attendance.Count total)
-                                </a>
+                            <div class="text-center mt-2">
+                                <a href="#" class="btn btn-sm btn-outline-primary">View All Grades</a>
                             </div>
                         }
                     }
                     else
                     {
                         <div class="text-center py-4">
-                            <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
-                            <p class="text-muted">No attendance records yet</p>
+                            <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">No grades recorded yet</h6>
                         </div>
                     }
                 </div>
             </div>
-        </div>
 
-        <!-- Right Column -->
-        <div class="col-lg-4">
-            <!-- Student Information -->
-            <div class="card card-teacher mb-4">
+            <!-- Recent Attendance -->
+            <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Student Information</h5>
+                    <h5 class="mb-0">Recent Attendance</h5>
                 </div>
                 <div class="card-body">
-                    <div class="mb-3">
-                        <label class="small text-muted mb-1">Date of Birth</label>
-                        <p class="mb-2">@Model.DateOfBirth.ToString("MMMM dd, yyyy")</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="small text-muted mb-1">Phone</label>
-                        <p class="mb-2">@(string.IsNullOrEmpty(Model.Phone) ? "Not provided" : Model.Phone)</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="small text-muted mb-1">Address</label>
-                        <p class="mb-2">@(string.IsNullOrEmpty(Model.Address) ? "Not provided" : Model.Address)</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="small text-muted mb-1">Enrollment Date</label>
-                        <p class="mb-2">@Model.EnrollmentDate.ToString("MMMM dd, yyyy")</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="small text-muted mb-1">Status</label>
-                        <p class="mb-0">
-                            @if (Model.IsActive)
-                            {
-                                <span class="badge bg-success">Active</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">Inactive</span>
-                            }
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Parent Information -->
-            <div class="card card-teacher mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-user-friends me-2"></i>Parent Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="small text-muted mb-1">Parent Name</label>
-                        <p class="mb-2">@(string.IsNullOrEmpty(Model.ParentName) ? "Not provided" : Model.ParentName)</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="small text-muted mb-1">Parent Email</label>
-                        <p class="mb-2">@(string.IsNullOrEmpty(Model.ParentEmail) ? "Not provided" : Model.ParentEmail)</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="small text-muted mb-1">Parent Phone</label>
-                        <p class="mb-2">@(string.IsNullOrEmpty(Model.ParentPhone) ? "Not provided" : Model.ParentPhone)</p>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="small text-muted mb-1">Emergency Contact</label>
-                        <p class="mb-0">@(string.IsNullOrEmpty(Model.EmergencyContact) ? "Not provided" : Model.EmergencyContact)</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Enrolled Subjects -->
-            <div class="card card-teacher">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-book-open me-2"></i>Enrolled Subjects</h5>
-                </div>
-                <div class="card-body">
-                    @if (Model.EnrolledSubjects.Any())
+                    @if (attendance?.Any() == true)
                     {
-                        <div class="d-flex flex-wrap gap-2">
-                            @foreach (var subject in Model.EnrolledSubjects)
-                            {
-                                <span class="badge bg-primary">@subject</span>
-                            }
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Class</th>
+                                        <th>Status</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var record in attendance.Take(10))
+                                    {
+                                        <tr>
+                                            <td>@record.Date.ToString("MMM dd, yyyy")</td>
+                                            <td>@record.ClassName</td>
+                                            <td>
+                                                <span class="badge @(record.Status == "Present" ? "bg-success" : record.Status == "Late" ? "bg-warning" : "bg-danger")">
+                                                    @record.Status
+                                                </span>
+                                            </td>
+                                            <td>@record.Remarks</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
+                        @if (attendance.Count() > 10)
+                        {
+                            <div class="text-center mt-2">
+                                <a href="#" class="btn btn-sm btn-outline-primary">View All Attendance</a>
+                            </div>
+                        }
                     }
                     else
                     {
-                        <p class="text-muted mb-0">No subjects enrolled</p>
+                        <div class="text-center py-4">
+                            <i class="fas fa-calendar fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">No attendance records yet</h6>
+                        </div>
                     }
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@functions {
-    public string GetGradeBadgeClass(string grade)
-    {
-        return grade switch
-        {
-            "A" => "badge-present",
-            "B" => "badge-present",
-            "C" => "badge-late",
-            "D" => "badge-absent",
-            "F" => "badge-absent",
-            _ => "badge-secondary"
-        };
-    }
-
-    public string GetAttendanceBadgeClass(string status)
-    {
-        return status.ToLower() switch
-        {
-            "present" => "badge-present",
-            "absent" => "badge-absent",
-            "late" => "badge-late",
-            "excused" => "badge-excused",
-            _ => "badge-secondary"
-        };
-    }
-}
-
-@section Scripts {
-    <script>
-        function editGrade(gradeId) {
-            // Implement grade editing
-            alert('Edit grade: ' + gradeId);
-        }
-
-        function deleteGrade(gradeId) {
-            if (confirm('Are you sure you want to delete this grade?')) {
-                // Implement grade deletion
-                alert('Delete grade: ' + gradeId);
-            }
-        }
-    </script>
-}

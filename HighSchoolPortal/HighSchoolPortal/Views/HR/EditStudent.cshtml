@@ -1,0 +1,227 @@
+﻿@model StudentProfile
+@{
+    ViewData["Title"] = "Edit Student";
+    var gradeLevels = ViewBag.GradeLevels as List<string> ?? new List<string> { "9", "10", "11", "12" };
+    var classes = ViewBag.Classes as List<string> ?? new List<string>();
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gradient">Edit Student</h1>
+            <p class="text-muted mb-0">Update student information</p>
+        </div>
+        <a href="@Url.Action("ManageStudents", "HR")" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to List
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Student Information</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="EditStudent">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="StudentId" />
+                        <input type="hidden" asp-for="CreatedAt" />
+                        <input type="hidden" asp-for="Role" value="student" />
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="FullName" class="form-label">Full Name *</label>
+                                    <input asp-for="FullName" class="form-control" required>
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Email" class="form-label">Email *</label>
+                                    <input asp-for="Email" type="email" class="form-control" required>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Phone" class="form-label">Phone</label>
+                                    <input asp-for="Phone" class="form-control">
+                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                                    <input asp-for="DateOfBirth" type="date" class="form-control">
+                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label">Address</label>
+                            <textarea asp-for="Address" class="form-control" rows="2"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="GradeLevel" class="form-label">Grade Level</label>
+                                    <select asp-for="GradeLevel" class="form-select">
+                                        <option value="">Select Grade</option>
+                                        @foreach (var grade in gradeLevels)
+                                        {
+                                            <option value="@grade">Grade @grade</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="GradeLevel" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ClassId" class="form-label">Class</label>
+                                    <select asp-for="ClassId" class="form-select">
+                                        <option value="">Select Class</option>
+                                        @foreach (var className in classes)
+                                        {
+                                            <option value="@className">@className</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="ClassId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="GPA" class="form-label">GPA</label>
+                                    <input asp-for="GPA" type="number" step="0.01" min="0" max="4.0" class="form-control">
+                                    <span asp-validation-for="GPA" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="AttendancePercentage" class="form-label">Attendance %</label>
+                                    <input asp-for="AttendancePercentage" type="number" min="0" max="100" class="form-control">
+                                    <span asp-validation-for="AttendancePercentage" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ParentName" class="form-label">Parent Name</label>
+                                    <input asp-for="ParentName" class="form-control">
+                                    <span asp-validation-for="ParentName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ParentEmail" class="form-label">Parent Email</label>
+                                    <input asp-for="ParentEmail" type="email" class="form-control">
+                                    <span asp-validation-for="ParentEmail" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ParentPhone" class="form-label">Parent Phone</label>
+                                    <input asp-for="ParentPhone" class="form-control">
+                                    <span asp-validation-for="ParentPhone" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="EmergencyContact" class="form-label">Emergency Contact</label>
+                                    <input asp-for="EmergencyContact" class="form-control">
+                                    <span asp-validation-for="EmergencyContact" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="AvatarUrl" class="form-label">Avatar URL</label>
+                            <input asp-for="AvatarUrl" class="form-control" placeholder="/images/default-avatar.png">
+                            <span asp-validation-for="AvatarUrl" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input asp-for="IsActive" class="form-check-input">
+                            <label asp-for="IsActive" class="form-check-label">Active Student</label>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="@Url.Action("StudentDetails", "HR", new { id = Model.Id })" class="btn btn-secondary">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Student
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Student Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <img src="@(Model.AvatarUrl ?? "/images/default-avatar.png")"
+                             class="rounded-circle img-fluid"
+                             style="width: 150px; height: 150px; object-fit: cover;"
+                             onerror="this.src='/images/default-avatar.png'">
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Student ID:</span>
+                            <strong>@Model.StudentId</strong>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Status:</span>
+                            <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger")">
+                                @(Model.IsActive ? "Active" : "Inactive")
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Enrollment Date:</span>
+                            <span>@Model.EnrollmentDate.ToString("MMMM dd, yyyy")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Current GPA:</span>
+                            <span class="badge @(Model.GPA >= 3.5m ? "bg-success" : Model.GPA >= 2.5m ? "bg-warning" : "bg-danger")">
+                                @Model.GPA.ToString("0.00")
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Attendance:</span>
+                            <span class="badge @(Model.AttendancePercentage >= 90 ? "bg-success" : Model.AttendancePercentage >= 75 ? "bg-warning" : "bg-danger")">
+                                @Model.AttendancePercentage%
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

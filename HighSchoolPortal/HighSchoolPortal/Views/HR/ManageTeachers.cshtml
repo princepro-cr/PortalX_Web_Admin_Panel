@@ -1,0 +1,217 @@
+﻿@model IEnumerable<TeacherProfile>
+@{
+    ViewData["Title"] = "Manage Teachers";
+    Layout = "_Layout";  // Make sure this points to your layout
+    var totalTeachers = Model.Count();
+    var activeTeachers = Model.Count(t => t.IsActive);
+}
+
+@section Scripts {
+    <script>
+        // This function should be in the view file, not in layout
+        function confirmDelete(teacherName) {
+            return confirm(`Are you sure you want to delete "${teacherName}"?\nThis action cannot be undone.`);
+        }
+
+        // Filter functionality for this specific page
+        const searchInput = document.getElementById('searchInput');
+        const deptFilter = document.getElementById('departmentFilter');
+        const statusFilter = document.getElementById('statusFilter');
+
+        function filterTeachers() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const dVal = deptFilter.value;
+            const sVal = statusFilter.value;
+            const rows = document.querySelectorAll('#teachersTable tbody tr');
+
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                const idElements = row.querySelector('.text-muted');
+                const id = idElements ? idElements.textContent.toLowerCase() : '';
+                const dept = row.getAttribute('data-department');
+                const status = row.getAttribute('data-status');
+
+                let show = true;
+
+                if (searchTerm && !name.includes(searchTerm) && !id.includes(searchTerm)) {
+                    show = false;
+                }
+                if (dVal && dept !== dVal) show = false;
+                if (sVal && status !== sVal) show = false;
+
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        if (searchInput) searchInput.addEventListener('keyup', filterTeachers);
+        if (deptFilter) deptFilter.addEventListener('change', filterTeachers);
+        if (statusFilter) statusFilter.addEventListener('change', filterTeachers);
+
+        function resetFilters() {
+            if (searchInput) searchInput.value = '';
+            if (deptFilter) deptFilter.value = '';
+            if (statusFilter) statusFilter.value = '';
+            filterTeachers();
+        }
+    </script>
+}
+<!-- Custom CSS Files -->
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
+
+<div class="container-fluid py-4 px-lg-5">
+
+    <div class="page-header-modern d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>
+            <h1 class="h3 mb-1 text-gradient">Teacher Faculty</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0" style="font-size: 0.85rem;">
+                    <li class="breadcrumb-item"><a href="#">HR Management</a></li>
+                    <li class="breadcrumb-item active">Teachers</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+            <div class="text-end d-none d-lg-block me-3">
+                <small class="text-muted d-block">Staff Capacity</small>
+                <span class="fw-bold text-primary">@activeTeachers / @totalTeachers Active</span>
+            </div>
+            <a href="@Url.Action("AddTeacher", "HR")" class="btn btn-primary rounded-pill px-4 shadow">
+                <i class="fas fa-user-plus me-2"></i>Add New Teacher
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-4 g-3">
+        @foreach (var dept in Model.GroupBy(t => t.Department).OrderByDescending(g => g.Count()).Take(4))
+        {
+            <div class="col-6 col-md-3">
+                <div class="mini-stat-card shadow-sm">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted small fw-bold text-uppercase">@dept.Key</span>
+                            <h3 class="mb-0 fw-bold">@dept.Count()</h3>
+                        </div>
+                        <div class="bg-purple-subtle rounded-circle p-2">
+                            <i class="fas fa-chalkboard text-purple"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="filter-section shadow-sm mb-4">
+        <div class="row g-3 align-items-center">
+            <div class="col-lg-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control border-start-0" placeholder="Search by name, ID, or email..." id="searchInput">
+                </div>
+            </div>
+            <div class="col-md-3 col-lg-2">
+                <select class="form-select border-0 shadow-sm" id="departmentFilter">
+                    <option value="">All Departments</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Science">Science</option>
+                    <option value="English">English</option>
+                    <option value="History">History</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Physical Education">Physical Education</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Administration">Administration</option>
+                </select>
+            </div>
+            <div class="col-md-3 col-lg-2">
+                <select class="form-select border-0 shadow-sm" id="statusFilter">
+                    <option value="">Status: All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="col-md-2 col-lg-1">
+                <button class="btn btn-light w-100 border shadow-sm" onclick="resetFilters()">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card main-card border-0">
+        <div class="card-body p-0">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0" id="teachersTable">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Teacher Profile</th>
+                                <th>Expertise</th>
+                                <th>Assigned Workload</th>
+                                <th>Status</th>
+                                <th class="text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var teacher in Model)
+                            {
+                                <tr class="teacher-row" data-department="@teacher.Department" data-status="@(teacher.IsActive ? "active" : "inactive")">
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="position-relative">
+                                                <img src="@teacher.AvatarUrl" class="rounded-3 shadow-sm me-3" style="width: 48px; height: 48px; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name=@teacher.FullName&background=random'">
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold text-dark">@teacher.FullName</div>
+                                                <div class="text-muted small">ID: @teacher.TeacherId</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary-subtle text-primary badge-soft mb-1">@teacher.Department</span>
+                                        <div class="small text-muted">@teacher.Qualification</div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-2">
+                                            <span class="badge bg-secondary-subtle text-secondary border">@(teacher.Classes?.Count ?? 0) Classes</span>
+                                            <span class="badge bg-info-subtle text-info border">@(teacher.Subjects?.Count ?? 0) Subjects</span>
+                                        </div>
+                                        <div class="extra-small text-muted mt-1">@teacher.Email</div>
+                                    </td>
+                                    <td>
+                                        @if (teacher.IsActive)
+                                        {
+                                            <span class="badge rounded-pill bg-success-subtle text-success px-3">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill bg-danger-subtle text-danger px-3">Inactive</span>
+                                        }
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a href="@Url.Action("TeacherDetails", "HR", new { id = teacher.Id })" class="btn btn-circle btn-info-subtle" title="View"><i class="fas fa-eye text-info"></i></a>
+                                            <a href="@Url.Action("EditTeacher", "HR", new { id = teacher.Id })" class="btn btn-circle btn-warning-subtle" title="Edit"><i class="fas fa-edit text-warning"></i></a>
+                                            <form method="post" action="@Url.Action("DeleteTeacher", "HR", new { id = teacher.Id })" onsubmit="return confirmDelete('@teacher.FullName')" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-circle btn-danger-subtle" title="Delete"><i class="fas fa-trash text-danger"></i></button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-chalkboard-teacher fa-4x text-light mb-3"></i>
+                    <h5 class="text-muted">No teachers found in the database</h5>
+                    <p class="text-muted mb-4">Click "New Registration" to start building your faculty.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

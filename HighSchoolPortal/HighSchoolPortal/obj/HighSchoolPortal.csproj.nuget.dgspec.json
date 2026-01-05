@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj": {}
+    "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj": {
+    "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj",
+        "projectUniqueName": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj",
         "projectName": "HighSchoolPortal",
-        "projectPath": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj",
+        "projectPath": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj",
         "packagesPath": "C:\\Users\\Princ\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Princ\\source\\repos\\HighSchoolPortal\\HighSchoolPortal\\obj\\",
+        "outputPath": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -49,6 +49,24 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.Cookies": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.Extensions.Logging": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Logging.Console": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Logging.Debug": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

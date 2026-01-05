@@ -11,236 +11,828 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Teacher Theme CSS -->
-    <link rel="stylesheet" href="~/css/teacher-theme.css" asp-append-version="true" />
-
     <!-- Custom CSS -->
     <style>
         :root {
             --primary-color: #4361ee;
             --secondary-color: #3a0ca3;
-            --success-color: #4cc9f0;
-            --warning-color: #f72585;
-            --danger-color: #7209b7;
+            --success-color: #06d6a0;
+            --info-color: #1b9aaa;
+            --warning-color: #ffd166;
+            --danger-color: #ef476f;
+            --dark-color: #2d3436;
             --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --border-radius: 12px;
-            --transition: all 0.3s ease;
-            --shadow: 0 5px 15px rgba(0,0,0,0.08);
-            --shadow-hover: 0 10px 25px rgba(0,0,0,0.12);
+            --sidebar-width: 280px;
+            --sidebar-collapsed-width: 80px;
+            --transition-speed: 0.3s;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            /* Teacher specific colors */
+            --teacher-primary: #06d6a0;
+            --teacher-secondary: #1b9aaa;
+            --teacher-light: #e0f7fa;
+            --teacher-dark: #00796b;
+            /* HR specific colors */
+            --hr-primary: #7209b7;
+            --hr-secondary: #4361ee;
+            --hr-light: #f3e5f5;
+            --hr-dark: #4a148c;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f7fb;
-            color: #333;
-            line-height: 1.6;
-            @if (User.IsInRole("teacher"))
-            {
-                <text>margin-left: 0;
-                </text>
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #f5f7fb 0%, #f0f2f5 100%);
+            color: #2d3436;
+            min-height: 100vh;
+            transition: margin-left var(--transition-speed);
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles - Enhanced with glassmorphism */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: var(--sidebar-width);
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            z-index: 1050;
+            transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--glass-border);
+        }
+
+            .sidebar.collapsed {
+                width: var(--sidebar-collapsed-width);
+                box-shadow: 4px 0 25px rgba(0, 0, 0, 0.2);
             }
+
+        .sidebar-header {
+            padding: 1.75rem 1.25rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.03);
         }
 
-        .navbar {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 1rem 0;
-        }
-
-        .navbar-brand {
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             font-weight: 700;
-            font-size: 1.5rem;
-            color: white !important;
+            font-size: 1.35rem;
+            color: white;
+            text-decoration: none;
+            white-space: nowrap;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .navbar-nav .nav-link {
-            color: rgba(255,255,255,0.9) !important;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            transition: var(--transition);
-        }
-
-            .navbar-nav .nav-link:hover {
-                color: white !important;
-                transform: translateY(-2px);
+            .sidebar-brand:hover {
+                transform: translateX(5px);
             }
 
+            .sidebar-brand i {
+                color: #4361ee;
+                font-size: 1.5rem;
+                background: linear-gradient(45deg, #4361ee, #3a0ca3);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+        .sidebar.collapsed .sidebar-brand span {
+            opacity: 0;
+            width: 0;
+        }
+
+        .sidebar-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+            backdrop-filter: blur(5px);
+        }
+
+            .sidebar-toggle:hover {
+                background: rgba(255,255,255,0.12);
+                transform: rotate(90deg);
+                border-color: rgba(255,255,255,0.2);
+            }
+
+        .sidebar-content {
+            padding: 1.5rem 0;
+            height: calc(100vh - 95px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
+        }
+
+            .sidebar-content::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            .sidebar-content::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .sidebar-content::-webkit-scrollbar-thumb {
+                background: rgba(255,255,255,0.2);
+                border-radius: 10px;
+            }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0 0.75rem;
+            margin: 0;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            border-radius: 10px;
+            position: relative;
+            background: transparent;
+        }
+
+        .sidebar.collapsed .nav-link span {
+            opacity: 0;
+            width: 0;
+            position: absolute;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.08);
+            color: white;
+            padding-left: 1.25rem;
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(90deg, rgba(67, 97, 238, 0.2) 0%, rgba(58, 12, 163, 0.2) 100%);
+            color: white;
+            border-left: 3px solid #ffd166;
+            box-shadow: inset 3px 0 10px rgba(67, 97, 238, 0.3);
+        }
+
+            .nav-link.active::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 3px;
+                height: 60%;
+                background: linear-gradient(to bottom, #4361ee, #3a0ca3);
+                border-radius: 0 3px 3px 0;
+            }
+
+        .nav-link i {
+            width: 24px;
+            text-align: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.1);
+        }
+
+        .sidebar.collapsed .nav-link i {
+            margin-right: 0;
+            margin-left: 0.25rem;
+        }
+
+        .nav-link .badge {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover .badge {
+            background: rgba(255,255,255,0.25);
+            transform: scale(1.05);
+        }
+
+        .nav-section {
+            padding: 1.25rem 1rem 0.75rem;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 0.5rem;
+        }
+
+            .nav-section:first-child {
+                border-top: none;
+                margin-top: 0;
+            }
+
+        .sidebar.collapsed .nav-section {
+            display: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 1rem 1.5rem;
+            transition: margin-left var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 100vh;
+            position: relative;
+        }
+
+            .main-content.expanded {
+                margin-left: var(--sidebar-collapsed-width);
+            }
+
+        /* Enhanced Navbar */
+        .main-navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-sm);
+            padding: 0.75rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1040;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-radius: 0 0 16px 16px;
+        }
+
+        #mobileSidebarToggle {
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 10px;
+            padding: 0.5rem 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+            #mobileSidebarToggle:hover {
+                background: var(--primary-color);
+                color: white;
+                transform: rotate(90deg);
+            }
+
+        /* Enhanced Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+            .page-header h1 {
+                font-weight: 700;
+                color: var(--dark-color);
+                margin-bottom: 0.5rem;
+                font-size: 1.75rem;
+                background: linear-gradient(45deg, var(--dark-color), #5a6a85);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            .page-header .breadcrumb {
+                background: none;
+                padding: 0;
+                margin: 0;
+                font-size: 0.9rem;
+            }
+
+        .breadcrumb-item a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .breadcrumb-item a:hover {
+                color: var(--secondary-color);
+            }
+
+        /* Enhanced Card Styles */
         .card {
             border: none;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            margin-bottom: 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 1.75rem;
+            overflow: hidden;
+            background: white;
         }
 
             .card:hover {
-                box-shadow: var(--shadow-hover);
                 transform: translateY(-5px);
+                box-shadow: var(--shadow-lg);
             }
 
         .card-header {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
-            border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
-            padding: 1rem 1.5rem;
-            border-bottom: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 16px 16px 0 0 !important;
             border: none;
-            border-radius: 8px;
-            padding: 0.5rem 1.5rem;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-            .btn-primary:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-            }
-
-        .stat-card {
-            border-left: 4px solid var(--primary-color);
-            transition: var(--transition);
-        }
-
-            .stat-card:hover {
-                transform: translateY(-3px);
-                border-left-color: var(--secondary-color);
-            }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .table th {
-            background-color: #f8f9fa;
+            padding: 1.25rem 1.75rem;
             font-weight: 600;
-            color: var(--dark-color);
-            border-top: none;
+            font-size: 1.1rem;
         }
 
-        .badge {
-            border-radius: 20px;
-            padding: 0.35em 0.65em;
-            font-weight: 500;
+        /* Enhanced Role-specific colors */
+        .teacher-gradient {
+            background: linear-gradient(135deg, var(--teacher-primary) 0%, var(--teacher-secondary) 100%) !important;
         }
 
-        .progress {
-            height: 8px;
-            border-radius: 4px;
+        .teacher-gradient-bg {
+            background: linear-gradient(135deg, var(--teacher-primary) 0%, var(--teacher-secondary) 100%) !important;
         }
 
-        .progress-bar {
-            border-radius: 4px;
-        }
-
-        .alert {
-            border-radius: var(--border-radius);
-            border: none;
-            box-shadow: var(--shadow);
-        }
-
-        .dashboard-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-            border-radius: 0 0 var(--border-radius) var(--border-radius);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            margin: 0 auto 1rem;
-        }
-
-        .text-gradient {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        .teacher-gradient-text {
+            background: linear-gradient(135deg, var(--teacher-primary) 0%, var(--teacher-secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        /* Animation classes */
-        .animate-fade-in {
-            animation: fadeIn 0.6s ease;
+        .btn-teacher-primary {
+            background: linear-gradient(135deg, var(--teacher-primary) 0%, var(--teacher-secondary) 100%);
+            border: none;
+            color: white;
+            padding: 0.625rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(6, 214, 160, 0.3);
         }
 
-        .animate-slide-in {
-            animation: slideIn 0.6s ease;
+            .btn-teacher-primary:hover {
+                background: linear-gradient(135deg, var(--teacher-dark) 0%, var(--teacher-secondary) 100%);
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(6, 214, 160, 0.4);
+            }
+
+        .btn-teacher-secondary {
+            background: white;
+            border: 2px solid var(--teacher-primary);
+            color: var(--teacher-primary);
+            padding: 0.625rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+            .btn-teacher-secondary:hover {
+                background: var(--teacher-light);
+                border-color: var(--teacher-dark);
+                color: var(--teacher-dark);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(6, 214, 160, 0.2);
+            }
+
+        .hr-gradient {
+            background: linear-gradient(135deg, var(--hr-primary) 0%, var(--hr-secondary) 100%) !important;
+        }
+
+        .hr-gradient-bg {
+            background: linear-gradient(135deg, var(--hr-primary) 0%, var(--hr-secondary) 100%) !important;
+        }
+
+        .hr-gradient-text {
+            background: linear-gradient(135deg, var(--hr-primary) 0%, var(--hr-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-hr-primary {
+            background: linear-gradient(135deg, var(--hr-primary) 0%, var(--hr-secondary) 100%);
+            border: none;
+            color: white;
+            padding: 0.625rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3);
+        }
+
+            .btn-hr-primary:hover {
+                background: linear-gradient(135deg, var(--hr-dark) 0%, var(--hr-secondary) 100%);
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(114, 9, 183, 0.4);
+            }
+
+        /* Enhanced Notifications & User Dropdown */
+        .dropdown-toggle {
+            border-radius: 10px;
+            padding: 0.5rem 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+            .dropdown-toggle:hover {
+                background: rgba(var(--primary-color-rgb, 67, 97, 238), 0.1);
+            }
+
+        .dropdown-menu {
+            border: none;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin: 0.125rem 0;
+            transition: all 0.2s ease;
+        }
+
+            .dropdown-item:hover {
+                background: rgba(var(--primary-color-rgb, 67, 97, 238), 0.1);
+                transform: translateX(5px);
+            }
+
+        /* Enhanced Alerts */
+        .alert {
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, rgba(6, 214, 160, 0.1) 0%, rgba(27, 154, 170, 0.05) 100%);
+            border-left-color: var(--success-color);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(239, 71, 111, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%);
+            border-left-color: var(--danger-color);
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, rgba(27, 154, 170, 0.1) 0%, rgba(23, 162, 184, 0.05) 100%);
+            border-left-color: var(--info-color);
+        }
+
+        /* Enhanced Footer */
+        .footer {
+            background: white;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            border-radius: 16px 16px 0 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
+        }
+
+            .footer .text-muted {
+                color: #6c757d !important;
+                font-size: 0.9rem;
+            }
+
+        /* Enhanced Student Card Styles */
+        .student-card {
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+            .student-card:hover {
+                border-color: var(--teacher-primary);
+                box-shadow: 0 8px 25px rgba(6, 214, 160, 0.15);
+                transform: translateY(-3px);
+            }
+
+        .student-avatar {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 3px solid var(--teacher-light);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Enhanced Badges */
+        .badge-present {
+            background: linear-gradient(135deg, var(--success-color) 0%, #28a745 100%);
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .badge-absent {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #dc3545 100%);
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .badge-late {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #ffc107 100%);
+            color: #333;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .badge-excused {
+            background: linear-gradient(135deg, var(--info-color) 0%, #17a2b8 100%);
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Enhanced Performance Indicators */
+        .grade-a {
+            color: var(--success-color);
+            font-weight: 700;
+        }
+
+        .grade-b {
+            color: #28a745;
+            font-weight: 700;
+        }
+
+        .grade-c {
+            color: var(--warning-color);
+            font-weight: 700;
+        }
+
+        .grade-d {
+            color: #fd7e14;
+            font-weight: 700;
+        }
+
+        .grade-f {
+            color: var(--danger-color);
+            font-weight: 700;
+        }
+
+        /* Enhanced Statistics Cards */
+        .stat-card {
+            border-radius: 16px;
+            border: none;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            background: white;
+        }
+
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: var(--shadow-lg);
+            }
+
+        .stat-number {
+            font-weight: 800;
+            font-size: 2.25rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .feature-icon-sm {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            box-shadow: 0 3px 10px rgba(67, 97, 238, 0.2);
+        }
+
+        /* Enhanced Animations */
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .animate-pulse-subtle {
+            animation: pulseSubtle 2s infinite;
         }
 
         @@keyframes fadeIn {
             from {
                 opacity: 0;
+                transform: translateY(10px);
             }
 
             to {
                 opacity: 1;
-            }
-        }
-
-        @@keyframes slideIn {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-
-            to {
                 transform: translateY(0);
+            }
+        }
+
+        @@keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes pulseSubtle {
+            0%, 100% {
                 opacity: 1;
             }
-        }
 
-        /* Teacher Layout Specific */
-        .teacher-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .main-content {
-            flex: 1;
-            transition: margin-left 0.3s ease;
-        }
-
-        /* Mobile responsive */
-        @@media (max-width: 768px) {
-            .stat-number {
-                font-size: 2rem;
-            }
-
-            .card-body {
-                padding: 1rem;
+            50% {
+                opacity: 0.8;
             }
         }
 
-        @@media (min-width: 1200px) {
-            .teacher-sidebar {
-                transform: translateX(0);
+        /* Responsive Design */
+        @@media (max-width: 992px) {
+            .sidebar {
+                width: var(--sidebar-collapsed-width);
             }
 
             .main-content {
-                margin-left: 280px;
+                margin-left: var(--sidebar-collapsed-width);
+            }
+
+            .page-header {
+                padding: 1.25rem;
+            }
+
+            .stat-number {
+                font-size: 1.75rem;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+                .sidebar.collapsed {
+                    transform: translateX(0);
+                }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+
+                .main-content.expanded {
+                    margin-left: 0;
+                }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .nav-link {
+                padding: 0.75rem;
+            }
+
+            .sidebar-header {
+                padding: 1.25rem 0.75rem;
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .main-navbar {
+                padding: 0.75rem 1rem;
+            }
+
+            .page-header {
+                padding: 1rem;
+            }
+
+            .footer {
+                padding: 1rem 0;
+            }
+
+            .card {
+                margin-bottom: 1.25rem;
+            }
+        }
+
+        /* Loading States */
+        .loading-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @@keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        /* Custom Scrollbar for Main Content */
+        main {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,0,0,0.1) transparent;
+        }
+
+            main::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            main::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            main::-webkit-scrollbar-thumb {
+                background: rgba(0,0,0,0.1);
+                border-radius: 10px;
+            }
+
+                main::-webkit-scrollbar-thumb:hover {
+                    background: rgba(0,0,0,0.2);
+                }
+
+        /* Focus States for Accessibility */
+        *:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Print Styles */
+        @@media print {
+            .sidebar, .main-navbar, .footer {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #dee2e6 !important;
             }
         }
     </style>
@@ -248,334 +840,332 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
-    @if (User.IsInRole("teacher"))
-    {
-        <!-- Teacher Layout -->
-        <div class="teacher-layout">
-            <!-- Sidebar -->
-            <div class="teacher-sidebar" id="teacherSidebar">
-                <div class="sidebar-header teacher-gradient-bg p-4">
+    @{
+        var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+        var isTeacher = userRole == "teacher";
+        var isHR = userRole == "hr";
+        var currentPath = Context.Request.Path.Value ?? "";
+        var userName = User.Identity?.Name ?? "User";
+    }
+
+    <!-- Sidebar -->
+    <div class="sidebar @(ViewBag.SidebarCollapsed == true ? "collapsed" : "")" id="sidebar">
+        <div class="sidebar-header">
+            <a href="/" class="sidebar-brand">
+                <i class="fas fa-school"></i>
+                <span>School Portal</span>
+            </a>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="sidebar-content">
+            <ul class="sidebar-nav">
+                @if (isTeacher)
+                {
+                    <!-- Teacher Navigation -->
+                    <li class="nav-section">Main</li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/Teacher/Dashboard") ? "active" : "")"
+                           href="/Teacher/Dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-section">Students</li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/Teacher/MyStudents") ? "active" : "")"
+                           href="/Teacher/MyStudents">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>My Students</span>
+                            <span class="badge bg-light text-dark ms-auto" id="studentCountBadge">0</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-section">Academic</li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/Teacher/AddGrade") ? "active" : "")"
+                           href="/Teacher/AddGrade">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Add Grades</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/Teacher/RecordAttendance") ? "active" : "")"
+                           href="/Teacher/RecordAttendance">
+                            <i class="fas fa-clipboard-check"></i>
+                            <span>Attendance</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/Teacher/ClassPerformance") ? "active" : "")"
+                           href="/Teacher/ClassPerformance">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Class Performance</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-section">Reports</li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/Teacher/GenerateReport") ? "active" : "")"
+                           href="/Teacher/GenerateReport">
+                            <i class="fas fa-file-pdf"></i>
+                            <span>Generate Reports</span>
+                        </a>
+                    </li>
+                }
+                else if (isHR)
+                {
+                    <!-- HR Navigation -->
+                    <li class="nav-section">Dashboard</li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/HR/Dashboard") ? "active" : "")"
+                           href="/HR/Dashboard">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>HR Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-section">Student Management</li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/HR/ManageStudents") ? "active" : "")"
+                           href="/HR/ManageStudents">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>Manage Students</span>
+                            <span class="badge bg-light text-dark ms-auto" id="hrStudentCountBadge">0</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/HR/AddStudent") ? "active" : "")"
+                           href="/HR/AddStudent">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Add Student</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-section">Staff Management</li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/HR/ManageTeachers") ? "active" : "")"
+                           href="/HR/ManageTeachers">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>Manage Teachers</span>
+                            <span class="badge bg-light text-dark ms-auto" id="teacherCountBadge">0</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/HR/AddTeacher") ? "active" : "")"
+                           href="/HR/AddTeacher">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Add Teacher</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-section">Reports & Analytics</li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/HR/SchoolStatistics") ? "active" : "")"
+                           href="/HR/SchoolStatistics">
+                            <i class="fas fa-chart-pie"></i>
+                            <span>School Statistics</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/HR/GenerateReport") ? "active" : "")"
+                           href="/HR/GenerateReport">
+                            <i class="fas fa-file-excel"></i>
+                            <span>Generate Reports</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <!-- Default/Public Navigation -->
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath == "/" ? "active" : "")" href="/">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/Auth/Login") ? "active" : "")" href="/Auth/Login">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Login</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/Auth/Register") ? "active" : "")" href="/Auth/Register">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Register</span>
+                        </a>
+                    </li>
+                }
+
+                <!-- Common Navigation for All Users -->
+                <li class="nav-section">Account</li>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/Profile") ? "active" : "")" href="/Profile">
+                            <i class="fas fa-user-cog"></i>
+                            <span>My Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="/Auth/Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content @(ViewBag.SidebarCollapsed == true ? "expanded" : "")" id="mainContent">
+        <!-- Navbar -->
+        <nav class="main-navbar">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
-                        <i class="fas fa-school fa-lg text-white me-2"></i>
-                        <h5 class="mb-0 text-white">HighSchool Portal</h5>
-                    </div>
-                    <div class="mt-3">
-                        <div class="d-flex align-items-center">
-                            <img id="teacherAvatar" src="/images/default-avatar.png"
-                                 class="rounded-circle me-3"
-                                 style="width: 50px; height: 50px; object-fit: cover; border: 2px solid white;">
-                            <div>
-                                <h6 class="mb-0 text-white" id="teacherName">Loading...</h6>
-                                <small class="text-white opacity-75">Teacher</small>
-                            </div>
+                        <button class="btn btn-outline-secondary me-3" id="mobileSidebarToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div class="page-header">
+                            <h1 class="h3 mb-0">@ViewData["Title"]</h1>
+                            @if (ViewBag.Breadcrumb != null)
+                            {
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb mb-0">
+                                        @foreach (var item in ViewBag.Breadcrumb)
+                                        {
+                                            <li class="breadcrumb-item @(item.Active ? "active" : "")">
+                                                @if (item.Url != null)
+                                                {
+                                                    <a href="@item.Url">@item.Text</a>
+                                                }
+                                                else
+                                                {
+                                                    @item.Text
+                                                }
+                                            </li>
+                                        }
+                                    </ol>
+                                </nav>
+                            }
                         </div>
                     </div>
-                </div>
 
-                <div class="sidebar-content p-3">
-                    <ul class="nav flex-column">
-                        <li class="nav-item mb-2">
-                            <a class="nav-link active" href="/Teacher/Dashboard">
-                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a class="nav-link" href="/Teacher/MyStudents">
-                                <i class="fas fa-user-graduate me-2"></i>My Students
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a class="nav-link" href="/Teacher/AddGrade">
-                                <i class="fas fa-graduation-cap me-2"></i>Add Grades
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a class="nav-link" href="/Teacher/RecordAttendance">
-                                <i class="fas fa-clipboard-check me-2"></i>Attendance
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-tasks me-2"></i>Assignments
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-book me-2"></i>Study Materials
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-bullhorn me-2"></i>Announcements
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-calendar me-2"></i>Schedule
-                            </a>
-                        </li>
-
-                        <li class="nav-item mb-2">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-chart-line me-2"></i>Reports
-                            </a>
-                        </li>
-                    </ul>
-
-                    <hr class="my-3">
-
-                    <ul class="nav flex-column">
-                        <li class="nav-item mb-2">
-                            <a class="nav-link" href="/Profile">
-                                <i class="fas fa-user-cog me-2"></i>Profile Settings
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-danger" href="/Auth/Logout">
-                                <i class="fas fa-sign-out-alt me-2"></i>Logout
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Sidebar Overlay -->
-            <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-            <!-- Main Content -->
-            <div class="main-content">
-                <header>
-                    <nav class="navbar navbar-expand-lg">
-                        <div class="container">
-                            <button class="btn btn-outline-light me-3" id="sidebarToggle">
-                                <i class="fas fa-bars"></i>
-                            </button>
-
-                            <a class="navbar-brand" href="/">
-                                <i class="fas fa-school me-2"></i>High School Portal
-                            </a>
-
-                            <div class="collapse navbar-collapse" id="navbarNav">
-                                <ul class="navbar-nav ms-auto">
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                            <i class="fas fa-user-circle me-1"></i><span id="currentUserEmail">Teacher</span>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item" href="/Profile"><i class="fas fa-id-card me-2"></i>My Profile</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item text-danger" href="/Auth/Logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                                        </ul>
-                                    </li>
+                    <div class="d-flex align-items-center">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <div class="dropdown me-3">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown">
+                                    <i class="fas fa-bell"></i>
+                                    <span class="badge bg-danger">3</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>New message</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-tasks me-2"></i>Task assigned</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-bell me-2"></i>View all notifications</a></li>
                                 </ul>
                             </div>
-                        </div>
-                    </nav>
-                </header>
 
-                <div class="container-fluid px-4">
-                    <main role="main" class="pb-3">
-                        <!-- Display TempData messages -->
-                        @if (TempData["SuccessMessage"] != null)
-                        {
-                            <div class="alert alert-success alert-dismissible fade show animate-fade-in" role="alert">
-                                <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center"
+                                        type="button" data-bs-toggle="dropdown">
+                                    <img src="@(User.FindFirst("AvatarUrl")?.Value ?? "/images/default-avatar.png")"
+                                         class="rounded-circle me-2"
+                                         style="width: 32px; height: 32px; object-fit: cover;">
+                                    <span>@userName</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="/Profile"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="/Auth/Logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                </ul>
                             </div>
                         }
-
-                        @if (TempData["ErrorMessage"] != null)
+                        else
                         {
-                            <div class="alert alert-danger alert-dismissible fade show animate-fade-in" role="alert">
-                                <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
+                            <a href="/Auth/Login" class="btn btn-primary me-2">
+                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                            </a>
+                            <a href="/Auth/Register" class="btn btn-outline-primary">
+                                <i class="fas fa-user-plus me-2"></i>Register
+                            </a>
                         }
-
-                        @if (TempData["InfoMessage"] != null)
-                        {
-                            <div class="alert alert-info alert-dismissible fade show animate-fade-in" role="alert">
-                                <i class="fas fa-info-circle me-2"></i>@TempData["InfoMessage"]
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        }
-
-                        @RenderBody()
-                    </main>
-                </div>
-
-                <footer class="border-top footer text-muted mt-5">
-                    <div class="container text-center py-3">
-                        &copy; @DateTime.Now.Year - High School Portal. All rights reserved.
                     </div>
-                </footer>
+                </div>
             </div>
-        </div>
-    }
-    else
-    {
-        <!-- Regular Layout for non-teachers -->
-        <header>
-            <nav class="navbar navbar-expand-lg">
-                <div class="container">
-                    <a class="navbar-brand" href="/">
-                        <i class="fas fa-school me-2"></i>High School Portal
-                    </a>
+        </nav>
 
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                        <span class="navbar-toggler-icon">
-                            <i class="fas fa-bars text-white"></i>
+        <!-- Page Content -->
+        <main class="container-fluid py-4">
+            <!-- Display TempData messages -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show animate-fade-in" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show animate-fade-in" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (TempData["InfoMessage"] != null)
+            {
+                <div class="alert alert-info alert-dismissible fade show animate-fade-in" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>@TempData["InfoMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <!-- Main Content -->
+            @RenderBody()
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer mt-auto py-3 border-top">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <span class="text-muted">&copy; @DateTime.Now.Year - High School Portal. All rights reserved.</span>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <span class="text-muted">
+                            <i class="fas fa-user me-1"></i>
+                            @userName
+                            @if (!string.IsNullOrEmpty(userRole))
+                            {
+                                <span class="ms-2">
+                                    <i class="fas fa-user-tag me-1"></i>
+                                    @userRole.ToUpper()
+                                </span>
+                            }
                         </span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                            @if (User.Identity?.IsAuthenticated == true)
-                            {
-                                var role = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="@(role == "hr" ? "/HR/Dashboard" : role == "teacher" ? "/Teacher/Dashboard" : "/Student/Dashboard")">
-                                        <i class="fas fa-tachometer-alt me-1"></i>Dashboard
-                                    </a>
-                                </li>
-
-                                @if (role == "hr")
-                                {
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="hrDropdown" role="button" data-bs-toggle="dropdown">
-                                            <i class="fas fa-users-cog me-1"></i>Manage
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="/HR/ManageStudents"><i class="fas fa-user-graduate me-2"></i>Students</a></li>
-                                            <li><a class="dropdown-item" href="/HR/ManageTeachers"><i class="fas fa-chalkboard-teacher me-2"></i>Teachers</a></li>
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li><a class="dropdown-item" href="/HR/AddStudent"><i class="fas fa-user-plus me-2"></i>Add Student</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/HR/GenerateReport">
-                                            <i class="fas fa-chart-bar me-1"></i>Reports
-                                        </a>
-                                    </li>
-                                }
-                                else if (role == "teacher")
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/Teacher/MyStudents">
-                                            <i class="fas fa-user-graduate me-1"></i>My Students
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/Teacher/RecordAttendance">
-                                            <i class="fas fa-clipboard-check me-1"></i>Attendance
-                                        </a>
-                                    </li>
-                                }
-                                else if (role == "student")
-                                {
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/Student/MyGrades">
-                                            <i class="fas fa-graduation-cap me-1"></i>My Grades
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/Student/MyAttendance">
-                                            <i class="fas fa-calendar-check me-1"></i>Attendance
-                                        </a>
-                                    </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/Student/ReportCard">
-                                            <i class="fas fa-file-alt me-1"></i>Report Card
-                                        </a>
-                                    </li>
-                                }
-
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                        <i class="fas fa-user-circle me-1"></i>@User.Identity.Name
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        @if (role == "student")
-                                        {
-                                            <li><a class="dropdown-item" href="/Student/Profile"><i class="fas fa-id-card me-2"></i>My Profile</a></li>
-                                        }
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="/Auth/Logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                                    </ul>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/Auth/Login">
-                                        <i class="fas fa-sign-in-alt me-1"></i>Login
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/Auth/Register">
-                                        <i class="fas fa-user-plus me-1"></i>Register
-                                    </a>
-                                </li>
-                            }
-                        </ul>
                     </div>
                 </div>
-            </nav>
-        </header>
-
-        <div class="container-fluid px-4">
-            <main role="main" class="pb-3">
-                <!-- Display TempData messages -->
-                @if (TempData["SuccessMessage"] != null)
-                {
-                    <div class="alert alert-success alert-dismissible fade show animate-fade-in" role="alert">
-                        <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                }
-
-                @if (TempData["ErrorMessage"] != null)
-                {
-                    <div class="alert alert-danger alert-dismissible fade show animate-fade-in" role="alert">
-                        <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                }
-
-                @if (TempData["InfoMessage"] != null)
-                {
-                    <div class="alert alert-info alert-dismissible fade show animate-fade-in" role="alert">
-                        <i class="fas fa-info-circle me-2"></i>@TempData["InfoMessage"]
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                }
-
-                @RenderBody()
-            </main>
-        </div>
-
-        <footer class="border-top footer text-muted mt-5">
-            <div class="container text-center py-3">
-                &copy; @DateTime.Now.Year - High School Portal. All rights reserved.
             </div>
         </footer>
-    }
+    </div>
 
-    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- jQuery -->
@@ -583,58 +1173,208 @@
 
     <!-- Custom JavaScript -->
     <script>
-        // Initialize tooltips
+        // Sidebar toggle functionality
         document.addEventListener('DOMContentLoaded', function() {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+
+            // Load sidebar state from localStorage
+            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (isCollapsed) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+            }
+
+            // Desktop sidebar toggle
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+                localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+
+                // Add animation class
+                sidebar.style.animation = 'none';
+                setTimeout(() => {
+                    sidebar.style.animation = 'slideIn 0.3s ease';
+                }, 10);
             });
 
-            // Auto-dismiss alerts after 5 seconds
-            setTimeout(function() {
-                $('.alert').alert('close');
-            }, 5000);
+            // Mobile sidebar toggle
+            mobileSidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+                localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
 
-            // Initialize sidebar toggle for teachers
-            if (document.getElementById('sidebarToggle')) {
-                $('#sidebarToggle').click(function() {
-                    $('#teacherSidebar').toggleClass('active');
-                    $('#sidebarOverlay').toggleClass('active');
-                });
+                // Add animation class
+                sidebar.style.animation = 'none';
+                setTimeout(() => {
+                    sidebar.style.animation = 'slideIn 0.3s ease';
+                }, 10);
+            });
 
-                $('#sidebarOverlay').click(function() {
-                    $('#teacherSidebar').removeClass('active');
-                    $(this).removeClass('active');
-                });
-
-                // Load teacher data
-                loadTeacherData();
-            }
-        });
-
-        function loadTeacherData() {
-            $.ajax({
-                url: '/Teacher/GetCurrentTeacher',
-                type: 'GET',
-                success: function(data) {
-                    if (data && !data.error) {
-                        $('#teacherName').text(data.fullName);
-                        $('#currentUserEmail').text(data.email);
-                        if (data.avatarUrl) {
-                            $('#teacherAvatar').attr('src', data.avatarUrl);
-                        }
+            // Auto-collapse on mobile
+            function handleResize() {
+                if (window.innerWidth <= 768) {
+                    if (!sidebar.classList.contains('collapsed')) {
+                        sidebar.classList.add('collapsed');
+                        mainContent.classList.add('expanded');
                     }
-                },
-                error: function() {
-                    // Fallback if AJAX fails
-                    const userName = '@User.Identity?.Name';
-                    if (userName) {
-                        $('#teacherName').text(userName);
-                        $('#currentUserEmail').text(userName);
+                } else {
+                    // Restore saved state on desktop
+                    const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                    if (isCollapsed) {
+                        sidebar.classList.add('collapsed');
+                        mainContent.classList.add('expanded');
+                    } else {
+                        sidebar.classList.remove('collapsed');
+                        mainContent.classList.remove('expanded');
                     }
                 }
-            });
+            }
+
+            window.addEventListener('resize', handleResize);
+            handleResize(); // Initial check
+
+            // Load role-based counts
+            loadRoleBasedCounts();
+
+            // Add animation for page transitions
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        function loadRoleBasedCounts() {
+            const userRole = '@userRole';
+
+            if (userRole === 'teacher') {
+                // Load teacher's student count
+                $.ajax({
+                    url: '/Teacher/GetStudentCount',
+                    type: 'GET',
+                    success: function(data) {
+                        if (data && data.count > 0) {
+                            $('#studentCountBadge').text(data.count).addClass('animate-pulse-subtle').show();
+                        }
+                    }
+                });
+            } else if (userRole === 'hr') {
+                // Load HR student count
+                $.ajax({
+                    url: '/HR/GetStudentCount',
+                    type: 'GET',
+                    success: function(data) {
+                        if (data && data.count > 0) {
+                            $('#hrStudentCountBadge').text(data.count).addClass('animate-pulse-subtle').show();
+                        }
+                    }
+                });
+
+                // Load HR teacher count
+                $.ajax({
+                    url: '/HR/GetTeacherCount',
+                    type: 'GET',
+                    success: function(data) {
+                        if (data && data.count > 0) {
+                            $('#teacherCountBadge').text(data.count).addClass('animate-pulse-subtle').show();
+                        }
+                    }
+                });
+            }
         }
+
+        // Initialize tooltips
+        $(document).ready(function() {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+
+            // Enhanced auto-dismiss alerts
+            $('.alert').each(function() {
+                const alert = $(this);
+                setTimeout(function() {
+                    alert.fadeOut(500, function() {
+                        $(this).alert('close');
+                    });
+                }, 5000);
+            });
+
+            // Enhanced smooth scrolling
+            $('a[href^="#"]').on('click', function(event) {
+                if (this.hash !== "") {
+                    event.preventDefault();
+                    const hash = this.hash;
+                    $('html, body').animate({
+                        scrollTop: $(hash).offset().top - 100
+                    }, 800, 'easeInOutCubic');
+                }
+            });
+
+            // Add hover effects to cards
+            $('.card').hover(
+                function() {
+                    $(this).addClass('shadow-lg');
+                },
+                function() {
+                    $(this).removeClass('shadow-lg');
+                }
+            );
+
+            // Add click effect to buttons
+            $('.btn').on('click', function() {
+                $(this).addClass('active');
+                setTimeout(() => {
+                    $(this).removeClass('active');
+                }, 300);
+            });
+        });
+
+        // Format numbers with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Calculate grade based on score
+        function calculateGrade(score) {
+            if (score >= 90) return 'A';
+            if (score >= 80) return 'B';
+            if (score >= 70) return 'C';
+            if (score >= 60) return 'D';
+            return 'F';
+        }
+
+        // Get grade color class with enhanced styling
+        function getGradeClass(score) {
+            if (score >= 90) return 'grade-a badge bg-success';
+            if (score >= 80) return 'grade-b badge bg-primary';
+            if (score >= 70) return 'grade-c badge bg-warning text-dark';
+            if (score >= 60) return 'grade-d badge bg-orange';
+            return 'grade-f badge bg-danger';
+        }
+
+        // Add CSS for smooth animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @@keyframes slideIn {
+                from { transform: translateX(-100%); }
+                to { transform: translateX(0); }
+            }
+
+            .btn.active {
+                transform: scale(0.95);
+                transition: transform 0.1s;
+            }
+
+            .bg-orange {
+                background-color: #fd7e14 !important;
+            }
+
+            .easeInOutCubic {
+                transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 
     @RenderSection("Scripts", required: false)

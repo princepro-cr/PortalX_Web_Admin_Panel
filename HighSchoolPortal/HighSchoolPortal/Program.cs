@@ -1,4 +1,6 @@
+// Program.cs - FIXED VERSION
 using HighSchoolPortal.Interfaces;
+using HighSchoolPortal.Models;
 using HighSchoolPortal.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Logging;
@@ -9,19 +11,28 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
-builder.Logging.SetMinimumLevel(LogLevel.Debug);
+builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 // Add services to the container
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddSession();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
-// Register your services as SINGLETON to prevent multiple initialization
-builder.Services.AddSingleton<IFirebaseAuthService, FirebaseAuthService>();
+// Configure Firebase settings
+builder.Services.Configure<FirebaseSettings>(
+    builder.Configuration.GetSection("Firebase"));
+
+// Register services in correct order (FirebaseSchoolService first since FirebaseAuthService depends on it)
 builder.Services.AddSingleton<IFirebaseSchoolService, FirebaseSchoolService>();
+builder.Services.AddSingleton<IFirebaseAuthService, FirebaseAuthService>();
 
-// Authentication MUST come after service registration
+// Authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -30,25 +41,18 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Auth/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromDays(7);
         options.SlidingExpiration = true;
-        // Prevent redirect loops
-        options.Events = new CookieAuthenticationEvents
-        {
-            OnRedirectToLogin = context =>
-            {
-                if (context.Request.Path.StartsWithSegments("/api"))
-                {
-                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                }
-                else
-                {
-                    context.Response.Redirect(context.RedirectUri);
-                }
-                return Task.CompletedTask;
-            }
-        };
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+        options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireTeacherRole", policy =>
+        policy.RequireRole("teacher"));
+    options.AddPolicy("RequireHRRole", policy =>
+        policy.RequireRole("hr"));
+});
 
 var app = builder.Build();
 
@@ -71,18 +75,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
-// Add debug middleware
+// Add security headers
 app.Use(async (context, next) =>
 {
-    var path = context.Request.Path;
-    if (path == "/" || path == "/Home" || path == "/Home/Index")
-    {
-        var isAuthenticated = context.User.Identity?.IsAuthenticated ?? false;
-        var role = context.User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
-
-        Console.WriteLine($"[DEBUG] Home access - Authenticated: {isAuthenticated}, Role: {role}");
-    }
-
+    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Add("X-Frame-Options", "DENY");
+    context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
     await next();
 });
 

@@ -1,0 +1,709 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\StudentProfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\StudentProfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\Grade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Grade.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\Class.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Class.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\AuthModels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\AuthModels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\HRController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\HRController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\TeacherController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\TeacherController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\TeacherProfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\TeacherProfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\Login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Auth\\Login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\Register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Auth\\Register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:wwwroot\\js\\site.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\css\\teacher-theme.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:wwwroot\\css\\teacher-theme.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\ViewStudent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Teacher\\ViewStudent.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\RecordAttendance.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Teacher\\RecordAttendance.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\MyStudents.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Teacher\\MyStudents.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\Dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Teacher\\Dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\AddGrade.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Teacher\\AddGrade.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\_Layout.cshtml.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Shared\\_Layout.cshtml.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\_Layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Shared\\_Layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Profile\\Index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Profile\\Index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\GenerateReport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\HR\\GenerateReport.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\ManageStudents.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\HR\\ManageStudents.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\Dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\HR\\Dashboard.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Home\\Index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Home\\Index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Home\\ChooseRole.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Home\\ChooseRole.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Services\\FirebaseSchoolService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Services\\FirebaseSchoolService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Services\\FirebaseAuthService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Services\\FirebaseAuthService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\UserProfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\UserProfile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\Attendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Models\\Attendance.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Interfaces\\IFirebaseSchoolService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Interfaces\\IFirebaseSchoolService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Interfaces\\IFirebaseAuthService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Interfaces\\IFirebaseAuthService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\ProfileController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\ProfileController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\HomeController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\HomeController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Controllers\\AuthController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\Error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Views\\Shared\\Error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj.user||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HighSchoolPortal.csproj.user||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HighSchoolPortal.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 9,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "HRController.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\HRController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HRController.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\HRController.cs*",
+              "RelativeToolTip": "Controllers\\HRController.cs*",
+              "ViewState": "AgIAAOkCAAAAAAAAAAAQwBQDAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:44:58.553Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Grade.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\Grade.cs",
+              "RelativeDocumentMoniker": "Models\\Grade.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\Grade.cs",
+              "RelativeToolTip": "Models\\Grade.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAB8AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:46:09.49Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "StudentProfile.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\StudentProfile.cs",
+              "RelativeDocumentMoniker": "Models\\StudentProfile.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\StudentProfile.cs",
+              "RelativeToolTip": "Models\\StudentProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:46:13.761Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TeacherController.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\TeacherController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TeacherController.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\TeacherController.cs*",
+              "RelativeToolTip": "Controllers\\TeacherController.cs*",
+              "ViewState": "AgIAAEYCAAAAAAAAAAAQwHECAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:44:09.4Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TeacherProfile.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\TeacherProfile.cs",
+              "RelativeDocumentMoniker": "Models\\TeacherProfile.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\TeacherProfile.cs",
+              "RelativeToolTip": "Models\\TeacherProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T12:21:56.606Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\Login.cshtml",
+              "RelativeDocumentMoniker": "Views\\Auth\\Login.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\Login.cshtml",
+              "RelativeToolTip": "Views\\Auth\\Login.cshtml",
+              "ViewState": "AgIAAKAAAAAAAAAAAAAuwMQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:51:15.418Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Program.cs*",
+              "RelativeToolTip": "Program.cs*",
+              "ViewState": "AgIAAH0AAAAAAAAAAAAQwKgAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-29T09:57:41.211Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Class.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\Class.cs",
+              "RelativeDocumentMoniker": "Models\\Class.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\Class.cs",
+              "RelativeToolTip": "Models\\Class.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:46:03.538Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AuthModels.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\AuthModels.cs",
+              "RelativeDocumentMoniker": "Models\\AuthModels.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\AuthModels.cs",
+              "RelativeToolTip": "Models\\AuthModels.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAQwGUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:45:57.754Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\Register.cshtml",
+              "RelativeDocumentMoniker": "Views\\Auth\\Register.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Auth\\Register.cshtml",
+              "RelativeToolTip": "Views\\Auth\\Register.cshtml",
+              "ViewState": "AgIAABABAAAAAAAAAAAuwD0BAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:51:18.261Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "teacher-theme.css",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\css\\teacher-theme.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\teacher-theme.css",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\css\\teacher-theme.css",
+              "RelativeToolTip": "wwwroot\\css\\teacher-theme.css",
+              "ViewState": "AgIAAPAAAAAAAAAAAAAuwB0BAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-01-04T11:48:48.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "site.js",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\js\\site.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\site.js",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\js\\site.js",
+              "RelativeToolTip": "wwwroot\\js\\site.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-01-04T11:48:43.967Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\site.css",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "wwwroot\\css\\site.css",
+              "ViewState": "AgIAACkAAAAAAAAAAAAuwFYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-01-04T11:48:31.922Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ViewStudent.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\ViewStudent.cshtml",
+              "RelativeDocumentMoniker": "Views\\Teacher\\ViewStudent.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\ViewStudent.cshtml",
+              "RelativeToolTip": "Views\\Teacher\\ViewStudent.cshtml",
+              "ViewState": "AgIAAEYBAAAAAAAAAAAuwHMBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:48:12.471Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "RecordAttendance.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\RecordAttendance.cshtml",
+              "RelativeDocumentMoniker": "Views\\Teacher\\RecordAttendance.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\RecordAttendance.cshtml",
+              "RelativeToolTip": "Views\\Teacher\\RecordAttendance.cshtml",
+              "ViewState": "AgIAAM0BAAAAAAAAAAAuwPoBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:48:06.659Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "MyStudents.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\MyStudents.cshtml",
+              "RelativeDocumentMoniker": "Views\\Teacher\\MyStudents.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\MyStudents.cshtml",
+              "RelativeToolTip": "Views\\Teacher\\MyStudents.cshtml",
+              "ViewState": "AgIAAFUBAAAAAAAAAAAuwIIBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:48:02.142Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\Teacher\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\Dashboard.cshtml",
+              "RelativeToolTip": "Views\\Teacher\\Dashboard.cshtml",
+              "ViewState": "AgIAAIABAAAAAAAAAAAuwK0BAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:47:57.665Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "AddGrade.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\AddGrade.cshtml",
+              "RelativeDocumentMoniker": "Views\\Teacher\\AddGrade.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Teacher\\AddGrade.cshtml",
+              "RelativeToolTip": "Views\\Teacher\\AddGrade.cshtml",
+              "ViewState": "AgIAANMAAAAAAAAAAAAuwAABAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:47:52.358Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "_Layout.cshtml.css",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\_Layout.cshtml.css",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml.css",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\_Layout.cshtml.css",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml.css",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAuwDAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-01-04T11:47:42.395Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Profile\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Profile\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Profile\\Index.cshtml",
+              "RelativeToolTip": "Views\\Profile\\Index.cshtml",
+              "ViewState": "AgIAACgBAAAAAAAAAAAuwFUBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:47:29.173Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "GenerateReport.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\GenerateReport.cshtml",
+              "RelativeDocumentMoniker": "Views\\HR\\GenerateReport.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\GenerateReport.cshtml",
+              "RelativeToolTip": "Views\\HR\\GenerateReport.cshtml",
+              "ViewState": "AgIAAHkAAAAAAAAAAAAuwKYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:47:23.254Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAFQCAAAAAAAAAAAuwIECAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:43:12.31Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "ManageStudents.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\ManageStudents.cshtml",
+              "RelativeDocumentMoniker": "Views\\HR\\ManageStudents.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\ManageStudents.cshtml",
+              "RelativeToolTip": "Views\\HR\\ManageStudents.cshtml",
+              "ViewState": "AgIAAMQAAAAAAAAAAAAuwPEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:47:18.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Dashboard.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\Dashboard.cshtml",
+              "RelativeDocumentMoniker": "Views\\HR\\Dashboard.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\HR\\Dashboard.cshtml",
+              "RelativeToolTip": "Views\\HR\\Dashboard.cshtml",
+              "ViewState": "AgIAAMkAAAAAAAAAAAAuwPYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:47:14.692Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:47:08.144Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "ChooseRole.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Home\\ChooseRole.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\ChooseRole.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Home\\ChooseRole.cshtml",
+              "RelativeToolTip": "Views\\Home\\ChooseRole.cshtml",
+              "ViewState": "AgIAANsAAAAAAAAAAAAuwAgBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:47:03.566Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "FirebaseSchoolService.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Services\\FirebaseSchoolService.cs",
+              "RelativeDocumentMoniker": "Services\\FirebaseSchoolService.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Services\\FirebaseSchoolService.cs",
+              "RelativeToolTip": "Services\\FirebaseSchoolService.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAQwAUFAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:46:56.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "FirebaseAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Services\\FirebaseAuthService.cs",
+              "RelativeDocumentMoniker": "Services\\FirebaseAuthService.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Services\\FirebaseAuthService.cs",
+              "RelativeToolTip": "Services\\FirebaseAuthService.cs",
+              "ViewState": "AgIAAA8CAAAAAAAAAAAQwDoCAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:46:52.125Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "UserProfile.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\UserProfile.cs",
+              "RelativeDocumentMoniker": "Models\\UserProfile.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\UserProfile.cs",
+              "RelativeToolTip": "Models\\UserProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:46:38.708Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "IFirebaseSchoolService.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Interfaces\\IFirebaseSchoolService.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IFirebaseSchoolService.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Interfaces\\IFirebaseSchoolService.cs",
+              "RelativeToolTip": "Interfaces\\IFirebaseSchoolService.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwCMAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:44:27.758Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Attendance.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\Attendance.cs",
+              "RelativeDocumentMoniker": "Models\\Attendance.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Models\\Attendance.cs",
+              "RelativeToolTip": "Models\\Attendance.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:44:37.227Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "IFirebaseAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Interfaces\\IFirebaseAuthService.cs",
+              "RelativeDocumentMoniker": "Interfaces\\IFirebaseAuthService.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Interfaces\\IFirebaseAuthService.cs",
+              "RelativeToolTip": "Interfaces\\IFirebaseAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:45:37.075Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "ProfileController.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\ProfileController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProfileController.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\ProfileController.cs",
+              "RelativeToolTip": "Controllers\\ProfileController.cs",
+              "ViewState": "AgIAAL8AAAAAAAAAAAAAANwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:44:08.207Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAMMAAAAAAAAAAAAAAM8AAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:44:43.169Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Controllers\\AuthController.cs",
+              "ViewState": "AgIAACEBAAAAAAAAAAAAADABAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-04T11:44:38.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "Error.cshtml",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\Error.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\Error.cshtml",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\Views\\Shared\\Error.cshtml",
+              "RelativeToolTip": "Views\\Shared\\Error.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-01-04T11:42:37.88Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "HighSchoolPortal.csproj",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj",
+              "RelativeDocumentMoniker": "HighSchoolPortal.csproj",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj",
+              "RelativeToolTip": "HighSchoolPortal.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-12-29T09:57:48.863Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-29T09:57:46.784Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "HighSchoolPortal.csproj.user",
+              "DocumentMoniker": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj.user",
+              "RelativeDocumentMoniker": "HighSchoolPortal.csproj.user",
+              "ToolTip": "C:\\Users\\Princ\\GitHub\\PortalX_Web_Admin_Panel\\HighSchoolPortal\\HighSchoolPortal\\HighSchoolPortal.csproj.user",
+              "RelativeToolTip": "HighSchoolPortal.csproj.user",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003464|",
+              "WhenOpened": "2025-12-29T09:57:43.111Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,320 @@
+﻿@using HighSchoolPortal.Controllers
+@model TeacherProfile
+@{
+    ViewData["Title"] = "Teacher Details";
+    var teacherStudents = ViewBag.TeacherStudents as IEnumerable<StudentProfile>;
+    var stats = ViewBag.Stats as TeacherHRStats;
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gradient">Teacher Details</h1>
+            <p class="text-muted mb-0">Teacher ID: @Model.TeacherId</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("EditTeacher", "HR", new { id = Model.Id })" class="btn btn-warning">
+                <i class="fas fa-edit me-2"></i>Edit Teacher
+            </a>
+            <a href="@Url.Action("ManageTeachers", "HR")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to List
+            </a>
+        </div>
+    </div>
+
+    <!-- Teacher Profile -->
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <img src="@Model.AvatarUrl"
+                         class="rounded-circle img-fluid"
+                         style="width: 150px; height: 150px; object-fit: cover;"
+                         onerror="this.src='/images/default-avatar.png'">
+                    <h5 class="my-3">@Model.FullName</h5>
+                    <p class="text-muted mb-1">@Model.Department Department</p>
+                    <p class="text-muted mb-4">@Model.Qualification</p>
+
+                    <div class="d-flex justify-content-center mb-2">
+                        <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger") fs-6">
+                            <i class="fas fa-circle me-1" style="font-size: 0.5rem;"></i>
+                            @(Model.IsActive ? "Active" : "Inactive")
+                        </span>
+                        @if (Model.IsHeadOfDepartment)
+                        {
+                            <span class="badge bg-info ms-2 fs-6">
+                                <i class="fas fa-crown me-1"></i>Head of Department
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Contact Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Email</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.Email</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Phone</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.Phone</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Address</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.Address</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Date of Birth</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.DateOfBirth.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <p class="mb-0">Hire Date</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <p class="text-muted mb-0">@Model.HireDate.ToString("MMMM dd, yyyy")</p>
+                            <small class="text-muted">
+                                (@((DateTime.Now - Model.HireDate).Days / 365) years experience)
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subjects -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Subjects</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Subjects?.Any() == true)
+                    {
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var subject in Model.Subjects)
+                            {
+                                <span class="badge bg-primary">@subject</span>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No subjects assigned</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Classes -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Classes</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.Classes?.Any() == true)
+                    {
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var className in Model.Classes)
+                            {
+                                <span class="badge bg-secondary">@className</span>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">No classes assigned</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <!-- Performance Statistics -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-primary text-white mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white-50">Total Students</h6>
+                                    <h4 class="mb-0">@(stats?.TotalStudents ?? 0)</h4>
+                                </div>
+                                <i class="fas fa-users fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-success text-white mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white-50">Total Classes</h6>
+                                    <h4 class="mb-0">@(stats?.TotalClasses ?? 0)</h4>
+                                </div>
+                                <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-info text-white mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white-50">Avg Student GPA</h6>
+                                    <h4 class="mb-0">@(stats?.AverageStudentGPA.ToString("0.00") ?? "0.00")</h4>
+                                </div>
+                                <i class="fas fa-graduation-cap fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card bg-warning text-white mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-white-50">Avg Attendance</h6>
+                                    <h4 class="mb-0">@(stats?.AverageStudentAttendance ?? 0)%</h4>
+                                </div>
+                                <i class="fas fa-calendar-check fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teacher's Students -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Students</h5>
+                        <span class="badge bg-primary">@(teacherStudents?.Count() ?? 0) students</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (teacherStudents?.Any() == true)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Student ID</th>
+                                        <th>Name</th>
+                                        <th>Grade</th>
+                                        <th>Class</th>
+                                        <th>GPA</th>
+                                        <th>Attendance</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var student in teacherStudents)
+                                    {
+                                        <tr>
+                                            <td>@student.StudentId</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="@student.AvatarUrl"
+                                                         class="rounded-circle me-2"
+                                                         style="width: 30px; height: 30px;"
+                                                         onerror="this.src='/images/default-avatar.png'">
+                                                    <div>@student.FullName</div>
+                                                </div>
+                                            </td>
+                                            <td>Grade @student.GradeLevel</td>
+                                            <td>@student.ClassId</td>
+                                            <td>
+                                                <span class="badge @(student.GPA >= 3.5m ? "bg-success" : student.GPA >= 2.5m ? "bg-warning" : "bg-danger")">
+                                                    @student.GPA.ToString("0.00")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge @(student.AttendancePercentage >= 90 ? "bg-success" : student.AttendancePercentage >= 75 ? "bg-warning" : "bg-danger")">
+                                                    @student.AttendancePercentage%
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge @(student.IsActive ? "bg-success" : "bg-danger")">
+                                                    @(student.IsActive ? "Active" : "Inactive")
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-user-graduate fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">No students assigned</h6>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Additional Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Specialization</label>
+                                <p class="mb-0">@Model.Specialization</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Employee ID</label>
+                                <p class="mb-0">@Model.EmployeeId</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Created At</label>
+                                <p class="mb-0">@Model.CreatedAt.ToString("MMMM dd, yyyy HH:mm")</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label text-muted">Last Updated</label>
+                                <p class="mb-0">@Model.UpdatedAt.ToString("MMMM dd, yyyy HH:mm")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,439 @@
+﻿@using HighSchoolPortal.Controllers
+@model StudentProfile
+@{
+    ViewData["Title"] = "Student Details";
+    var grades = ViewBag.Grades as IEnumerable<Grade>;
+    var attendance = ViewBag.Attendance as IEnumerable<Attendance>;
+    var stats = ViewBag.Stats as StudentStats;
+}
+
+<div class="container-fluid py-4 px-lg-5">
+    <!-- Modern Header -->
+    <div class="page-header-modern d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <div>
+            <h1 class="h3 mb-1 text-gradient">Student Profile</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0" style="font-size: 0.85rem;">
+                    <li class="breadcrumb-item"><a href="/HR/ManageStudents">Manage Students</a></li>
+                    <li class="breadcrumb-item active">@Model.FullName</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-3 mt-3 mt-md-0">
+            <div class="text-end d-none d-lg-block me-3">
+                <small class="text-muted d-block">Student Status</small>
+                <span class="fw-bold @(Model.IsActive ? "text-success" : "text-danger")">
+                    @(Model.IsActive ? "Active" : "Inactive")
+                </span>
+            </div>
+            <a href="@Url.Action("EditStudent", "HR", new { id = Model.Id })" class="btn btn-warning rounded-pill px-4 shadow">
+                <i class="fas fa-edit me-2"></i>Edit Profile
+            </a>
+            <a href="@Url.Action("ManageStudents", "HR")" class="btn btn-secondary rounded-pill px-4 shadow">
+                <i class="fas fa-arrow-left me-2"></i>Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Column: Profile & Contact Info -->
+        <div class="col-lg-4">
+            <!-- Profile Card -->
+            <div class="card main-card mb-4">
+                <div class="card-body text-center p-4">
+                    <div class="position-relative d-inline-block mb-3">
+                        <img src="@Model.AvatarUrl"
+                             class="rounded-circle shadow-lg"
+                             style="width: 140px; height: 140px; object-fit: cover; border: 4px solid #fff;"
+                             onerror="this.src='https://ui-avatars.com/api/?name=@Model.FullName&background=random'">
+                        <div class="position-absolute bottom-0 end-0">
+                            <span class="badge @(Model.IsActive ? "bg-success" : "bg-danger") rounded-pill px-3 py-2">
+                                <i class="fas fa-circle me-1" style="font-size: 0.6rem;"></i>
+                                @(Model.IsActive ? "Active" : "Inactive")
+                            </span>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-1">@Model.FullName</h4>
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-id-card me-2"></i>ID: @Model.StudentId
+                    </p>
+                    <div class="d-flex justify-content-center gap-3 mb-3">
+                        <span class="badge bg-primary-subtle text-primary px-3 py-2">
+                            <i class="fas fa-graduation-cap me-1"></i>Grade @Model.GradeLevel
+                        </span>
+                        <span class="badge bg-info-subtle text-info px-3 py-2">
+                            <i class="fas fa-school me-1"></i>@Model.ClassId
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Stats Grid -->
+            <div class="row mb-4 g-2">
+                <div class="col-6">
+                    <div class="mini-stat-card shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-muted small fw-bold">CURRENT GPA</span>
+                                <h3 class="mb-0 fw-bold @GetGpaColorClass(Model.GPA)">@Model.GPA.ToString("0.00")</h3>
+                            </div>
+                            <div class="bg-primary-subtle rounded-circle p-2">
+                                <i class="fas fa-chart-line text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="mini-stat-card shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-muted small fw-bold">ATTENDANCE</span>
+                                <h3 class="mb-0 fw-bold @GetAttendanceColorClass(Model.AttendancePercentage)">@Model.AttendancePercentage%</h3>
+                            </div>
+                            <div class="bg-success-subtle rounded-circle p-2">
+                                <i class="fas fa-calendar-check text-success"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="mini-stat-card shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-muted small fw-bold">GRADES</span>
+                                <h3 class="mb-0 fw-bold">@(stats?.TotalGrades ?? 0)</h3>
+                            </div>
+                            <div class="bg-info-subtle rounded-circle p-2">
+                                <i class="fas fa-graduation-cap text-info"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="mini-stat-card shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-muted small fw-bold">ENROLLED</span>
+                                <h3 class="mb-0 fw-bold">@(stats?.DaysEnrolled ?? 0)d</h3>
+                            </div>
+                            <div class="bg-warning-subtle rounded-circle p-2">
+                                <i class="fas fa-clock text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="card main-card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 d-flex align-items-center">
+                        <i class="fas fa-address-card text-primary me-2"></i>
+                        Contact Information
+                    </h5>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item border-0 px-0 py-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-envelope text-muted me-3" style="width: 20px;"></i>
+                                <div>
+                                    <small class="text-muted">Email</small>
+                                    <div class="fw-semibold">@Model.Email</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item border-0 px-0 py-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-phone text-muted me-3" style="width: 20px;"></i>
+                                <div>
+                                    <small class="text-muted">Phone</small>
+                                    <div class="fw-semibold">@Model.Phone</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item border-0 px-0 py-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-map-marker-alt text-muted me-3" style="width: 20px;"></i>
+                                <div>
+                                    <small class="text-muted">Address</small>
+                                    <div class="fw-semibold">@Model.Address</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item border-0 px-0 py-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-birthday-cake text-muted me-3" style="width: 20px;"></i>
+                                <div>
+                                    <small class="text-muted">Date of Birth</small>
+                                    <div class="fw-semibold">@Model.DateOfBirth.ToString("MMMM dd, yyyy")</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item border-0 px-0 py-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-calendar-plus text-muted me-3" style="width: 20px;"></i>
+                                <div>
+                                    <small class="text-muted">Enrollment Date</small>
+                                    <div class="fw-semibold">@Model.EnrollmentDate.ToString("MMMM dd, yyyy")</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parent Information -->
+            <div class="card main-card">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 d-flex align-items-center">
+                        <i class="fas fa-users text-primary me-2"></i>
+                        Parent Information
+                    </h5>
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item border-0 px-0 py-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-friends text-muted me-3" style="width: 20px;"></i>
+                                <div>
+                                    <small class="text-muted">Parent Name</small>
+                                    <div class="fw-semibold">@Model.ParentName</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item border-0 px-0 py-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-envelope text-muted me-3" style="width: 20px;"></i>
+                                <div>
+                                    <small class="text-muted">Parent Email</small>
+                                    <div class="fw-semibold">@Model.ParentEmail</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item border-0 px-0 py-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-phone text-muted me-3" style="width: 20px;"></i>
+                                <div>
+                                    <small class="text-muted">Parent Phone</small>
+                                    <div class="fw-semibold">@Model.ParentPhone</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item border-0 px-0 py-2">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-triangle text-muted me-3" style="width: 20px;"></i>
+                                <div>
+                                    <small class="text-muted">Emergency Contact</small>
+                                    <div class="fw-semibold">@Model.EmergencyContact</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Grades & Attendance -->
+        <div class="col-lg-8">
+            <!-- Recent Grades -->
+            <div class="card main-card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 d-flex align-items-center">
+                        <i class="fas fa-graduation-cap text-primary me-2"></i>
+                        Recent Grades
+                    </h5>
+                    @if (grades?.Any() == true)
+                    {
+                        <a href="#" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye me-1"></i>View All
+                        </a>
+                    }
+                </div>
+                <div class="card-body p-0">
+                    @if (grades?.Any() == true)
+                    {
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-4">Subject</th>
+                                        <th>Term</th>
+                                        <th>Test 1</th>
+                                        <th>Test 2</th>
+                                        <th>Assignment</th>
+                                        <th>Exam</th>
+                                        <th>Total</th>
+                                        <th>Grade</th>
+                                        <th class="pe-4">Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var grade in grades.Take(10))
+                                    {
+                                        <tr>
+                                            <td class="ps-4">
+                                                <div class="fw-semibold">@grade.Subject</div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-light text-dark">@grade.Term</span>
+                                            </td>
+                                            <td class="text-muted">@grade.Test1.ToString("0.00")</td>
+                                            <td class="text-muted">@grade.Test2.ToString("0.00")</td>
+                                            <td class="text-muted">@grade.Assignment.ToString("0.00")</td>
+                                            <td class="text-muted">@grade.Exam.ToString("0.00")</td>
+                                            <td>
+                                                <span class="fw-bold @GetGradeColorClass(grade.TotalScore)">
+                                                    @grade.TotalScore.ToString("0.00")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge rounded-pill @GetGradeBadgeClass(grade.TotalScore) px-3">
+                                                    @grade.GradeLetter
+                                                </span>
+                                            </td>
+                                            <td class="pe-4">
+                                                <span class="text-muted small">@grade.DateRecorded.ToString("MMM dd")</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (grades.Count() > 10)
+                        {
+                            <div class="text-center py-3 border-top">
+                                <span class="text-muted small">
+                                    Showing 10 of @grades.Count() grades
+                                </span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-book-open fa-3x text-light mb-3"></i>
+                            <h5 class="text-muted">No grades recorded yet</h5>
+                            <p class="text-muted mb-0">Grades will appear here once recorded by teachers.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Recent Attendance -->
+            <div class="card main-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 d-flex align-items-center">
+                        <i class="fas fa-calendar-alt text-primary me-2"></i>
+                        Recent Attendance
+                    </h5>
+                    @if (attendance?.Any() == true)
+                    {
+                        <a href="#" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye me-1"></i>View All
+                        </a>
+                    }
+                </div>
+                <div class="card-body p-0">
+                    @if (attendance?.Any() == true)
+                    {
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-4">Date</th>
+                                        <th>Class</th>
+                                        <th>Status</th>
+                                        <th class="pe-4">Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var record in attendance.Take(10))
+                                    {
+                                        <tr>
+                                            <td class="ps-4">
+                                                <div class="fw-semibold">@record.Date.ToString("MMM dd, yyyy")</div>
+                                                <div class="text-muted small">@record.Date.ToString("dddd")</div>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info-subtle text-info">@record.ClassName</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge rounded-pill @GetAttendanceStatusClass(record.Status) px-3 py-1">
+                                                    @record.Status
+                                                </span>
+                                            </td>
+                                            <td class="pe-4">
+                                                <span class="text-muted small">@record.Remarks</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (attendance.Count() > 10)
+                        {
+                            <div class="text-center py-3 border-top">
+                                <span class="text-muted small">
+                                    Showing 10 of @attendance.Count() attendance records
+                                </span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-calendar-check fa-3x text-light mb-3"></i>
+                            <h5 class="text-muted">No attendance records yet</h5>
+                            <p class="text-muted mb-0">Attendance records will appear here once recorded by teachers.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public string GetGpaColorClass(decimal gpa)
+    {
+        if (gpa >= 3.5m) return "text-success";
+        if (gpa >= 2.5m) return "text-warning";
+        return "text-danger";
+    }
+
+    public string GetAttendanceColorClass(int attendance)
+    {
+        if (attendance >= 90) return "text-success";
+        if (attendance >= 75) return "text-warning";
+        return "text-danger";
+    }
+
+    public string GetGradeColorClass(decimal score)
+    {
+        if (score >= 70) return "text-success";
+        if (score >= 50) return "text-warning";
+        return "text-danger";
+    }
+
+    public string GetGradeBadgeClass(decimal score)
+    {
+        if (score >= 90) return "bg-success-subtle text-success";
+        if (score >= 80) return "bg-primary-subtle text-primary";
+        if (score >= 70) return "bg-info-subtle text-info";
+        if (score >= 60) return "bg-warning-subtle text-warning";
+        if (score >= 50) return "bg-orange-subtle text-orange";
+        return "bg-danger-subtle text-danger";
+    }
+
+    public string GetAttendanceStatusClass(string status)
+    {
+        switch (status.ToLower())
+        {
+            case "present":
+                return "bg-success-subtle text-success";
+            case "late":
+                return "bg-warning-subtle text-warning";
+            case "excused":
+                return "bg-info-subtle text-info";
+            default:
+                return "bg-danger-subtle text-danger";
+        }
+    }
+}

@@ -1,0 +1,296 @@
+﻿@using HighSchoolPortal.Controllers
+@{
+    ViewData["Title"] = "School Statistics";
+    var statistics = ViewBag.Statistics as SchoolStatistics;
+    var generatedDate = ViewBag.GeneratedDate as string;
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gradient">School Statistics</h1>
+            <p class="text-muted mb-0">@generatedDate</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("GenerateReport", "HR", new { reportType = "overview", format = "html" })" class="btn btn-outline-primary">
+                <i class="fas fa-file-export me-2"></i>Generate Report
+            </a>
+            <a href="@Url.Action("Dashboard", "HR")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary Statistics -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50">Total Students</h6>
+                            <h4 class="mb-0">@statistics?.TotalStudents</h4>
+                        </div>
+                        <i class="fas fa-user-graduate fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50">Total Teachers</h6>
+                            <h4 class="mb-0">@statistics?.TotalTeachers</h4>
+                        </div>
+                        <i class="fas fa-chalkboard-teacher fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-info text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50">Total Classes</h6>
+                            <h4 class="mb-0">@statistics?.TotalClasses</h4>
+                        </div>
+                        <i class="fas fa-school fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50">Student/Teacher Ratio</h6>
+                            <h4 class="mb-0">@statistics?.StudentTeacherRatio:1</h4>
+                        </div>
+                        <i class="fas fa-balance-scale fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Grade Distribution -->
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Grade Level Distribution</h5>
+                </div>
+                <div class="card-body">
+                    @if (statistics?.GradeDistribution?.Any() == true)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Grade Level</th>
+                                        <th>Students</th>
+                                        <th>Avg GPA</th>
+                                        <th>Avg Attendance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var grade in statistics.GradeDistribution)
+                                    {
+                                        <tr>
+                                            <td>Grade @grade.GradeLevel</td>
+                                            <td>@grade.StudentCount</td>
+                                            <td>
+                                                <span class="badge @(grade.AverageGPA >= 3.5m ? "bg-success" : grade.AverageGPA >= 2.5m ? "bg-warning" : "bg-danger")">
+                                                    @grade.AverageGPA.ToString("0.00")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge @(grade.AverageAttendance >= 90 ? "bg-success" : grade.AverageAttendance >= 75 ? "bg-warning" : "bg-danger")">
+                                                    @grade.AverageAttendance%
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">No grade distribution data available</h6>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Department Statistics -->
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Department Statistics</h5>
+                </div>
+                <div class="card-body">
+                    @if (statistics?.DepartmentStats?.Any() == true)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Department</th>
+                                        <th>Teachers</th>
+                                        <th>Avg Experience (years)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var dept in statistics.DepartmentStats)
+                                    {
+                                        <tr>
+                                            <td>@dept.Department</td>
+                                            <td>@dept.TeacherCount</td>
+                                            <td>@dept.AverageExperience.ToString("0.0")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">No department statistics available</h6>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Class Statistics -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Class Statistics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-6">
+                            <div class="card bg-light mb-3">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Average Class Size</h6>
+                                    <h3>@statistics?.AverageClassSize.ToString("0.0")</h3>
+                                    <small class="text-muted">students per class</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light mb-3">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Overall Pass Rate</h6>
+                                    <h3>@statistics?.PassRate.ToString("0.0")%</h3>
+                                    <small class="text-muted">students passing (GPA ≥ 2.0)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Quick Reports</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <a href="@Url.Action("GenerateReport", "HR", new { reportType = "overview" })"
+                               class="btn btn-outline-primary w-100 text-start">
+                                <i class="fas fa-chart-pie me-2"></i>Overview Report
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="@Url.Action("GenerateReport", "HR", new { reportType = "performance" })"
+                               class="btn btn-outline-success w-100 text-start">
+                                <i class="fas fa-graduation-cap me-2"></i>Performance Report
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="@Url.Action("GenerateReport", "HR", new { reportType = "attendance" })"
+                               class="btn btn-outline-info w-100 text-start">
+                                <i class="fas fa-calendar-check me-2"></i>Attendance Report
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="@Url.Action("GenerateReport", "HR", new { reportType = "teacher" })"
+                               class="btn btn-outline-warning w-100 text-start">
+                                <i class="fas fa-chalkboard-teacher me-2"></i>Teacher Report
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Statistics Summary</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card bg-light mb-3">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-check fa-2x text-primary mb-2"></i>
+                            <h5>Active Students</h5>
+                            <p class="h4 mb-0">
+                                @{
+                                    var activeStudents = statistics?.GradeDistribution?.Sum(g => g.StudentCount) ?? 0;
+                                }
+                                @activeStudents
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-light mb-3">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-line fa-2x text-success mb-2"></i>
+                            <h5>Academic Performance</h5>
+                            <p class="h4 mb-0">
+                                @statistics?.PassRate.ToString("0.0")%
+                            </p>
+                            <small class="text-muted">Overall Pass Rate</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-light mb-3">
+                        <div class="card-body text-center">
+                            <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                            <h5>Average Experience</h5>
+                            <p class="h4 mb-0">
+                                @{
+                                    var avgExp = statistics?.DepartmentStats?.Average(d => d.AverageExperience) ?? 0;
+                                }
+                                @avgExp.ToString("0.0") yrs
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

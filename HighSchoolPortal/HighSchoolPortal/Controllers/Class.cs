@@ -17,5 +17,10 @@ namespace HighSchoolPortal.Models
         public int StudentCount => StudentIds?.Count ?? 0;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public string Code { get; internal set; }
+        public string AcademicYear { get; internal set; }
+        public string Term { get; internal set; }
+        public int MaxCapacity { get; internal set; }
+        public bool IsActive { get; internal set; }
     }
 }

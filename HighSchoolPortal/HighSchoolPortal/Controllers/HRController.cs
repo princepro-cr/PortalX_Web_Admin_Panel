@@ -22,7 +22,7 @@ namespace HighSchoolPortal.Controllers
             _authService = authService;
             _logger = logger;
         }
-
+        
         public async Task<IActionResult> Dashboard()
         {
             try
@@ -180,49 +180,200 @@ namespace HighSchoolPortal.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ViewStudent(string id) // Renamed from StudentDetails
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                TempData["ErrorMessage"] = "Invalid student ID.";
-                return RedirectToAction("ManageStudents");
-            }
+        // Add these methods to your existing HRController
 
+        [HttpGet]
+        public async Task<IActionResult> AssignTeacherSubjects(string id)
+        {
             try
             {
-                var student = await _schoolService.GetStudentByIdAsync(id);
-                if (student == null)
+                _logger.LogInformation($"Loading assignment page for teacher ID: {id}");
+
+                if (string.IsNullOrEmpty(id))
                 {
-                    TempData["ErrorMessage"] = "Student not found.";
-                    return RedirectToAction("ManageStudents");
+                    TempData["ErrorMessage"] = "Teacher ID is required.";
+                    return RedirectToAction("ManageTeachers");
                 }
 
-                var grades = await _schoolService.GetStudentGradesAsync(id);
-                var attendance = await _schoolService.GetStudentAttendanceAsync(id);
-
-                // Calculate statistics
-                var stats = new StudentHRStats
+                // Get teacher profile
+                var teacher = await _schoolService.GetTeacherByIdAsync(id);
+                if (teacher == null)
                 {
-                    TotalGrades = grades.Count(),
-                    AverageScore = grades.Any() ? Math.Round(grades.Average(g => g.TotalScore), 2) : 0,
-                    AttendancePercentage = student.AttendancePercentage,
-                    DaysEnrolled = (DateTime.Now - student.EnrollmentDate).Days,
-                    Subjects = grades.Select(g => g.Subject).Distinct().ToList()
-                };
+                    _logger.LogWarning($"Teacher not found with ID: {id}");
+                    TempData["ErrorMessage"] = $"Teacher with ID {id} not found.";
+                    return RedirectToAction("ManageTeachers");
+                }
 
-                ViewBag.Grades = grades.OrderByDescending(g => g.DateRecorded).ToList();
-                ViewBag.Attendance = attendance.OrderByDescending(a => a.Date).Take(30).ToList();
-                ViewBag.Stats = stats;
+                _logger.LogInformation($"Teacher found: {teacher.FullName} (ID: {teacher.Id})");
 
-                return View(student);
+                // Get all available classes
+                var allClasses = await _schoolService.GetAllClassesAsync();
+
+                // If no classes exist, create default ones
+                if (!allClasses.Any())
+                {
+                    TempData["InfoMessage"] = "No classes found. Creating default classes...";
+                    await CreateDefaultClasses();
+                    allClasses = await _schoolService.GetAllClassesAsync();
+                }
+
+                var availableClasses = allClasses
+                    .Select(c => c.Name)
+                    .Distinct()
+                    .OrderBy(c => c)
+                    .ToList();
+
+                // If teacher already has classes assigned, include them even if they don't exist in allClasses
+                if (teacher.Classes != null && teacher.Classes.Any())
+                {
+                    foreach (var assignedClass in teacher.Classes)
+                    {
+                        if (!availableClasses.Contains(assignedClass))
+                        {
+                            availableClasses.Add(assignedClass);
+                        }
+                    }
+                }
+
+                ViewBag.Teacher = teacher;
+                ViewBag.AvailableClasses = availableClasses.OrderBy(c => c).ToList();
+                ViewBag.Subjects = GetSubjectList();
+
+                return View(teacher);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error viewing student details for ID: {id}");
-                TempData["ErrorMessage"] = "Error loading student details.";
-                return RedirectToAction("ManageStudents");
+                _logger.LogError(ex, $"Error loading teacher assignment page for ID: {id}");
+                TempData["ErrorMessage"] = "Error loading assignment data.";
+                return RedirectToAction("ManageTeachers");
             }
+        }
+
+        private async Task CreateDefaultClasses()
+        {
+            try
+            {
+                var classes = new List<string> { "10A", "10B", "11A", "11B", "12A", "12B" };
+
+                foreach (var className in classes)
+                {
+                    var grade = className.Substring(0, 2);
+                    var classItem = new Class
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = className,
+                        Code = $"GR{className}",
+                        GradeLevel = grade,
+                        TeacherId = "",
+                        TeacherName = "",
+                        Subject = "General",
+                        AcademicYear = DateTime.Now.Year.ToString(),
+                        Term = "First",
+                        Schedule = "Mon-Fri 9:00-10:00",
+                        RoomNumber = $"Room {100 + new Random().Next(1, 20)}",
+                         MaxCapacity = 30,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    };
+
+                    await _schoolService.AddClassAsync(classItem);
+                }
+
+                _logger.LogInformation($"Created {classes.Count} default classes.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating default classes");
+                throw;
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AssignTeacherSubjects(string teacherId, List<string> selectedClasses, List<string> selectedSubjects)
+        {
+            try
+            {
+                _logger.LogInformation($"Processing assignment for teacher ID: {teacherId}");
+
+                if (string.IsNullOrEmpty(teacherId))
+                {
+                    TempData["ErrorMessage"] = "Teacher ID is required.";
+                    return RedirectToAction("ManageTeachers");
+                }
+
+                // Get teacher first
+                var teacher = await _schoolService.GetTeacherByIdAsync(teacherId);
+                if (teacher == null)
+                {
+                    TempData["ErrorMessage"] = "Teacher not found.";
+                    return RedirectToAction("ManageTeachers");
+                }
+
+                if (selectedClasses == null || !selectedClasses.Any())
+                {
+                    TempData["ErrorMessage"] = "Please select at least one class.";
+                    return RedirectToAction("AssignTeacherSubjects", new { id = teacherId });
+                }
+
+                if (selectedSubjects == null || !selectedSubjects.Any())
+                {
+                    TempData["ErrorMessage"] = "Please select at least one subject.";
+                    return RedirectToAction("AssignTeacherSubjects", new { id = teacherId });
+                }
+
+                _logger.LogInformation($"Assigning {selectedSubjects.Count} subjects and {selectedClasses.Count} classes to {teacher.FullName}");
+
+                // Update teacher with assigned classes and subjects
+                teacher.Classes = selectedClasses;
+                teacher.Subjects = selectedSubjects;
+                teacher.UpdatedAt = DateTime.UtcNow;
+
+                await _schoolService.UpdateTeacherAsync(teacher);
+
+                // Update classes with teacher assignment
+                var allClasses = await _schoolService.GetAllClassesAsync();
+                foreach (var classItem in allClasses.Where(c => selectedClasses.Contains(c.Name)))
+                {
+                    classItem.TeacherId = teacherId;
+                    classItem.TeacherName = teacher.FullName;
+                    await _schoolService.UpdateClassAsync(classItem);
+                }
+
+                TempData["SuccessMessage"] = $"Successfully assigned {selectedSubjects.Count} subjects and {selectedClasses.Count} classes to {teacher.FullName}.";
+                return RedirectToAction("ViewTeacher", new { id = teacherId });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error assigning teacher subjects");
+                TempData["ErrorMessage"] = $"Error assigning subjects: {ex.Message}";
+                return RedirectToAction("AssignTeacherSubjects", new { id = teacherId });
+            }
+        }
+
+        // Helper method to get subject list
+        private List<string> GetSubjectList()
+        {
+            return new List<string>
+    {
+        "Mathematics",
+        "Science",
+        "English",
+        "History",
+        "Geography",
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Computer Science",
+        "Art",
+        "Music",
+        "Physical Education",
+        "Economics",
+        "Business Studies",
+        "Psychology",
+        "Sociology"
+    };
         }
 
 

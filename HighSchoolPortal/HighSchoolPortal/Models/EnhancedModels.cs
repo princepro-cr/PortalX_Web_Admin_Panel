@@ -122,16 +122,7 @@ namespace HighSchoolPortal.Models
         public double PassRate { get; set; }
         public int TotalStudents { get; set; }
     }
-
-    public class ClassAssignment
-    {
-        public string ClassId { get; set; }
-        public string Subject { get; set; }
-        public string Schedule { get; set; }
-        public string Room { get; set; }
-        public int StudentCount { get; set; }
-        public string AcademicYear { get; set; }
-    }
+ 
 
     public class ProfessionalDevelopment
     {

@@ -1,5 +1,7 @@
 ﻿using HighSchoolPortal.Models;
+using HighSchoolPortal.Services;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace HighSchoolPortal.Interfaces
@@ -41,12 +43,19 @@ namespace HighSchoolPortal.Interfaces
         Task<Attendance> RecordAttendanceAsync(Attendance attendance);
         Task<IEnumerable<Attendance>> GetStudentAttendanceAsync(string studentId);
         Task<IEnumerable<Attendance>> GetClassAttendanceAsync(string classId, DateTime date);
-       
+
         // User Management
         Task DeleteUserAsync(string id);
 
         // Report Generation
         Task<IEnumerable<Grade>> GenerateGradeReportAsync(string classId, string term, int year);
         Task<Dictionary<string, object>> GenerateStatisticsReportAsync();
+
+        // NEW METHODS ADDED FOR TEACHER-STUDENT RELATIONSHIP
+        Task<List<StudentProfile>> GetStudentsByTeacherAsync(string teacherId);
+        Task<List<StudentProfile>> GetStudentsByClassIdAsync(string classId);
+
+       // HR can assign teachers to classes and subjects
+    Task<TeacherAssignment> AssignTeacherToClassesAsync(string teacherId, List<string> classIds, List<string> subjects);
     }
 }

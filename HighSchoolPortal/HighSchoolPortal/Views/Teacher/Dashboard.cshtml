@@ -9,7 +9,7 @@
 }
 
 <div class="row">
-    <!-- Dashboard Header -->
+    <!-- Dashboard Header with Assignment Status -->
     <div class="col-12 mb-4">
         <div class="card teacher-gradient">
             <div class="card-body text-white">
@@ -23,15 +23,48 @@
                             <i class="fas fa-clock me-1"></i>
                             @DateTime.Now.ToString("dddd, MMMM dd, yyyy")
                         </p>
+                        <!-- Assignment Status -->
+                        @if (teacher?.Classes?.Any() == true && teacher?.Subjects?.Any() == true)
+                        {
+                            <div class="mt-2">
+                                <span class="badge bg-light text-dark me-2">
+                                    <i class="fas fa-school me-1"></i>@teacher.Classes.Count classes
+                                </span>
+                                <span class="badge bg-light text-dark">
+                                    <i class="fas fa-book me-1"></i>@teacher.Subjects.Count subjects
+                                </span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="mt-2">
+                                <span class="badge bg-warning">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    No classes/subjects assigned. Contact HR.
+                                </span>
+                            </div>
+                        }
                     </div>
                     <div class="col-md-4 text-md-end">
                         <div class="btn-group">
-                            <a href="/Teacher/AddGrade" class="btn btn-light me-2">
-                                <i class="fas fa-graduation-cap me-1"></i>Add Grade
-                            </a>
-                            <a href="/Teacher/RecordAttendance" class="btn btn-outline-light">
-                                <i class="fas fa-clipboard-check me-1"></i>Attendance
-                            </a>
+                            @if (teacher?.Classes?.Any() == true)
+                            {
+                                <a href="/Teacher/AddGrade" class="btn btn-light me-2">
+                                    <i class="fas fa-graduation-cap me-1"></i>Add Grade
+                                </a>
+                                <a href="/Teacher/RecordAttendance" class="btn btn-outline-light">
+                                    <i class="fas fa-clipboard-check me-1"></i>Attendance
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-light me-2" disabled>
+                                    <i class="fas fa-graduation-cap me-1"></i>Add Grade
+                                </button>
+                                <button class="btn btn-outline-light" disabled>
+                                    <i class="fas fa-clipboard-check me-1"></i>Attendance
+                                </button>
+                            }
                         </div>
                     </div>
                 </div>

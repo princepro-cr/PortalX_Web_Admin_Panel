@@ -1,0 +1,188 @@
+﻿@using HighSchoolPortal.Controllers
+@{
+    ViewData["Title"] = "My Classes";
+    var classStats = ViewBag.ClassStats as List<TeacherController.ClassStats> ?? new List<TeacherController.ClassStats>();
+    var teacher = ViewBag.Teacher as TeacherProfile;
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gradient">My Classes</h1>
+            <p class="text-muted mb-0">
+                <i class="fas fa-chalkboard-teacher me-2"></i>
+                Classes assigned to @teacher?.FullName
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/Teacher/Dashboard" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics Summary -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50">Total Classes</h6>
+                            <h4 class="mb-0">@classStats.Count</h4>
+                        </div>
+                        <i class="fas fa-school fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50">Total Students</h6>
+                            <h4 class="mb-0">@classStats.Sum(c => c.StudentCount)</h4>
+                        </div>
+                        <i class="fas fa-user-graduate fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50">Avg GPA</h6>
+                            <h4 class="mb-0">
+                                @{
+                                    var avgGpa = classStats.Any() ?
+                                    Math.Round(classStats.Average(c => c.AverageGPA), 2) : 0;
+                                }
+                                @avgGpa
+                            </h4>
+                        </div>
+                        <i class="fas fa-chart-line fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-white-50">Avg Attendance</h6>
+                            <h4 class="mb-0">
+                                @{
+                                    var avgAttendance = classStats.Any() ?
+                                    (int)Math.Round(classStats.Average(c => c.AverageAttendance)) : 0;
+                                }
+                                @avgAttendance%
+                            </h4>
+                        </div>
+                        <i class="fas fa-calendar-check fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Classes Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Class Details</h5>
+        </div>
+        <div class="card-body">
+            @if (classStats.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Students</th>
+                                <th>Average GPA</th>
+                                <th>Attendance</th>
+                                <th>Top Student</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var stats in classStats)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@stats.ClassId</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">@stats.StudentCount students</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(stats.AverageGPA >= 3.0m ? "bg-success" : stats.AverageGPA >= 2.0m ? "bg-warning" : "bg-danger")">
+                                            @stats.AverageGPA.ToString("0.00")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(stats.AverageAttendance >= 90 ? "bg-success" : stats.AverageAttendance >= 75 ? "bg-warning" : "bg-danger")">
+                                            @stats.AverageAttendance%
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(stats.TopStudent) && stats.TopStudent != "No students")
+                                        {
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-crown text-warning me-2"></i>
+                                                <span>@stats.TopStudent</span>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">@stats.TopStudent</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="/Teacher/MyStudents?classFilter=@stats.ClassId" class="btn btn-outline-primary" title="View Students">
+                                                <i class="fas fa-users"></i>
+                                            </a>
+                                            <a href="/Teacher/ClassPerformance?classId=@stats.ClassId" class="btn btn-outline-success" title="Performance">
+                                                <i class="fas fa-chart-line"></i>
+                                            </a>
+                                            <a href="/Teacher/RecordAttendance?classId=@stats.ClassId" class="btn btn-outline-warning" title="Attendance">
+                                                <i class="fas fa-clipboard-check"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-school fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No Classes Assigned</h5>
+                    <p class="text-muted mb-4">
+                        You don't have any classes assigned to you yet.
+                        <br>Contact HR to get classes assigned.
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Refresh class data periodically
+            setInterval(function() {
+                location.reload();
+            }, 30000); // Every 30 seconds
+        });
+    </script>
+}

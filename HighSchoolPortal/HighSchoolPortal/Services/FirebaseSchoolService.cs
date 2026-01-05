@@ -22,20 +22,17 @@ namespace HighSchoolPortal.Services
             _projectId = _configuration["Firebase:ProjectId"] ?? throw new InvalidOperationException("Firebase ProjectId is not configured");
         }
 
-        // Update the ParseStudentDocument method in FirebaseSchoolService.cs
+        #region Helper Methods for Parsing
         private StudentProfile ParseStudentDocument(JsonElement document)
         {
             try
             {
-                // Check if document has fields and name properties
                 if (document.TryGetProperty("fields", out var fields) &&
                     document.TryGetProperty("name", out var name))
                 {
-                    // Extract document ID from the name field
                     string documentPath = name.GetString() ?? "";
                     string id = documentPath.Split('/').LastOrDefault() ?? Guid.NewGuid().ToString();
 
-                    // Try to parse the fields - they should be a JSON object
                     if (fields.ValueKind == JsonValueKind.Object)
                     {
                         return new StudentProfile
@@ -76,7 +73,6 @@ namespace HighSchoolPortal.Services
             }
         }
 
-        // Also update the ParseTeacherDocument method
         private TeacherProfile ParseTeacherDocument(JsonElement document)
         {
             try
@@ -84,7 +80,6 @@ namespace HighSchoolPortal.Services
                 if (document.TryGetProperty("fields", out var fields) &&
                     document.TryGetProperty("name", out var name))
                 {
-                    // Extract document ID from the name field
                     string documentPath = name.GetString() ?? "";
                     string id = documentPath.Split('/').LastOrDefault() ?? Guid.NewGuid().ToString();
 
@@ -126,171 +121,44 @@ namespace HighSchoolPortal.Services
             }
         }
 
-        // Update the GetAllStudentsAsync method to debug the response
-        public async Task<IEnumerable<StudentProfile>> GetAllStudentsAsync()
+        private Class ParseClassDocument(JsonElement document)
         {
             try
             {
-                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/students";
-                _logger.LogInformation($"Fetching students from: {url}");
-
-                var response = await _httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-
-                var content = await response.Content.ReadAsStringAsync();
-                _logger.LogDebug($"Firestore response: {content.Substring(0, Math.Min(500, content.Length))}");
-
-                using var doc = JsonDocument.Parse(content);
-                var root = doc.RootElement;
-
-                var students = new List<StudentProfile>();
-
-                if (root.TryGetProperty("documents", out var documents))
-                {
-                    _logger.LogInformation($"Found {documents.GetArrayLength()} student documents");
-
-                    foreach (var document in documents.EnumerateArray())
-                    {
-                        try
-                        {
-                            var student = ParseStudentDocument(document);
-                            if (student != null)
-                            {
-                                students.Add(student);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogWarning(ex, $"Failed to parse student document: {document}");
-                        }
-                    }
-                }
-                else
-                {
-                    _logger.LogWarning("No 'documents' property found in response");
-                }
-
-                _logger.LogInformation($"Successfully parsed {students.Count} students");
-                return students;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting all students");
-                return new List<StudentProfile>();
-            }
-        }
-
-        // Update the GetStudentByIdAsync to debug response
-        public async Task<StudentProfile> GetStudentByIdAsync(string id)
-        {
-            try
-            {
-                _logger.LogInformation($"Getting student by ID: {id}");
-
-                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/students/{id}";
-                var response = await _httpClient.GetAsync(url);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogWarning($"Student not found with ID: {id}, Status: {response.StatusCode}");
-                    return null;
-                }
-
-                var content = await response.Content.ReadAsStringAsync();
-                _logger.LogDebug($"Student response: {content}");
-
-                using var doc = JsonDocument.Parse(content);
-                var root = doc.RootElement;
-
-                // Parse directly from the response
-                if (root.TryGetProperty("fields", out var fields) &&
-                    root.TryGetProperty("name", out var name))
+                if (document.TryGetProperty("fields", out var fields) &&
+                    document.TryGetProperty("name", out var name))
                 {
                     string documentPath = name.GetString() ?? "";
-                    string documentId = documentPath.Split('/').LastOrDefault() ?? id;
+                    string id = documentPath.Split('/').LastOrDefault() ?? Guid.NewGuid().ToString();
 
-                    return new StudentProfile
+                    return new Class
                     {
-                        Id = documentId,
-                        Email = GetStringValue(fields, "email"),
-                        FullName = GetStringValue(fields, "fullName"),
-                        Phone = GetStringValue(fields, "phone"),
-                        Role = GetStringValue(fields, "role", "student"),
-                        AvatarUrl = GetStringValue(fields, "avatarUrl", "/images/default-avatar.png"),
-                        DateOfBirth = GetDateTimeValue(fields, "dateOfBirth"),
-                        Address = GetStringValue(fields, "address"),
-                        CreatedAt = GetDateTimeValue(fields, "createdAt"),
-                        UpdatedAt = GetDateTimeValue(fields, "updatedAt"),
-                        IsActive = GetBoolValue(fields, "isActive", true),
-                        StudentId = GetStringValue(fields, "studentId"),
+                        Id = id,
+                        Name = GetStringValue(fields, "name"),
+                        Code = GetStringValue(fields, "code"),
                         GradeLevel = GetStringValue(fields, "gradeLevel"),
-                        ParentName = GetStringValue(fields, "parentName"),
-                        ParentEmail = GetStringValue(fields, "parentEmail"),
-                        ParentPhone = GetStringValue(fields, "parentPhone"),
-                        ClassId = GetStringValue(fields, "classId"),
-                        EmergencyContact = GetStringValue(fields, "emergencyContact"),
-                        GPA = GetDecimalValue(fields, "gpa"),
-                        AttendancePercentage = GetIntValue(fields, "attendancePercentage", 100),
-                        EnrollmentDate = GetDateTimeValue(fields, "enrollmentDate"),
-                        EnrolledSubjects = GetStringArrayValue(fields, "enrolledSubjects")
+                        TeacherId = GetStringValue(fields, "teacherId"),
+                        TeacherName = GetStringValue(fields, "teacherName"),
+                        Subject = GetStringValue(fields, "subject"),
+                        AcademicYear = GetStringValue(fields, "academicYear", DateTime.Now.Year.ToString()),
+                        Term = GetStringValue(fields, "term", "First"),
+                        Schedule = GetStringValue(fields, "schedule"),
+                        RoomNumber = GetStringValue(fields, "roomNumber"),
+                         MaxCapacity = GetIntValue(fields, "maxCapacity", 30),
+                        IsActive = GetBoolValue(fields, "isActive", true),
+                        CreatedAt = GetDateTimeValue(fields, "createdAt"),
+                        UpdatedAt = GetDateTimeValue(fields, "updatedAt")
                     };
                 }
-
-                _logger.LogWarning($"Invalid student document structure for ID: {id}");
                 return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error getting student by ID: {id}");
+                _logger.LogError(ex, "Error parsing class document");
                 return null;
             }
         }
 
-        private IEnumerable<TeacherProfile> ParseTeachersFromFirestore(string content)
-        {
-            var teachers = new List<TeacherProfile>();
-
-            try
-            {
-                using var doc = JsonDocument.Parse(content);
-                var root = doc.RootElement;
-
-                if (root.TryGetProperty("documents", out var documents))
-                {
-                    _logger.LogInformation($"Found {documents.GetArrayLength()} teacher documents");
-
-                    foreach (var document in documents.EnumerateArray())
-                    {
-                        try
-                        {
-                            var teacher = ParseTeacherDocument(document);
-                            if (teacher != null)
-                            {
-                                teachers.Add(teacher);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogWarning(ex, $"Failed to parse teacher document: {document}");
-                        }
-                    }
-                }
-                else
-                {
-                    _logger.LogWarning("No 'documents' property found in teacher response");
-                }
-
-                _logger.LogInformation($"Successfully parsed {teachers.Count} teachers");
-                return teachers;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error parsing teachers from Firestore");
-                return new List<TeacherProfile>();
-            }
-        }
-
-        // Helper methods for parsing Firestore values
         private string GetStringValue(JsonElement fields, string fieldName, string defaultValue = "")
         {
             try
@@ -398,13 +266,16 @@ namespace HighSchoolPortal.Services
             catch { }
             return list;
         }
+        #endregion
 
-        #region Service Methods - IMPLEMENTED
-        public async Task<int> GetStudentCountAsync()
+        #region Student Management
+        public async Task<IEnumerable<StudentProfile>> GetAllStudentsAsync()
         {
             try
             {
                 var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/students";
+                _logger.LogInformation($"Fetching students from: {url}");
+
                 var response = await _httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
 
@@ -412,95 +283,98 @@ namespace HighSchoolPortal.Services
                 using var doc = JsonDocument.Parse(content);
                 var root = doc.RootElement;
 
+                var students = new List<StudentProfile>();
+
                 if (root.TryGetProperty("documents", out var documents))
                 {
-                    return documents.GetArrayLength();
+                    _logger.LogInformation($"Found {documents.GetArrayLength()} student documents");
+
+                    foreach (var document in documents.EnumerateArray())
+                    {
+                        try
+                        {
+                            var student = ParseStudentDocument(document);
+                            if (student != null)
+                            {
+                                students.Add(student);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex, $"Failed to parse student document: {document}");
+                        }
+                    }
                 }
-                return 0;
+
+                _logger.LogInformation($"Successfully parsed {students.Count} students");
+                return students;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting student count");
-                return 0;
+                _logger.LogError(ex, "Error getting all students");
+                return new List<StudentProfile>();
             }
         }
 
-        public async Task<int> GetTeacherCountAsync()
+        public async Task<StudentProfile> GetStudentByIdAsync(string id)
         {
             try
             {
-                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/teachers";
+                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/students/{id}";
                 var response = await _httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning($"Student not found with ID: {id}, Status: {response.StatusCode}");
+                    return null;
+                }
 
                 var content = await response.Content.ReadAsStringAsync();
                 using var doc = JsonDocument.Parse(content);
                 var root = doc.RootElement;
 
-                if (root.TryGetProperty("documents", out var documents))
+                if (root.TryGetProperty("fields", out var fields) &&
+                    root.TryGetProperty("name", out var name))
                 {
-                    return documents.GetArrayLength();
+                    string documentPath = name.GetString() ?? "";
+                    string documentId = documentPath.Split('/').LastOrDefault() ?? id;
+
+                    return new StudentProfile
+                    {
+                        Id = documentId,
+                        Email = GetStringValue(fields, "email"),
+                        FullName = GetStringValue(fields, "fullName"),
+                        Phone = GetStringValue(fields, "phone"),
+                        Role = GetStringValue(fields, "role", "student"),
+                        AvatarUrl = GetStringValue(fields, "avatarUrl", "/images/default-avatar.png"),
+                        DateOfBirth = GetDateTimeValue(fields, "dateOfBirth"),
+                        Address = GetStringValue(fields, "address"),
+                        CreatedAt = GetDateTimeValue(fields, "createdAt"),
+                        UpdatedAt = GetDateTimeValue(fields, "updatedAt"),
+                        IsActive = GetBoolValue(fields, "isActive", true),
+                        StudentId = GetStringValue(fields, "studentId"),
+                        GradeLevel = GetStringValue(fields, "gradeLevel"),
+                        ParentName = GetStringValue(fields, "parentName"),
+                        ParentEmail = GetStringValue(fields, "parentEmail"),
+                        ParentPhone = GetStringValue(fields, "parentPhone"),
+                        ClassId = GetStringValue(fields, "classId"),
+                        EmergencyContact = GetStringValue(fields, "emergencyContact"),
+                        GPA = GetDecimalValue(fields, "gpa"),
+                        AttendancePercentage = GetIntValue(fields, "attendancePercentage", 100),
+                        EnrollmentDate = GetDateTimeValue(fields, "enrollmentDate"),
+                        EnrolledSubjects = GetStringArrayValue(fields, "enrolledSubjects")
+                    };
                 }
-                return 0;
+
+                return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting teacher count");
-                return 0;
+                _logger.LogError(ex, $"Error getting student by ID: {id}");
+                return null;
             }
         }
 
-        public async Task<int> GetClassCountAsync()
-        {
-            try
-            {
-                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/classes";
-                var response = await _httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-
-                var content = await response.Content.ReadAsStringAsync();
-                using var doc = JsonDocument.Parse(content);
-                var root = doc.RootElement;
-
-                if (root.TryGetProperty("documents", out var documents))
-                {
-                    return documents.GetArrayLength();
-                }
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting class count");
-                return 0;
-            }
-        }
-
-        public async Task<int> GetHRCountAsync()
-        {
-            try
-            {
-                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/hr";
-                var response = await _httpClient.GetAsync(url);
-                response.EnsureSuccessStatusCode();
-
-                var content = await response.Content.ReadAsStringAsync();
-                using var doc = JsonDocument.Parse(content);
-                var root = doc.RootElement;
-
-                if (root.TryGetProperty("documents", out var documents))
-                {
-                    return documents.GetArrayLength();
-                }
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting HR count");
-                return 0;
-            }
-        }
-
-       
         public async Task<StudentProfile> AddStudentAsync(StudentProfile student)
         {
             try
@@ -548,12 +422,11 @@ namespace HighSchoolPortal.Services
                 var response = await _httpClient.PostAsync($"{url}?documentId={documentId}", content);
                 response.EnsureSuccessStatusCode();
 
-                _logger.LogInformation($"✅ Student added successfully: {student.FullName}");
                 return student;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error adding student: {student.FullName}");
+                _logger.LogError(ex, $"Error adding student: {student.FullName}");
                 throw;
             }
         }
@@ -604,16 +477,16 @@ namespace HighSchoolPortal.Services
                 var content = new StringContent(JsonSerializer.Serialize(firestoreDoc), System.Text.Encoding.UTF8, "application/json");
                 var response = await _httpClient.PatchAsync($"{url}?updateMask.fieldPaths={string.Join("&updateMask.fieldPaths=", updateMask)}", content);
                 response.EnsureSuccessStatusCode();
-
-                _logger.LogInformation($"✅ Student updated successfully: {student.FullName}");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error updating student: {student.FullName}");
+                _logger.LogError(ex, $"Error updating student: {student.FullName}");
                 throw;
             }
         }
+        #endregion
 
+        #region Teacher Management
         public async Task<IEnumerable<TeacherProfile>> GetAllTeachersAsync()
         {
             try
@@ -624,7 +497,6 @@ namespace HighSchoolPortal.Services
 
                 var content = await response.Content.ReadAsStringAsync();
                 var teachers = ParseTeachersFromFirestore(content);
-
                 return teachers;
             }
             catch (Exception ex)
@@ -634,26 +506,48 @@ namespace HighSchoolPortal.Services
             }
         }
 
-        // Update the GetTeacherByIdAsync method in FirebaseSchoolService.cs
+        private IEnumerable<TeacherProfile> ParseTeachersFromFirestore(string content)
+        {
+            var teachers = new List<TeacherProfile>();
+
+            try
+            {
+                using var doc = JsonDocument.Parse(content);
+                var root = doc.RootElement;
+
+                if (root.TryGetProperty("documents", out var documents))
+                {
+                    foreach (var document in documents.EnumerateArray())
+                    {
+                        var teacher = ParseTeacherDocument(document);
+                        if (teacher != null)
+                        {
+                            teachers.Add(teacher);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error parsing teachers from Firestore");
+            }
+
+            return teachers;
+        }
+
         public async Task<TeacherProfile> GetTeacherByIdAsync(string id)
         {
             try
             {
-                _logger.LogInformation($"Getting teacher by ID: {id}");
-
                 var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/teachers/{id}";
                 var response = await _httpClient.GetAsync(url);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogWarning($"Teacher not found with ID: {id}, Status: {response.StatusCode}");
                     return null;
                 }
 
                 var content = await response.Content.ReadAsStringAsync();
-                _logger.LogDebug($"Teacher response: {content}");
-
-                // Parse the single teacher document
                 using var doc = JsonDocument.Parse(content);
                 var root = doc.RootElement;
 
@@ -688,12 +582,11 @@ namespace HighSchoolPortal.Services
                     };
                 }
 
-                _logger.LogWarning($"Invalid teacher document structure for ID: {id}");
                 return null;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error getting teacher by ID: {id}");
+                _logger.LogError(ex, $"Error getting teacher by ID: {id}");
                 return null;
             }
         }
@@ -749,12 +642,11 @@ namespace HighSchoolPortal.Services
                 var response = await _httpClient.PostAsync($"{url}?documentId={documentId}", content);
                 response.EnsureSuccessStatusCode();
 
-                _logger.LogInformation($"✅ Teacher added successfully: {teacher.FullName}");
                 return teacher;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error adding teacher: {teacher.FullName}");
+                _logger.LogError(ex, $"Error adding teacher: {teacher.FullName}");
                 throw;
             }
         }
@@ -809,165 +701,98 @@ namespace HighSchoolPortal.Services
                 var content = new StringContent(JsonSerializer.Serialize(firestoreDoc), System.Text.Encoding.UTF8, "application/json");
                 var response = await _httpClient.PatchAsync($"{url}?updateMask.fieldPaths={string.Join("&updateMask.fieldPaths=", updateMask)}", content);
                 response.EnsureSuccessStatusCode();
-
-                _logger.LogInformation($"✅ Teacher updated successfully: {teacher.FullName}");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error updating teacher: {teacher.FullName}");
+                _logger.LogError(ex, $"Error updating teacher: {teacher.FullName}");
                 throw;
             }
         }
 
-        // Add these methods for Class parsing
-        private IEnumerable<Class> ParseClassesFromFirestore(string content)
+        // NEW: HR can assign subjects and classes to teachers
+        public async Task<TeacherAssignment> AssignTeacherToClassesAsync(string teacherId, List<string> classIds, List<string> subjects)
         {
-            var classes = new List<Class>();
-
             try
             {
-                using var doc = JsonDocument.Parse(content);
-                var root = doc.RootElement;
+                var teacher = await GetTeacherByIdAsync(teacherId);
+                if (teacher == null)
+                    throw new Exception($"Teacher {teacherId} not found");
 
-                if (root.TryGetProperty("documents", out var documents))
+                // Update teacher with assigned classes and subjects
+                teacher.Classes = classIds;
+                teacher.Subjects = subjects;
+                teacher.UpdatedAt = DateTime.UtcNow;
+
+                await UpdateTeacherAsync(teacher);
+
+                // Create assignment record
+                var assignment = new TeacherAssignment
                 {
-                    foreach (var document in documents.EnumerateArray())
+                    Id = Guid.NewGuid().ToString(),
+                    TeacherId = teacherId,
+                    TeacherName = teacher.FullName,
+                    ClassIds = classIds,
+                    Subjects = subjects,
+                    AssignedDate = DateTime.UtcNow,
+                    AssignedBy = "HR",
+                    IsActive = true
+                };
+
+                await SaveTeacherAssignmentAsync(assignment);
+                return assignment;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error assigning teacher {teacherId} to classes");
+                throw;
+            }
+        }
+
+        private async Task SaveTeacherAssignmentAsync(TeacherAssignment assignment)
+        {
+            try
+            {
+                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/teacher_assignments/{assignment.Id}";
+
+                var firestoreDoc = new
+                {
+                    fields = new Dictionary<string, object>
                     {
-                        var classItem = ParseClassDocument(document);
-                        if (classItem != null)
+                        ["teacherId"] = new { stringValue = assignment.TeacherId },
+                        ["teacherName"] = new { stringValue = assignment.TeacherName },
+                        ["classIds"] = new
                         {
-                            classes.Add(classItem);
-                        }
+                            arrayValue = new
+                            {
+                                values = assignment.ClassIds.Select(id => new { stringValue = id }).ToArray()
+                            }
+                        },
+                        ["subjects"] = new
+                        {
+                            arrayValue = new
+                            {
+                                values = assignment.Subjects.Select(s => new { stringValue = s }).ToArray()
+                            }
+                        },
+                        ["assignedDate"] = new { timestampValue = assignment.AssignedDate.ToString("o") },
+                        ["assignedBy"] = new { stringValue = assignment.AssignedBy },
+                        ["isActive"] = new { booleanValue = assignment.IsActive }
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error parsing classes from Firestore");
-            }
+                };
 
-            return classes;
-        }
-
-        private Class ParseClassDocument(JsonElement document)
-        {
-            try
-            {
-                if (document.TryGetProperty("fields", out var fields) &&
-                    document.TryGetProperty("name", out var name))
-                {
-                    string id = name.GetProperty("name").GetString()?.Split('/').Last() ?? Guid.NewGuid().ToString();
-
-                    return new Class
-                    {
-                        Id = id,
-                        Name = GetStringValue(fields, "name"),
-                        GradeLevel = GetStringValue(fields, "gradeLevel"),
-                        TeacherId = GetStringValue(fields, "teacherId"),
-                        TeacherName = GetStringValue(fields, "teacherName"),
-                        Subject = GetStringValue(fields, "subject"),
-                        RoomNumber = GetStringValue(fields, "roomNumber"),
-                        Schedule = GetStringValue(fields, "schedule"),
-                        StudentIds = GetStringArrayValue(fields, "studentIds"),
-                        CreatedAt = GetDateTimeValue(fields, "createdAt"),
-                        UpdatedAt = GetDateTimeValue(fields, "updatedAt")
-                    };
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error parsing class document");
-                return null;
-            }
-        }
-
-        private Class ParseClassFromFirestore(string id, string content)
-        {
-            try
-            {
-                using var doc = JsonDocument.Parse(content);
-                var root = doc.RootElement;
-
-                if (root.TryGetProperty("fields", out var fields))
-                {
-                    return new Class
-                    {
-                        Id = id,
-                        Name = GetStringValue(fields, "name"),
-                        GradeLevel = GetStringValue(fields, "gradeLevel"),
-                        TeacherId = GetStringValue(fields, "teacherId"),
-                        TeacherName = GetStringValue(fields, "teacherName"),
-                        Subject = GetStringValue(fields, "subject"),
-                        RoomNumber = GetStringValue(fields, "roomNumber"),
-                        Schedule = GetStringValue(fields, "schedule"),
-                        StudentIds = GetStringArrayValue(fields, "studentIds"),
-                        CreatedAt = GetDateTimeValue(fields, "createdAt"),
-                        UpdatedAt = GetDateTimeValue(fields, "updatedAt")
-                    };
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error parsing class from Firestore: {id}");
-                return null;
-            }
-        }
-
-        public async Task<IEnumerable<Class>> GetAllClassesAsync()
-        {
-            try
-            {
-                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/classes";
-                var response = await _httpClient.GetAsync(url);
+                var content = new StringContent(JsonSerializer.Serialize(firestoreDoc), System.Text.Encoding.UTF8, "application/json");
+                var response = await _httpClient.PatchAsync($"{url}?updateMask.fieldPaths=teacherId,teacherName,classIds,subjects,assignedDate,assignedBy,isActive", content);
                 response.EnsureSuccessStatusCode();
-
-                var content = await response.Content.ReadAsStringAsync();
-                var classes = ParseClassesFromFirestore(content);
-
-                return classes;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all classes");
-                return new List<Class>();
+                _logger.LogError(ex, "Error saving teacher assignment");
+                throw;
             }
         }
+        #endregion
 
-        public async Task<Class> GetClassByIdAsync(string id)
-        {
-            try
-            {
-                _logger.LogInformation($"Getting class by ID: {id}");
-
-                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/classes/{id}";
-                var response = await _httpClient.GetAsync(url);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogWarning($"Class not found with ID: {id}");
-                    return null;
-                }
-
-                var content = await response.Content.ReadAsStringAsync();
-                var classItem = ParseClassFromFirestore(id, content);
-
-                if (classItem != null)
-                {
-                    _logger.LogInformation($"✅ Found class: {classItem.Name}");
-                }
-
-                return classItem;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"❌ Error getting class by ID: {id}");
-                return null;
-            }
-        }
-
-        // MISSING METHOD IMPLEMENTATION: AddClassAsync
+        #region Class Management (NEW Methods)
         public async Task<Class> AddClassAsync(Class classItem)
         {
             try
@@ -982,19 +807,18 @@ namespace HighSchoolPortal.Services
                     fields = new Dictionary<string, object>
                     {
                         ["name"] = new { stringValue = classItem.Name },
-                        ["gradeLevel"] = new { stringValue = classItem.GradeLevel ?? "" },
+                        ["code"] = new { stringValue = classItem.Code },
+                        ["gradeLevel"] = new { stringValue = classItem.GradeLevel },
                         ["teacherId"] = new { stringValue = classItem.TeacherId ?? "" },
                         ["teacherName"] = new { stringValue = classItem.TeacherName ?? "" },
                         ["subject"] = new { stringValue = classItem.Subject ?? "" },
-                        ["roomNumber"] = new { stringValue = classItem.RoomNumber ?? "" },
+                        ["academicYear"] = new { stringValue = classItem.AcademicYear },
+                        ["term"] = new { stringValue = classItem.Term },
                         ["schedule"] = new { stringValue = classItem.Schedule ?? "" },
-                        ["studentIds"] = new
-                        {
-                            arrayValue = new
-                            {
-                                values = classItem.StudentIds?.Select(id => new { stringValue = id }).ToArray() ?? Array.Empty<object>()
-                            }
-                        },
+                        ["roomNumber"] = new { stringValue = classItem.RoomNumber ?? "" },
+                        ["studentCount"] = new { integerValue = classItem.StudentCount },
+                        ["maxCapacity"] = new { integerValue = classItem.MaxCapacity },
+                        ["isActive"] = new { booleanValue = classItem.IsActive },
                         ["createdAt"] = new { timestampValue = DateTime.UtcNow.ToString("o") },
                         ["updatedAt"] = new { timestampValue = DateTime.UtcNow.ToString("o") }
                     }
@@ -1004,17 +828,75 @@ namespace HighSchoolPortal.Services
                 var response = await _httpClient.PostAsync($"{url}?documentId={documentId}", content);
                 response.EnsureSuccessStatusCode();
 
-                _logger.LogInformation($"✅ Class added successfully: {classItem.Name}");
                 return classItem;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error adding class: {classItem.Name}");
+                _logger.LogError(ex, $"Error adding class: {classItem.Name}");
                 throw;
             }
         }
 
-        // MISSING METHOD IMPLEMENTATION: UpdateClassAsync
+        public async Task<IEnumerable<Class>> GetAllClassesAsync()
+        {
+            try
+            {
+                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/classes";
+                var response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+
+                var content = await response.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(content);
+                var root = doc.RootElement;
+
+                var classes = new List<Class>();
+
+                if (root.TryGetProperty("documents", out var documents))
+                {
+                    foreach (var document in documents.EnumerateArray())
+                    {
+                        var classItem = ParseClassDocument(document);
+                        if (classItem != null)
+                        {
+                            classes.Add(classItem);
+                        }
+                    }
+                }
+
+                return classes;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all classes");
+                return new List<Class>();
+            }
+        }
+
+        public async Task<Class> GetClassByIdAsync(string id)
+        {
+            try
+            {
+                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/classes/{id}";
+                var response = await _httpClient.GetAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(content);
+                var root = doc.RootElement;
+
+                return ParseClassDocument(root);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting class by ID: {id}");
+                return null;
+            }
+        }
+
         public async Task UpdateClassAsync(Class classItem)
         {
             try
@@ -1023,8 +905,8 @@ namespace HighSchoolPortal.Services
 
                 var updateMask = new List<string>
                 {
-                    "name", "gradeLevel", "teacherId", "teacherName", "subject", "roomNumber",
-                    "schedule", "studentIds", "updatedAt"
+                    "name", "teacherId", "teacherName", "subject", "schedule", "roomNumber",
+                    "studentCount", "isActive", "updatedAt"
                 };
 
                 var firestoreDoc = new
@@ -1032,19 +914,13 @@ namespace HighSchoolPortal.Services
                     fields = new Dictionary<string, object>
                     {
                         ["name"] = new { stringValue = classItem.Name },
-                        ["gradeLevel"] = new { stringValue = classItem.GradeLevel ?? "" },
                         ["teacherId"] = new { stringValue = classItem.TeacherId ?? "" },
                         ["teacherName"] = new { stringValue = classItem.TeacherName ?? "" },
                         ["subject"] = new { stringValue = classItem.Subject ?? "" },
-                        ["roomNumber"] = new { stringValue = classItem.RoomNumber ?? "" },
                         ["schedule"] = new { stringValue = classItem.Schedule ?? "" },
-                        ["studentIds"] = new
-                        {
-                            arrayValue = new
-                            {
-                                values = classItem.StudentIds?.Select(id => new { stringValue = id }).ToArray() ?? Array.Empty<object>()
-                            }
-                        },
+                        ["roomNumber"] = new { stringValue = classItem.RoomNumber ?? "" },
+                        ["studentCount"] = new { integerValue = classItem.StudentCount },
+                        ["isActive"] = new { booleanValue = classItem.IsActive },
                         ["updatedAt"] = new { timestampValue = DateTime.UtcNow.ToString("o") }
                     }
                 };
@@ -1052,87 +928,63 @@ namespace HighSchoolPortal.Services
                 var content = new StringContent(JsonSerializer.Serialize(firestoreDoc), System.Text.Encoding.UTF8, "application/json");
                 var response = await _httpClient.PatchAsync($"{url}?updateMask.fieldPaths={string.Join("&updateMask.fieldPaths=", updateMask)}", content);
                 response.EnsureSuccessStatusCode();
-
-                _logger.LogInformation($"✅ Class updated successfully: {classItem.Name}");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error updating class: {classItem.Name}");
+                _logger.LogError(ex, $"Error updating class: {classItem.Name}");
                 throw;
             }
         }
+        #endregion
 
-        // Add these methods for Grade parsing
-        private IEnumerable<Grade> ParseGradesFromFirestore(string content)
-        {
-            var grades = new List<Grade>();
-
-            try
-            {
-                using var doc = JsonDocument.Parse(content);
-                var root = doc.RootElement;
-
-                foreach (var element in root.EnumerateArray())
-                {
-                    if (element.TryGetProperty("document", out var document))
-                    {
-                        var grade = ParseGradeDocument(document);
-                        if (grade != null)
-                        {
-                            grades.Add(grade);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error parsing grades from Firestore");
-            }
-
-            return grades;
-        }
-
-        private Grade ParseGradeDocument(JsonElement document)
+        #region Teacher-Student Relationship
+        public async Task<List<StudentProfile>> GetStudentsByTeacherAsync(string teacherId)
         {
             try
             {
-                if (document.TryGetProperty("fields", out var fields) &&
-                    document.TryGetProperty("name", out var name))
+                // Get teacher profile
+                var teacher = await GetTeacherByIdAsync(teacherId);
+                if (teacher == null || teacher.Classes == null || !teacher.Classes.Any())
                 {
-                    string id = name.GetProperty("name").GetString()?.Split('/').Last() ?? Guid.NewGuid().ToString();
-
-                    var grade = new Grade
-                    {
-                        Id = id,
-                        StudentId = GetStringValue(fields, "studentId"),
-                        StudentName = GetStringValue(fields, "studentName"),
-                        TeacherId = GetStringValue(fields, "teacherId"),
-                        Subject = GetStringValue(fields, "subject"),
-                        Term = GetStringValue(fields, "term", "First"),
-                        Year = GetIntValue(fields, "year", DateTime.Now.Year),
-                        Test1 = GetDecimalValue(fields, "test1"),
-                        Test2 = GetDecimalValue(fields, "test2"),
-                        Exam = GetDecimalValue(fields, "exam"),
-                        Assignment = GetDecimalValue(fields, "assignment"),
-                        TotalScore = GetDecimalValue(fields, "totalScore"),
-                        GradeLetter = GetStringValue(fields, "gradeLetter", "F"),
-                        Remarks = GetStringValue(fields, "remarks"),
-                        DateRecorded = GetDateTimeValue(fields, "dateRecorded"),
-                        UpdatedAt = GetDateTimeValue(fields, "updatedAt")
-                    };
-
-                    return grade;
+                    return new List<StudentProfile>();
                 }
-                return null;
+
+                // Get all students
+                var allStudents = await GetAllStudentsAsync();
+
+                // Filter students who are in teacher's classes
+                var teacherStudents = allStudents
+                    .Where(s => !string.IsNullOrEmpty(s.ClassId) &&
+                               teacher.Classes.Contains(s.ClassId))
+                    .ToList();
+
+                return teacherStudents;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error parsing grade document");
-                return null;
+                _logger.LogError(ex, $"Error getting students for teacher: {teacherId}");
+                return new List<StudentProfile>();
             }
         }
 
-        // MISSING METHOD: AddGradeAsync (from interface)
+        public async Task<List<StudentProfile>> GetStudentsByClassIdAsync(string classId)
+        {
+            try
+            {
+                var allStudents = await GetAllStudentsAsync();
+                return allStudents
+                    .Where(s => s.ClassId == classId)
+                    .ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting students for class: {classId}");
+                return new List<StudentProfile>();
+            }
+        }
+        #endregion
+
+        #region Grade Management
         public async Task<Grade> AddGradeAsync(Grade grade)
         {
             try
@@ -1168,12 +1020,11 @@ namespace HighSchoolPortal.Services
                 var response = await _httpClient.PostAsync($"{url}?documentId={documentId}", content);
                 response.EnsureSuccessStatusCode();
 
-                _logger.LogInformation($"✅ Grade added for student: {grade.StudentName}");
                 return grade;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error adding grade for student: {grade.StudentName}");
+                _logger.LogError(ex, $"Error adding grade for student: {grade.StudentName}");
                 throw;
             }
         }
@@ -1206,9 +1057,7 @@ namespace HighSchoolPortal.Services
                 response.EnsureSuccessStatusCode();
 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var grades = ParseGradesFromFirestore(responseContent);
-
-                return grades;
+                return ParseGradesFromFirestore(responseContent);
             }
             catch (Exception ex)
             {
@@ -1221,19 +1070,16 @@ namespace HighSchoolPortal.Services
         {
             try
             {
-                // First get all students in the class
-                var classItem = await GetClassByIdAsync(classId);
-                if (classItem == null || classItem.StudentIds == null || !classItem.StudentIds.Any())
-                    return new List<Grade>();
-
+                // Get all students in the class
+                var classStudents = await GetStudentsByClassIdAsync(classId);
                 var allGrades = new List<Grade>();
 
-                // Get grades for each student in the class for the specific subject
-                foreach (var studentId in classItem.StudentIds)
+                foreach (var student in classStudents)
                 {
-                    var studentGrades = await GetStudentGradesAsync(studentId);
-                    var subjectGrades = studentGrades.Where(g => g.Subject?.Equals(subject, StringComparison.OrdinalIgnoreCase) == true);
-                    allGrades.AddRange(subjectGrades);
+                    var studentGrades = await GetStudentGradesAsync(student.Id);
+                    var filteredGrades = studentGrades.Where(g =>
+                        string.IsNullOrEmpty(subject) || g.Subject == subject);
+                    allGrades.AddRange(filteredGrades);
                 }
 
                 return allGrades;
@@ -1276,12 +1122,11 @@ namespace HighSchoolPortal.Services
                 var response = await _httpClient.PatchAsync($"{url}?updateMask.fieldPaths={string.Join("&updateMask.fieldPaths=", updateMask)}", content);
                 response.EnsureSuccessStatusCode();
 
-                _logger.LogInformation($"✅ Grade updated for student: {grade.StudentName}");
                 return grade;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error updating grade for student: {grade.StudentName}");
+                _logger.LogError(ex, $"Error updating grade for student: {grade.StudentName}");
                 throw;
             }
         }
@@ -1291,19 +1136,215 @@ namespace HighSchoolPortal.Services
             try
             {
                 var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/grades/{gradeId}";
-                var response = await _httpClient.DeleteAsync(url);
-                response.EnsureSuccessStatusCode();
-
-                _logger.LogInformation($"✅ Grade deleted: {gradeId}");
+                await _httpClient.DeleteAsync(url);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error deleting grade: {gradeId}");
+                _logger.LogError(ex, $"Error deleting grade: {gradeId}");
                 throw;
             }
         }
 
-        // Add these methods for Attendance parsing
+        private IEnumerable<Grade> ParseGradesFromFirestore(string content)
+        {
+            var grades = new List<Grade>();
+
+            try
+            {
+                using var doc = JsonDocument.Parse(content);
+                var root = doc.RootElement;
+
+                foreach (var element in root.EnumerateArray())
+                {
+                    if (element.TryGetProperty("document", out var document))
+                    {
+                        var grade = ParseGradeDocument(document);
+                        if (grade != null)
+                        {
+                            grades.Add(grade);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error parsing grades from Firestore");
+            }
+
+            return grades;
+        }
+
+        private Grade ParseGradeDocument(JsonElement document)
+        {
+            try
+            {
+                if (document.TryGetProperty("fields", out var fields) &&
+                    document.TryGetProperty("name", out var name))
+                {
+                    string id = name.GetProperty("name").GetString()?.Split('/').Last() ?? Guid.NewGuid().ToString();
+
+                    return new Grade
+                    {
+                        Id = id,
+                        StudentId = GetStringValue(fields, "studentId"),
+                        StudentName = GetStringValue(fields, "studentName"),
+                        TeacherId = GetStringValue(fields, "teacherId"),
+                        Subject = GetStringValue(fields, "subject"),
+                        Term = GetStringValue(fields, "term", "First"),
+                        Year = GetIntValue(fields, "year", DateTime.Now.Year),
+                        Test1 = GetDecimalValue(fields, "test1"),
+                        Test2 = GetDecimalValue(fields, "test2"),
+                        Exam = GetDecimalValue(fields, "exam"),
+                        Assignment = GetDecimalValue(fields, "assignment"),
+                        TotalScore = GetDecimalValue(fields, "totalScore"),
+                        GradeLetter = GetStringValue(fields, "gradeLetter", "F"),
+                        Remarks = GetStringValue(fields, "remarks"),
+                        DateRecorded = GetDateTimeValue(fields, "dateRecorded"),
+                        UpdatedAt = GetDateTimeValue(fields, "updatedAt")
+                    };
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error parsing grade document");
+                return null;
+            }
+        }
+        #endregion
+
+        #region Attendance Management
+        public async Task<Attendance> RecordAttendanceAsync(Attendance attendance)
+        {
+            try
+            {
+                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/attendance";
+
+                var documentId = string.IsNullOrEmpty(attendance.Id) ? Guid.NewGuid().ToString() : attendance.Id;
+                attendance.Id = documentId;
+
+                var firestoreDoc = new
+                {
+                    fields = new Dictionary<string, object>
+                    {
+                        ["studentId"] = new { stringValue = attendance.StudentId },
+                        ["studentName"] = new { stringValue = attendance.StudentName ?? "" },
+                        ["classId"] = new { stringValue = attendance.ClassId ?? "" },
+                        ["className"] = new { stringValue = attendance.ClassName ?? "" },
+                        ["date"] = new { timestampValue = attendance.Date.ToString("o") },
+                        ["status"] = new { stringValue = attendance.Status ?? "Present" },
+                        ["remarks"] = new { stringValue = attendance.Remarks ?? "" },
+                        ["recordedBy"] = new { stringValue = attendance.RecordedBy ?? "" },
+                        ["recordedAt"] = new { timestampValue = DateTime.UtcNow.ToString("o") }
+                    }
+                };
+
+                var content = new StringContent(JsonSerializer.Serialize(firestoreDoc), System.Text.Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync($"{url}?documentId={documentId}", content);
+                response.EnsureSuccessStatusCode();
+
+                return attendance;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error recording attendance for student: {attendance.StudentName}");
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Attendance>> GetStudentAttendanceAsync(string studentId)
+        {
+            try
+            {
+                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents:runQuery";
+
+                var query = new
+                {
+                    structuredQuery = new
+                    {
+                        from = new[] { new { collectionId = "attendance" } },
+                        where = new
+                        {
+                            fieldFilter = new
+                            {
+                                field = new { fieldPath = "studentId" },
+                                op = "EQUAL",
+                                value = new { stringValue = studentId }
+                            }
+                        }
+                    }
+                };
+
+                var content = new StringContent(JsonSerializer.Serialize(query), System.Text.Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(url, content);
+                response.EnsureSuccessStatusCode();
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return ParseAttendanceFromFirestore(responseContent);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting attendance for student: {studentId}");
+                return new List<Attendance>();
+            }
+        }
+
+        public async Task<IEnumerable<Attendance>> GetClassAttendanceAsync(string classId, DateTime date)
+        {
+            try
+            {
+                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents:runQuery";
+
+                var query = new
+                {
+                    structuredQuery = new
+                    {
+                        from = new[] { new { collectionId = "attendance" } },
+                        where = new
+                        {
+                            compositeFilter = new
+                            {
+                                op = "AND",
+                                filters = new object[]
+                                {
+                                    new
+                                    {
+                                        fieldFilter = new
+                                        {
+                                            field = new { fieldPath = "classId" },
+                                            op = "EQUAL",
+                                            value = new { stringValue = classId }
+                                        }
+                                    },
+                                    new
+                                    {
+                                        fieldFilter = new
+                                        {
+                                            field = new { fieldPath = "date" },
+                                            op = "EQUAL",
+                                            value = new { timestampValue = date.ToString("o") }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                var content = new StringContent(JsonSerializer.Serialize(query), System.Text.Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(url, content);
+                response.EnsureSuccessStatusCode();
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return ParseAttendanceFromFirestore(responseContent);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting class attendance for class: {classId} on date: {date}");
+                return new List<Attendance>();
+            }
+        }
+
         private IEnumerable<Attendance> ParseAttendanceFromFirestore(string content)
         {
             var attendanceRecords = new List<Attendance>();
@@ -1364,144 +1405,81 @@ namespace HighSchoolPortal.Services
                 return null;
             }
         }
+        #endregion
 
-        public async Task<Attendance> RecordAttendanceAsync(Attendance attendance)
+        #region Dashboard Statistics
+        public async Task<int> GetStudentCountAsync()
         {
             try
             {
-                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/attendance";
-
-                var documentId = string.IsNullOrEmpty(attendance.Id) ? Guid.NewGuid().ToString() : attendance.Id;
-                attendance.Id = documentId;
-
-                var firestoreDoc = new
-                {
-                    fields = new Dictionary<string, object>
-                    {
-                        ["studentId"] = new { stringValue = attendance.StudentId },
-                        ["studentName"] = new { stringValue = attendance.StudentName ?? "" },
-                        ["classId"] = new { stringValue = attendance.ClassId ?? "" },
-                        ["className"] = new { stringValue = attendance.ClassName ?? "" },
-                        ["date"] = new { timestampValue = attendance.Date.ToString("o") },
-                        ["status"] = new { stringValue = attendance.Status ?? "Present" },
-                        ["remarks"] = new { stringValue = attendance.Remarks ?? "" },
-                        ["recordedBy"] = new { stringValue = attendance.RecordedBy ?? "" },
-                        ["recordedAt"] = new { timestampValue = DateTime.UtcNow.ToString("o") }
-                    }
-                };
-
-                var content = new StringContent(JsonSerializer.Serialize(firestoreDoc), System.Text.Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync($"{url}?documentId={documentId}", content);
-                response.EnsureSuccessStatusCode();
-
-                _logger.LogInformation($"✅ Attendance recorded for student: {attendance.StudentName}");
-                return attendance;
+                var students = await GetAllStudentsAsync();
+                return students.Count();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error recording attendance for student: {attendance.StudentName}");
-                throw;
+                _logger.LogError(ex, "Error getting student count");
+                return 0;
             }
         }
 
-        public async Task<IEnumerable<Attendance>> GetStudentAttendanceAsync(string studentId)
+        public async Task<int> GetTeacherCountAsync()
         {
             try
             {
-                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents:runQuery";
-
-                var query = new
-                {
-                    structuredQuery = new
-                    {
-                        from = new[] { new { collectionId = "attendance" } },
-                        where = new
-                        {
-                            fieldFilter = new
-                            {
-                                field = new { fieldPath = "studentId" },
-                                op = "EQUAL",
-                                value = new { stringValue = studentId }
-                            }
-                        }
-                    }
-                };
-
-                var content = new StringContent(JsonSerializer.Serialize(query), System.Text.Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync(url, content);
-                response.EnsureSuccessStatusCode();
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var attendanceRecords = ParseAttendanceFromFirestore(responseContent);
-
-                return attendanceRecords;
+                var teachers = await GetAllTeachersAsync();
+                return teachers.Count();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting attendance for student: {studentId}");
-                return new List<Attendance>();
+                _logger.LogError(ex, "Error getting teacher count");
+                return 0;
             }
         }
 
-        public async Task<IEnumerable<Attendance>> GetClassAttendanceAsync(string classId, DateTime date)
+        public async Task<int> GetClassCountAsync()
         {
             try
             {
-                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents:runQuery";
-
-                // Create filters with the same structure
-                var filter1 = new
-                {
-                    fieldFilter = new
-                    {
-                        field = new { fieldPath = "classId" },
-                        op = "EQUAL",
-                        value = new { stringValue = classId }
-                    }
-                };
-
-                var filter2 = new
-                {
-                    fieldFilter = new
-                    {
-                        field = new { fieldPath = "date" },
-                        op = "EQUAL",
-                        value = new { timestampValue = date.ToString("o") }
-                    }
-                };
-
-                var query = new
-                {
-                    structuredQuery = new
-                    {
-                        from = new[] { new { collectionId = "attendance" } },
-                        where = new
-                        {
-                            compositeFilter = new
-                            {
-                                op = "AND",
-                                filters = new object[] { filter1, filter2 }
-                            }
-                        }
-                    }
-                };
-
-                var content = new StringContent(JsonSerializer.Serialize(query), System.Text.Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync(url, content);
-                response.EnsureSuccessStatusCode();
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var attendanceRecords = ParseAttendanceFromFirestore(responseContent);
-
-                return attendanceRecords;
+                var classes = await GetAllClassesAsync();
+                return classes.Count();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting class attendance for class: {classId} on date: {date}");
-                return new List<Attendance>();
+                _logger.LogError(ex, "Error getting class count");
+                return 0;
             }
         }
 
+        public async Task<int> GetHRCountAsync()
+        {
+            try
+            {
+                // Query HR collection in Firestore
+                var url = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/hr";
+                var response = await _httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(content);
+                    var root = doc.RootElement;
+
+                    if (root.TryGetProperty("documents", out var documents))
+                    {
+                        return documents.GetArrayLength();
+                    }
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting HR count");
+                return 0;
+            }
+        }
+        #endregion
+
+        #region User Management
         public async Task DeleteUserAsync(string id)
         {
             try
@@ -1512,7 +1490,6 @@ namespace HighSchoolPortal.Services
 
                 if (studentResponse.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation($"✅ Student deleted: {id}");
                     return;
                 }
 
@@ -1522,54 +1499,39 @@ namespace HighSchoolPortal.Services
 
                 if (teacherResponse.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation($"✅ Teacher deleted: {id}");
                     return;
                 }
 
                 // Try to delete from HR
                 var hrUrl = $"https://firestore.googleapis.com/v1/projects/{_projectId}/databases/(default)/documents/hr/{id}";
-                var hrResponse = await _httpClient.DeleteAsync(hrUrl);
-
-                if (hrResponse.IsSuccessStatusCode)
-                {
-                    _logger.LogInformation($"✅ HR deleted: {id}");
-                    return;
-                }
-
-                _logger.LogWarning($"⚠️ User not found for deletion: {id}");
+                await _httpClient.DeleteAsync(hrUrl);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"❌ Error deleting user: {id}");
+                _logger.LogError(ex, $"Error deleting user: {id}");
                 throw;
             }
         }
+        #endregion
 
+        #region Reports
         public async Task<IEnumerable<Grade>> GenerateGradeReportAsync(string classId, string term, int year)
         {
             try
             {
-                // Get the class
-                var classItem = await GetClassByIdAsync(classId);
-                if (classItem == null)
-                    return new List<Grade>();
+                var classStudents = await GetStudentsByClassIdAsync(classId);
+                var allGrades = new List<Grade>();
 
-                var reportGrades = new List<Grade>();
-
-                // Get grades for each student in the class for the specified term and year
-                if (classItem.StudentIds != null)
+                foreach (var student in classStudents)
                 {
-                    foreach (var studentId in classItem.StudentIds)
-                    {
-                        var studentGrades = await GetStudentGradesAsync(studentId);
-                        var filteredGrades = studentGrades
-                            .Where(g => g.Term?.Equals(term, StringComparison.OrdinalIgnoreCase) == true &&
-                                       g.Year == year);
-                        reportGrades.AddRange(filteredGrades);
-                    }
+                    var studentGrades = await GetStudentGradesAsync(student.Id);
+                    var termGrades = studentGrades
+                        .Where(g => g.Term == term && g.Year == year)
+                        .ToList();
+                    allGrades.AddRange(termGrades);
                 }
 
-                return reportGrades;
+                return allGrades;
             }
             catch (Exception ex)
             {
@@ -1584,7 +1546,6 @@ namespace HighSchoolPortal.Services
 
             try
             {
-                // Get counts
                 var studentCount = await GetStudentCountAsync();
                 var teacherCount = await GetTeacherCountAsync();
                 var classCount = await GetClassCountAsync();
@@ -1596,18 +1557,13 @@ namespace HighSchoolPortal.Services
                 statistics["hrCount"] = hrCount;
                 statistics["totalUsers"] = studentCount + teacherCount + hrCount;
                 statistics["reportGeneratedAt"] = DateTime.UtcNow;
-
-                // Get recent activity (last 30 days)
-                var recentDate = DateTime.UtcNow.AddDays(-30).ToString("o");
                 statistics["reportPeriod"] = "Last 30 days";
                 statistics["periodStart"] = DateTime.UtcNow.AddDays(-30);
                 statistics["periodEnd"] = DateTime.UtcNow;
-
-                _logger.LogInformation($"✅ Statistics report generated successfully");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "❌ Error generating statistics report");
+                _logger.LogError(ex, "Error generating statistics report");
                 statistics["error"] = "Failed to generate statistics";
             }
 
@@ -1615,4 +1571,30 @@ namespace HighSchoolPortal.Services
         }
         #endregion
     }
+
+    #region Additional Models
+    public class TeacherAssignment
+    {
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string TeacherId { get; set; } = string.Empty;
+        public string TeacherName { get; set; } = string.Empty;
+        public List<string> ClassIds { get; set; } = new List<string>();
+        public List<string> Subjects { get; set; } = new List<string>();
+        public DateTime AssignedDate { get; set; } = DateTime.UtcNow;
+        public string AssignedBy { get; set; } = string.Empty; // HR user ID
+        public bool IsActive { get; set; } = true;
+    }
+
+    public class SubjectAssignment
+    {
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string TeacherId { get; set; } = string.Empty;
+        public string TeacherName { get; set; } = string.Empty;
+        public string Subject { get; set; } = string.Empty;
+        public List<string> ClassIds { get; set; } = new List<string>();
+        public string AcademicYear { get; set; } = DateTime.Now.Year.ToString();
+        public DateTime AssignedDate { get; set; } = DateTime.UtcNow;
+        public string AssignedBy { get; set; } = string.Empty; // HR user ID
+    }
+    #endregion
 }

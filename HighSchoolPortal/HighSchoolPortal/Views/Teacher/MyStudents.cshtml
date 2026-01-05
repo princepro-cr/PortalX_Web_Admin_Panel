@@ -4,10 +4,11 @@
     var teacherClasses = ViewBag.TeacherClasses as List<string> ?? new List<string>();
     var totalStudents = ViewBag.TotalStudents ?? 0;
     var activeCount = ViewBag.ActiveCount ?? 0;
+    var teacher = ViewBag.Teacher as TeacherProfile;
 }
 
 <div class="container-fluid py-4 px-lg-5">
-    <!-- Modern Header -->
+    <!-- Modern Header with Assignment Info -->
     <div class="page-header-modern d-flex flex-column flex-md-row justify-content-between align-items-center">
         <div>
             <h1 class="h3 mb-1 text-gradient">My Students</h1>
@@ -17,18 +18,47 @@
                     <li class="breadcrumb-item active">Students</li>
                 </ol>
             </nav>
+            <!-- Assignment Info -->
+            @if (teacher?.Classes?.Any() == true)
+            {
+                <div class="mt-2">
+                    <small class="text-muted">
+                        Assigned to:
+                        @foreach (var classId in teacher.Classes.Take(3))
+                        {
+                            <span class="badge bg-info-subtle text-info me-1">@classId</span>
+                        }
+                        @if (teacher.Classes.Count > 3)
+                        {
+                            <span class="text-muted">+@(teacher.Classes.Count - 3) more</span>
+                        }
+                    </small>
+                </div>
+            }
         </div>
         <div class="d-flex gap-3 mt-3 mt-md-0">
             <div class="text-end d-none d-lg-block me-3">
                 <small class="text-muted d-block">Student Overview</small>
                 <span class="fw-bold text-success">@activeCount / @totalStudents Active</span>
             </div>
-            <button class="btn btn-teacher-primary rounded-pill px-4 shadow" onclick="refreshStudentData()">
-                <i class="fas fa-sync-alt me-2"></i>Refresh Data
-
-            </button>
+            @if (teacher?.Classes?.Any() == true)
+            {
+                <button class="btn btn-teacher-primary rounded-pill px-4 shadow" onclick="refreshStudentData()">
+                    <i class="fas fa-sync-alt me-2"></i>Refresh Data
+                </button>
+            }
         </div>
     </div>
+
+    <!-- If no classes assigned, show warning -->
+    @if (teacher?.Classes?.Any() != true)
+    {
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            You don't have any classes assigned yet. Please contact HR to get assigned to classes.
+            Once assigned, you'll see your students here.
+        </div>
+    }
 
     <!-- Stats Grid -->
     <div class="row mb-4 g-3">

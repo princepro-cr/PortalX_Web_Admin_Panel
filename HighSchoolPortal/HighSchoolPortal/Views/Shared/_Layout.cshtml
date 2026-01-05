@@ -708,6 +708,14 @@
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/Teacher/MyClasses") ? "active" : "")"
+                           href="/Teacher/MyClasses">
+                            <i class="fas fa-school"></i>
+                            <span>My Classes</span>
+                        </a>
+                    </li>
+
                     <li class="nav-section">Reports</li>
                     <li class="nav-item">
                         <a class="nav-link @(currentPath.Contains("/Teacher/GenerateReport") ? "active" : "")"
@@ -754,6 +762,16 @@
                             <i class="fas fa-chalkboard-teacher"></i>
                             <span>Manage Teachers</span>
                             <span class="badge bg-light text-dark ms-auto" id="teacherCountBadge">0</span>
+                        </a>
+                    </li>
+
+                    <!-- Change to this if you want it in sidebar -->
+                    <li class="nav-item">
+                        <a class="nav-link @(currentPath.Contains("/HR/AssignTeacherSubjects") ? "active" : "")"
+                           href="/HR/ManageTeachers">
+                            <i class="fas fa-user-check"></i>
+                            <span>Assign Teacher Subjects</span>
+                            <small class="ms-auto text-muted">Select teacher first</small>
                         </a>
                     </li>
 

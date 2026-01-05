@@ -1,0 +1,235 @@
+﻿@model TeacherProfile
+@{
+    ViewData["Title"] = "Assign Subjects & Classes";
+    var availableClasses = ViewBag.AvailableClasses as List<string> ?? new List<string>();
+    var subjects = ViewBag.Subjects as List<string> ?? new List<string>();
+}
+
+<div class="container-fluid px-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1 text-gradient">Assign Subjects & Classes</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/HR/ManageTeachers">Manage Teachers</a></li>
+                    <li class="breadcrumb-item"><a href="/HR/ViewTeacher/@Model.Id">@Model.FullName</a></li>
+                    <li class="breadcrumb-item active">Assign Subjects</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a href="/HR/ViewTeacher/@Model.Id" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Teacher
+            </a>
+        </div>
+    </div>
+
+    <!-- Teacher Info -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img src="@Model.AvatarUrl"
+                         class="rounded-circle"
+                         style="width: 80px; height: 80px; object-fit: cover;"
+                         onerror="this.src='/images/default-avatar.png'">
+                </div>
+                <div class="col">
+                    <h4 class="mb-1">@Model.FullName</h4>
+                    <p class="text-muted mb-0">
+                        <i class="fas fa-id-card me-1"></i>@Model.TeacherId
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-building me-1"></i>@Model.Department
+                    </p>
+                    <div class="mt-2">
+                        @if (Model.Classes?.Any() == true)
+                        {
+                            <span class="badge bg-info me-2">
+                                <i class="fas fa-school me-1"></i>@Model.Classes.Count Classes
+                            </span>
+                        }
+                        @if (Model.Subjects?.Any() == true)
+                        {
+                            <span class="badge bg-success">
+                                <i class="fas fa-book me-1"></i>@Model.Subjects.Count Subjects
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Assignment (if any) -->
+    @if (Model.Classes?.Any() == true || Model.Subjects?.Any() == true)
+    {
+        <div class="card mb-4 bg-light">
+            <div class="card-body">
+                <h6 class="mb-3"><i class="fas fa-history me-2"></i>Current Assignment</h6>
+                <div class="row">
+                    @if (Model.Subjects?.Any() == true)
+                    {
+                        <div class="col-md-6 mb-3">
+                            <p class="mb-2"><strong>Current Subjects:</strong></p>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var subject in Model.Subjects)
+                                {
+                                    <span class="badge bg-primary">@subject</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                    @if (Model.Classes?.Any() == true)
+                    {
+                        <div class="col-md-6 mb-3">
+                            <p class="mb-2"><strong>Current Classes:</strong></p>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var classItem in Model.Classes)
+                                {
+                                    <span class="badge bg-success">@classItem</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Assignment Form -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Assign Classes & Subjects</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/HR/AssignTeacherSubjects" id="assignmentForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="teacherId" value="@Model.Id" />
+
+                <!-- Subjects Selection -->
+                <div class="mb-4">
+                    <h6 class="mb-3"><i class="fas fa-book me-2"></i>Select Subjects</h6>
+                    <div class="row">
+                        @foreach (var subject in subjects)
+                        {
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           name="selectedSubjects"
+                                           value="@subject"
+                                           id="subject_@subject"
+                                           @(Model.Subjects?.Contains(subject) == true ? "checked" : "")>
+                                    <label class="form-check-label" for="subject_@subject">
+                                        <i class="fas fa-book-open me-2 text-primary"></i>@subject
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Classes Selection -->
+                <div class="mb-4">
+                    <h6 class="mb-3"><i class="fas fa-school me-2"></i>Select Classes</h6>
+                    @if (availableClasses.Any())
+                    {
+                        <div class="row">
+                            @foreach (var classItem in availableClasses)
+                            {
+                                <div class="col-md-3 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="selectedClasses"
+                                               value="@classItem"
+                                               id="class_@classItem"
+                                               @(Model.Classes?.Contains(classItem) == true ? "checked" : "")>
+                                        <label class="form-check-label" for="class_@classItem">
+                                            <i class="fas fa-chalkboard-teacher me-2 text-success"></i>@classItem
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            No classes available. Please create classes first.
+                        </div>
+                    }
+                </div>
+
+                <!-- Validation Summary -->
+                <div id="validationMessage" class="alert alert-danger d-none">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span id="validationText"></span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between">
+                    <a href="/HR/ViewTeacher/@Model.Id" class="btn btn-outline-secondary">
+                        <i class="fas fa-times me-1"></i>Cancel
+                    </a>
+                    <div>
+                        <button type="button" class="btn btn-outline-warning me-2" onclick="clearSelection()">
+                            <i class="fas fa-redo me-1"></i>Clear All
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <i class="fas fa-save me-1"></i>Save Assignment
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function clearSelection() {
+            if (confirm('Are you sure you want to clear all selections?')) {
+                $('input[type="checkbox"]').prop('checked', false);
+            }
+        }
+
+        $('#assignmentForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const selectedSubjects = $('input[name="selectedSubjects"]:checked').length;
+            const selectedClasses = $('input[name="selectedClasses"]:checked').length;
+
+            // Hide validation message
+            $('#validationMessage').addClass('d-none');
+
+            if (selectedSubjects === 0) {
+                showValidation('Please select at least one subject.');
+                return false;
+            }
+
+            if (selectedClasses === 0) {
+                showValidation('Please select at least one class.');
+                return false;
+            }
+
+            // Show loading state
+            const submitBtn = $('#submitBtn');
+            const originalText = submitBtn.html();
+            submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i>Saving...');
+
+            // Submit the form
+            this.submit();
+        });
+
+        function showValidation(message) {
+            $('#validationText').text(message);
+            $('#validationMessage').removeClass('d-none');
+            $('html, body').animate({
+                scrollTop: $('#validationMessage').offset().top - 100
+            }, 500);
+        }
+    </script>
+}

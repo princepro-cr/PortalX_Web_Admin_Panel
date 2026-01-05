@@ -44,12 +44,8 @@ namespace HighSchoolPortal.Models
         [Display(Name = "Grade Level")]
         public string? GradeLevel { get; set; } = "10";
 
-        [Display(Name = "Parent/Guardian Name")]
-        public string? ParentName { get; set; } = string.Empty;
-
-        [Display(Name = "Parent Email")]
-        [EmailAddress(ErrorMessage = "Invalid email address")]
-        public string? ParentEmail { get; set; } = string.Empty;
+        
+        
 
         [Display(Name = "Student ID")]
         public string? StudentId { get; set; } = string.Empty;

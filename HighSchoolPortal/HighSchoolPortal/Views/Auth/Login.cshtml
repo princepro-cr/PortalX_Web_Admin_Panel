@@ -1,26 +1,42 @@
 ﻿@model LoginModel
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Login to PortalX";
     var selectedRole = ViewData["SelectedRole"] as string ?? "teacher";
 }
+<!-- Include the shared CSS file in your layout -->
+@section Styles {
+    <link rel="stylesheet" href="~/css/portalx.css" />
+    <style>
+        /* Page-specific overrides only if absolutely necessary */
+        .login-page-bg {
+            background: var(--gradient-light);
+        }
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
-            <div class="card shadow-lg animate-fade-in">
-                <div class="card-header text-center" style="background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);">
+        .login-card {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+    </style>
+}
+
+<div class="full-height" style="background: var(--gradient-light);">
+    <div class="container center-vertically">
+        <div class="container-narrow animate-fade-in">
+            <!-- Card using shared component classes -->
+            <div class="portalx-card shadow-lg">
+                <div class="portalx-card-header text-center">
                     <div class="d-flex justify-content-center mb-3">
-                        <div class="feature-icon" style="background: rgba(255,255,255,0.2);">
-                            <i class="fas fa-school text-white"></i>
+                        <div class="portalx-badge portalx-badge-primary p-3 rounded-round">
+                            <i class="fas fa-school fa-2x"></i>
                         </div>
                     </div>
-                    <h3 class="mb-1 text-white">Welcome Back!</h3>
-                    <p class="text-white-75 mb-0">Login to Staff Portal</p>
+                    <h3 class="mb-1 font-weight-semibold">Welcome Back!</h3>
+                    <p class="mb-0 opacity-75">Login to PortalX</p>
 
                     @if (!string.IsNullOrEmpty(selectedRole))
                     {
                         <div class="mt-3">
-                            <span class="badge @(selectedRole == "hr" ? "bg-primary" : "bg-success")">
+                            <span class="portalx-badge @(selectedRole == "hr" ? "portalx-badge-primary" : "portalx-badge-success")">
                                 <i class="fas @(selectedRole == "hr" ? "fa-user-tie" : "fa-chalkboard-teacher") me-2"></i>
                                 @(selectedRole == "hr" ? "HR Staff" : "Teacher")
                             </span>
@@ -28,10 +44,10 @@
                     }
                 </div>
 
-                <div class="card-body p-4">
+                <div class="p-4">
                     @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
                     {
-                        <div class="alert alert-success animate-slide-in-left">
+                        <div class="portalx-alert portalx-alert-success animate-slide-in-left">
                             <i class="fas fa-check-circle me-2"></i>
                             @TempData["SuccessMessage"]
                         </div>
@@ -40,72 +56,79 @@
                     <form method="post" asp-action="Login" asp-controller="Auth" class="needs-validation" novalidate>
                         @Html.AntiForgeryToken()
 
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label">
-                                <i class="fas fa-envelope me-2 text-primary"></i>Email Address
+                        <div class="portalx-form-group">
+                            <label asp-for="Email" class="portalx-form-label">
+                                <i class="fas fa-envelope text-accent"></i>
+                                <span>Email Address</span>
                             </label>
-                            <div class="input-group">
-                                <span class="input-group-text">
+                            <div class="portalx-input-group">
+                                <span class="portalx-input-group-prepend">
                                     <i class="fas fa-at"></i>
                                 </span>
-                                <input asp-for="Email" class="form-control" placeholder="staff@school.edu" required>
+                                <input asp-for="Email" class="portalx-form-input" placeholder="staff@school.edu" required>
                             </div>
                             <span asp-validation-for="Email" class="text-danger small"></span>
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Password" class="form-label">
-                                <i class="fas fa-lock me-2 text-primary"></i>Password
+                        <div class="portalx-form-group">
+                            <label asp-for="Password" class="portalx-form-label">
+                                <i class="fas fa-lock text-accent"></i>
+                                <span>Password</span>
                             </label>
-                            <div class="input-group">
-                                <span class="input-group-text">
+                            <div class="portalx-input-group">
+                                <span class="portalx-input-group-prepend">
                                     <i class="fas fa-key"></i>
                                 </span>
-                                <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" required>
-                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <input asp-for="Password" type="password" class="portalx-form-input" placeholder="Enter your password" required id="passwordInput">
+                                <button class="portalx-btn portalx-btn-outline" type="button" id="togglePassword">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
                             <span asp-validation-for="Password" class="text-danger small"></span>
                         </div>
 
-                        <div class="mb-3 form-check d-flex justify-content-between align-items-center">
-                            <div>
+                        <div class="portalx-form-group d-flex justify-content-between align-items-center">
+                            <div class="form-check">
                                 <input asp-for="RememberMe" class="form-check-input">
                                 <label asp-for="RememberMe" class="form-check-label">Remember me</label>
                             </div>
-                            <a href="/Auth/ForgotPassword" class="text-decoration-none">
+                            <a href="/Auth/ForgotPassword" class="text-decoration-none text-accent">
                                 <i class="fas fa-key me-1"></i>Forgot password?
                             </a>
                         </div>
 
                         <!-- Role Selection -->
-                        <div class="mb-4">
-                            <label class="form-label">
-                                <i class="fas fa-user-tag me-2 text-primary"></i>Login as
+                        <div class="portalx-form-group">
+                            <label class="portalx-form-label">
+                                <i class="fas fa-user-tag text-accent"></i>
+                                <span>Login as</span>
                             </label>
-                            <div class="btn-group w-100" role="group">
-                                <input type="radio" class="btn-check" name="Role" id="roleTeacher" value="teacher" @(selectedRole == "teacher" ? "checked" : "")>
-                                <label class="btn btn-outline-success" for="roleTeacher">
-                                    <i class="fas fa-chalkboard-teacher me-2"></i>Teacher
-                                </label>
+                            <div class="d-flex gap-2" id="roleSelection">
+                                <div class="portalx-role-option flex-fill @(selectedRole == "teacher" ? "active" : "")"
+                                     data-role="teacher">
+                                    <input type="radio" class="d-none" name="Role" id="roleTeacher" value="teacher" @(selectedRole == "teacher" ? "checked" : "")>
+                                    <i class="fas fa-chalkboard-teacher me-2 text-accent"></i>
+                                    <span class="font-weight-medium text-main">Teacher</span>
+                                </div>
 
-                                <input type="radio" class="btn-check" name="Role" id="roleHR" value="hr" @(selectedRole == "hr" ? "checked" : "")>
-                                <label class="btn btn-outline-primary" for="roleHR">
-                                    <i class="fas fa-user-tie me-2"></i>HR Staff
-                                </label>
+                                <div class="portalx-role-option flex-fill @(selectedRole == "hr" ? "active" : "")"
+                                     data-role="hr">
+                                    <input type="radio" class="d-none" name="Role" id="roleHR" value="hr" @(selectedRole == "hr" ? "checked" : "")>
+                                    <i class="fas fa-user-tie me-2 text-accent"></i>
+                                    <span class="font-weight-medium text-main">HR Staff</span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="d-grid gap-2 mb-4">
-                            <button type="submit" class="btn btn-primary btn-lg">
+                            <button type="submit" class="portalx-btn portalx-btn-primary portalx-btn-lg">
                                 <i class="fas fa-sign-in-alt me-2"></i>Login
                             </button>
                         </div>
 
                         <div class="text-center">
                             <p class="mb-2">Don't have an account?</p>
-                            <a href="/Auth/Register?role=@selectedRole" class="btn btn-outline-primary w-100">
+                            <a href="/Auth/Register?role=@selectedRole" class="portalx-btn portalx-btn-outline w-100" id="registerLink">
                                 <i class="fas fa-user-plus me-2"></i>Create Account
                             </a>
                         </div>
@@ -113,11 +136,11 @@
                         <hr class="my-4">
 
                         <div class="text-center">
-                            <p class="small text-muted">
+                            <p class="small text-medium">
                                 By logging in, you agree to our
-                                <a href="#" class="text-decoration-none">Terms of Service</a>
+                                <a href="#" class="text-decoration-none text-accent">Terms of Service</a>
                                 and
-                                <a href="#" class="text-decoration-none">Privacy Policy</a>.
+                                <a href="#" class="text-decoration-none text-accent">Privacy Policy</a>.
                             </p>
                         </div>
                     </form>
@@ -127,43 +150,60 @@
     </div>
 </div>
 
-@section Styles {
-    <style>
-        .btn-check:checked + .btn-outline-primary {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .btn-check:checked + .btn-outline-success {
-            background-color: var(--success-color);
-            color: white;
-            border-color: var(--success-color);
-        }
-
-        .input-group-text {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            border: none;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
-        }
-    </style>
-}
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        // Toggle password visibility
+        // Fix: Toggle password visibility
         document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordInput = document.querySelector('input[type="password"]');
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            const passwordInput = document.getElementById('passwordInput');
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            this.innerHTML = type === 'password'
+                ? '<i class="fas fa-eye"></i>'
+                : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        // Fix: Role selection functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleOptions = document.querySelectorAll('.portalx-role-option');
+            const registerLink = document.getElementById('registerLink');
+
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const role = this.getAttribute('data-role');
+
+                    // Update radio button
+                    const radioInput = this.querySelector('input[type="radio"]');
+                    radioInput.checked = true;
+
+                    // Remove active class from all options
+                    roleOptions.forEach(opt => opt.classList.remove('active'));
+
+                    // Add active class to clicked option
+                    this.classList.add('active');
+
+                    // Update the badge in header
+                    const badge = document.querySelector('.portalx-badge');
+                    if (badge) {
+                        if (role === 'teacher') {
+                            badge.className = 'portalx-badge portalx-badge-success';
+                            badge.innerHTML = '<i class="fas fa-chalkboard-teacher me-2"></i>Teacher';
+                        } else {
+                            badge.className = 'portalx-badge portalx-badge-primary';
+                            badge.innerHTML = '<i class="fas fa-user-tie me-2"></i>HR Staff';
+                        }
+                    }
+
+                    // Update register link
+                    if (registerLink) {
+                        registerLink.href = `/Auth/Register?role=${role}`;
+                    }
+
+                    // Trigger change event for radio button
+                    radioInput.dispatchEvent(new Event('change'));
+                });
+            });
         });
 
         // Form validation
@@ -178,12 +218,21 @@
             // Add loading state
             const submitBtn = this.querySelector('button[type="submit"]');
             if (submitBtn) {
+                const originalText = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Logging in...';
                 submitBtn.disabled = true;
+
+                // Reset button after 5 seconds if submission fails
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }, 5000);
             }
         });
 
-        // Role selection updates register link
+        // Role radio button change event
         document.querySelectorAll('input[name="Role"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 const role = this.value;

@@ -1,264 +1,773 @@
 ﻿@{
-    ViewData["Title"] = "Welcome";
+    ViewData["Title"] = "Welcome to PortalX";
     var isAuthenticated = User.Identity?.IsAuthenticated == true;
 }
 
-<div class="container py-5">
-    <!-- Hero Section -->
-    <div class="text-center mb-5 animate-fade-in">
-        <div class="d-flex justify-content-center mb-4">
-            <div class="feature-icon" style="width: 100px; height: 100px; background: linear-gradient(135deg, #4361ee 0%, #7209b7 100%);">
-                <i class="fas fa-school fa-3x text-white"></i>
-            </div>
-        </div>
-        <h1 class="display-5 fw-bold mb-3">
-            Welcome to <span class="text-gradient">StaffPortal</span>
-        </h1>
-        <p class="lead text-muted mb-4">
-            Your digital gateway to school staff management and resources.
-            Choose your role to get started.
-        </p>
-    </div>
-
-    <!-- Role Selection Cards -->
-    <div class="row g-4 justify-content-center">
-        <!-- Teacher Card -->
-        <div class="col-md-6">
-            <div class="card h-100 hover-lift animate-fade-in" style="animation-delay: 0.1s;">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon mb-4" style="background: linear-gradient(135deg, #06d6a0 0%, #1b9aaa 100%);">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                    </div>
-                    <h3 class="fw-bold mb-3">Teacher</h3>
-                    <p class="text-muted mb-4">For teaching staff to manage classes and students</p>
-
-                    <ul class="list-unstyled text-start mb-4">
-                        <li class="mb-2">
-                            <i class="fas fa-check-circle text-success me-2"></i>
-                            Manage student grades
-                        </li>
-                        <li class="mb-2">
-                            <i class="fas fa-check-circle text-success me-2"></i>
-                            Record attendance
-                        </li>
-                        <li class="mb-2">
-                            <i class="fas fa-check-circle text-success me-2"></i>
-                            Upload study materials
-                        </li>
-                        <li class="mb-2">
-                            <i class="fas fa-check-circle text-success me-2"></i>
-                            View class performance
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle text-success me-2"></i>
-                            Communicate with students
-                        </li>
-                    </ul>
-
-                    <div class="mt-4">
-                        <a href="/Auth/Login?role=teacher" class="btn btn-success w-100 mb-2">
-                            <i class="fas fa-sign-in-alt me-2"></i>Login as Teacher
-                        </a>
-                        <a href="/Auth/Register?role=teacher" class="btn btn-outline-success w-100">
-                            <i class="fas fa-chalkboard-teacher me-2"></i>Register as Teacher
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- HR Card -->
-        <div class="col-md-6">
-            <div class="card h-100 hover-lift animate-fade-in" style="animation-delay: 0.2s;">
-                <div class="card-body text-center p-4">
-                    <div class="feature-icon mb-4" style="background: linear-gradient(135deg, #f72585 0%, #7209b7 100%);">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <h3 class="fw-bold mb-3">HR Staff</h3>
-                    <p class="text-muted mb-4">For administrative staff management</p>
-
-                    <ul class="list-unstyled text-start mb-4">
-                        <li class="mb-2">
-                            <i class="fas fa-check-circle text-success me-2"></i>
-                            Manage staff records
-                        </li>
-                        <li class="mb-2">
-                            <i class="fas fa-check-circle text-success me-2"></i>
-                            Handle teacher information
-                        </li>
-                        <li class="mb-2">
-                            <i class="fas fa-check-circle text-success me-2"></i>
-                            Generate reports
-                        </li>
-                        <li class="mb-2">
-                            <i class="fas fa-check-circle text-success me-2"></i>
-                            Monitor school statistics
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle text-success me-2"></i>
-                            Administrative controls
-                        </li>
-                    </ul>
-
-                    <div class="mt-4">
-                        <a href="/Auth/Login?role=hr" class="btn btn-primary w-100 mb-2">
-                            <i class="fas fa-sign-in-alt me-2"></i>Login as HR
-                        </a>
-                        <a href="/Auth/Register?role=hr" class="btn btn-outline-primary w-100">
-                            <i class="fas fa-user-tie me-2"></i>Register as HR
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Already Logged In Section -->
-    @if (isAuthenticated)
-    {
-        <div class="card mt-5 animate-fade-in" style="animation-delay: 0.3s;">
-            <div class="card-body text-center p-5">
-                <h3 class="mb-3">Welcome back, @User.Identity?.Name!</h3>
-                <p class="text-muted mb-4">You're already logged in. Go to your dashboard to continue.</p>
-                @{
-                    var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
-                    var dashboardUrl = userRole == "hr" ? "/HR/Dashboard" : "/Teacher/Dashboard";
-                }
-                <a href="@dashboardUrl" class="btn btn-primary px-4">
-                    <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
-                </a>
-            </div>
-        </div>
+<style>
+    :root {
+        --sidebar-primary: #2c3e50;
+        --sidebar-secondary: #1a1a2e 0;
+         --sidebar-accent: #3498db;
+        --sidebar-light: #ecf0f1;
+        --sidebar-hover: #2980b9;
+        --primary-color: #2c3e50;
+        --secondary-color: #34495e;
+        --accent-color: #3498db;
+        --success-color: #27ae60;
+        --warning-color: #f39c12;
+        --danger-color: #e74c3c;
+        --light-color: #ecf0f1;
+        --dark-color: #2c3e50;
+        --bg-gradient: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
     }
 
-    <!-- Features Comparison -->
-    <div class="card mt-5 animate-fade-in" style="animation-delay: 0.4s;">
-        <div class="card-header text-center">
-            <h5 class="mb-0">Staff Features Comparison</h5>
+    body {
+        background: var(--bg-gradient);
+        min-height: 100vh;
+        font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+        color: #333;
+    }
+
+    /* Hero Section */
+    .portalx-hero {
+        background: linear-gradient(135deg, var(--sidebar-primary) 0%, var(--sidebar-secondary) 100%);
+        color: white;
+        padding: 5rem 0 4rem;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0 0 30px 30px;
+        margin-bottom: 3rem;
+    }
+
+        .portalx-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.1;
+        }
+
+    .portalx-logo {
+        width: 120px;
+        height: 120px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+        .portalx-logo i {
+            font-size: 3.5rem;
+            color: white;
+        }
+
+    .portalx-title {
+        font-size: 3.2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        letter-spacing: -0.5px;
+    }
+
+    .portalx-subtitle {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto 2rem;
+        line-height: 1.6;
+        font-weight: 300;
+    }
+
+    /* Stats Section */
+    .portalx-stats {
+        display: flex;
+        justify-content: center;
+        gap: 2.5rem;
+        margin-top: 3rem;
+        flex-wrap: wrap;
+    }
+
+    .portalx-stat {
+        text-align: center;
+        padding: 1.5rem;
+        min-width: 140px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: var(--transition);
+    }
+
+        .portalx-stat:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+    .portalx-stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+        color: white;
+    }
+
+    .portalx-stat-label {
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.8;
+    }
+
+    /* Role Cards */
+    .portalx-role-cards {
+        margin-top: 2rem;
+    }
+
+    .role-card-container {
+        height: 100%;
+    }
+
+    .portalx-role-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2.5rem;
+        height: 100%;
+        transition: var(--transition);
+        box-shadow: var(--card-shadow);
+        border: 1px solid #e9ecef;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .portalx-role-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: var(--accent-color);
+        }
+
+        .portalx-role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--sidebar-secondary);
+        }
+
+    .teacher-card::before {
+        background: var(--success-color);
+    }
+
+    .hr-card::before {
+        background: var(--accent-color);
+    }
+
+    .portalx-role-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        color: white;
+        font-size: 1.8rem;
+        background: var(--sidebar-secondary);
+    }
+
+    .teacher-card .portalx-role-icon {
+        background: var(--success-color);
+    }
+
+    .hr-card .portalx-role-icon {
+        background: var(--accent-color);
+    }
+
+    .portalx-role-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--sidebar-primary);
+    }
+
+    .portalx-role-description {
+        color: #6c757d;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+        font-size: 1rem;
+    }
+
+    /* Feature List */
+    .portalx-feature-list {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 2.5rem;
+    }
+
+        .portalx-feature-list li {
+            padding: 0.85rem 0;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f1f3f4;
+            transition: var(--transition);
+        }
+
+            .portalx-feature-list li:last-child {
+                border-bottom: none;
+            }
+
+            .portalx-feature-list li:hover {
+                background: #f8f9fa;
+                padding-left: 10px;
+            }
+
+    .portalx-feature-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        margin-right: 12px;
+        background: var(--light-color);
+        color: var(--sidebar-secondary);
+        font-size: 0.8rem;
+    }
+
+    .teacher-card .portalx-feature-icon {
+        background: rgba(39, 174, 96, 0.1);
+        color: var(--success-color);
+    }
+
+    .hr-card .portalx-feature-icon {
+        background: rgba(52, 152, 219, 0.1);
+        color: var(--accent-color);
+    }
+
+    /* Buttons */
+    .portalx-btn {
+        padding: 0.875rem 1.75rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+        border: 2px solid transparent;
+        cursor: pointer;
+        width: 100%;
+        margin-bottom: 0.75rem;
+    }
+
+    .portalx-btn-primary {
+        background: var(--sidebar-secondary);
+        color: white;
+        border-color: var(--sidebar-secondary);
+    }
+
+        .portalx-btn-primary:hover {
+            background: var(--sidebar-primary);
+            border-color: var(--sidebar-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.2);
+        }
+
+    .portalx-btn-outline {
+        background: transparent;
+        color: var(--sidebar-secondary);
+        border-color: var(--sidebar-secondary);
+    }
+
+        .portalx-btn-outline:hover {
+            background: var(--sidebar-secondary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+    .teacher-card .portalx-btn-primary {
+        background: var(--success-color);
+        border-color: var(--success-color);
+    }
+
+        .teacher-card .portalx-btn-primary:hover {
+            background: #219653;
+            border-color: #219653;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.2);
+        }
+
+    .teacher-card .portalx-btn-outline {
+        color: var(--success-color);
+        border-color: var(--success-color);
+    }
+
+        .teacher-card .portalx-btn-outline:hover {
+            background: var(--success-color);
+            color: white;
+        }
+
+    .hr-card .portalx-btn-primary {
+        background: var(--accent-color);
+        border-color: var(--accent-color);
+    }
+
+        .hr-card .portalx-btn-primary:hover {
+            background: #2980b9;
+            border-color: #2980b9;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+    .hr-card .portalx-btn-outline {
+        color: var(--accent-color);
+        border-color: var(--accent-color);
+    }
+
+        .hr-card .portalx-btn-outline:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+    /* Welcome Back Section */
+    .portalx-welcome-back {
+        background: white;
+        border-radius: 16px;
+        padding: 3rem;
+        text-align: center;
+        margin-top: 3rem;
+        box-shadow: var(--card-shadow);
+        border-left: 5px solid var(--success-color);
+    }
+
+    .portalx-welcome-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--sidebar-primary) 0%, var(--sidebar-secondary) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: white;
+        font-size: 2rem;
+        box-shadow: 0 10px 20px rgba(44, 62, 80, 0.1);
+    }
+
+    .portalx-welcome-back h3 {
+        color: var(--sidebar-primary);
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+    }
+
+    .portalx-welcome-back p {
+        color: #6c757d;
+        margin-bottom: 1.5rem;
+        font-size: 1.05rem;
+    }
+
+    .portalx-dashboard-btn {
+        background: linear-gradient(135deg, var(--sidebar-primary) 0%, var(--sidebar-secondary) 100%);
+        color: white;
+        padding: 0.875rem 2.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: var(--transition);
+        border: none;
+    }
+
+        .portalx-dashboard-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(44, 62, 80, 0.2);
+            color: white;
+        }
+
+    /* Footer Note */
+    .portalx-footer-note {
+        text-align: center;
+        margin-top: 4rem;
+        padding: 2rem 0;
+        color: #6c757d;
+        font-size: 0.9rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+        .portalx-footer-note a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+            .portalx-footer-note a:hover {
+                text-decoration: underline;
+            }
+
+    /* Responsive Design */
+    @@media (max-width: 992px) {
+        .portalx-title
+
+    {
+        font-size: 2.5rem;
+    }
+
+    .portalx-subtitle {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+    }
+
+    .portalx-stats {
+        gap: 1.5rem;
+    }
+
+    .portalx-stat {
+        min-width: 120px;
+        padding: 1.25rem;
+    }
+
+    }
+
+    @@media (max-width: 768px) {
+        .portalx-hero
+
+    {
+        padding: 3rem 0;
+    }
+
+    .portalx-title {
+        font-size: 2rem;
+    }
+
+    .portalx-role-card {
+        padding: 2rem;
+    }
+
+    .portalx-stats {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .portalx-stat {
+        width: 100%;
+        max-width: 250px;
+    }
+
+    }
+
+    @@media (max-width: 576px) {
+        .portalx-role-card
+
+    {
+        padding: 1.5rem;
+    }
+
+    .portalx-btn {
+        padding: 0.75rem 1.5rem;
+    }
+
+    }
+</style>
+
+<div class="container-fluid px-0">
+    <!-- Hero Section -->
+    <section class="portalx-hero">
+        <div class="container">
+            <div class="text-center">
+                <div class="portalx-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1 class="portalx-title">Portal<span style="color: #ecf0f1;">X</span></h1>
+                <p class="portalx-subtitle">
+                    Professional Educational Management Platform. Streamline operations,
+                    enhance collaboration, and empower your institution with cutting-edge tools.
+                </p>
+            </div>
+
+            <!-- Stats -->
+            <div class="portalx-stats">
+                <div class="portalx-stat">
+                    <div class="portalx-stat-value">1K+</div>
+                    <div class="portalx-stat-label">Active Users</div>
+                </div>
+                <div class="portalx-stat">
+                    <div class="portalx-stat-value">99.9%</div>
+                    <div class="portalx-stat-label">Uptime</div>
+                </div>
+                <div class="portalx-stat">
+                    <div class="portalx-stat-value">24/7</div>
+                    <div class="portalx-stat-label">Support</div>
+                </div>
+                <div class="portalx-stat">
+                    <div class="portalx-stat-value">4.9★</div>
+                    <div class="portalx-stat-label">Rating</div>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Feature</th>
-                            <th class="text-center">Teacher</th>
-                            <th class="text-center">HR Staff</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>View Grades</td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                        </tr>
-                        <tr>
-                            <td>View Attendance</td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Add Grades</td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Record Attendance</td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Manage Users</td>
-                            <td class="text-center"><i class="fas fa-times text-danger"></i></td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Generate Reports</td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                        </tr>
-                        <tr>
-                            <td>Upload Materials</td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-times text-danger"></i></td>
-                        </tr>
-                        <tr>
-                            <td>System Configuration</td>
-                            <td class="text-center"><i class="fas fa-times text-danger"></i></td>
-                            <td class="text-center"><i class="fas fa-check text-success"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="portalx-role-cards">
+            <div class="row justify-content-center g-4">
+                <!-- Teacher Portal -->
+                <div class="col-xl-5 col-lg-6">
+                    <div class="role-card-container">
+                        <div class="portalx-role-card teacher-card">
+                            <div class="portalx-role-icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <h2 class="portalx-role-title">Educator Portal</h2>
+                            <p class="portalx-role-description">
+                                Comprehensive tools for academic management, student assessment,
+                                and classroom coordination designed specifically for educators.
+                            </p>
+
+                            <ul class="portalx-feature-list">
+                                <li>
+                                    <span class="portalx-feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Manage student grades & academic records</span>
+                                </li>
+                                <li>
+                                    <span class="portalx-feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Track attendance & participation metrics</span>
+                                </li>
+                                <li>
+                                    <span class="portalx-feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Share learning materials & resources</span>
+                                </li>
+                                <li>
+                                    <span class="portalx-feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Monitor academic performance analytics</span>
+                                </li>
+                                <li>
+                                    <span class="portalx-feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Communicate with students & guardians</span>
+                                </li>
+                            </ul>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <a href="/Auth/Login?role=teacher" class="portalx-btn portalx-btn-primary">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    Access Educator Portal
+                                </a>
+                                <a href="/Auth/Register?role=teacher" class="portalx-btn portalx-btn-outline">
+                                    <i class="fas fa-user-plus"></i>
+                                    Register as Educator
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HR/Admin Portal -->
+                <div class="col-xl-5 col-lg-6">
+                    <div class="role-card-container">
+                        <div class="portalx-role-card hr-card">
+                            <div class="portalx-role-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h2 class="portalx-role-title">Administration Portal</h2>
+                            <p class="portalx-role-description">
+                                Advanced management tools for institutional administration,
+                                staff coordination, and operational oversight.
+                            </p>
+
+                            <ul class="portalx-feature-list">
+                                <li>
+                                    <span class="portalx-feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Manage staff profiles & employment records</span>
+                                </li>
+                                <li>
+                                    <span class="portalx-feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Handle institutional data & analytics</span>
+                                </li>
+                                <li>
+                                    <span class="portalx-feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Generate comprehensive reports</span>
+                                </li>
+                                <li>
+                                    <span class="portalx-feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Monitor institutional KPIs & metrics</span>
+                                </li>
+                                <li>
+                                    <span class="portalx-feature-icon">
+                                        <i class="fas fa-check"></i>
+                                    </span>
+                                    <span>Administrative controls & permissions</span>
+                                </li>
+                            </ul>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <a href="/Auth/Login?role=hr" class="portalx-btn portalx-btn-primary">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    Access Admin Portal
+                                </a>
+                                <a href="/Auth/Register?role=hr" class="portalx-btn portalx-btn-outline">
+                                    <i class="fas fa-user-plus"></i>
+                                    Register as Administrator
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Already Logged In Section -->
+            @if (isAuthenticated)
+            {
+                <div class="portalx-welcome-back animate-fade-in" style="animation-delay: 0.3s;">
+                    <div class="portalx-welcome-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h3>Welcome back, @User.Identity?.Name!</h3>
+                    <p>You're already authenticated. Proceed to your dashboard to continue your work.</p>
+                    @{
+                        var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+                        var dashboardUrl = userRole == "hr" ? "/HR/Dashboard" : "/Teacher/Dashboard";
+                    }
+                    <a href="@dashboardUrl" class="portalx-dashboard-btn">
+                        <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                    </a>
+                </div>
+            }
+
+            <!-- Footer Note -->
+            <div class="portalx-footer-note">
+                <p>
+                    <strong>PortalX v2.0</strong> • Professional Education Management System<br>
+                    Need assistance? <a href="/support">Contact our support team</a> or
+                    <a href="/docs">view documentation</a>.
+                </p>
+                <p class="mt-2" style="font-size: 0.8rem; opacity: 0.7;">
+                    &copy; @DateTime.Now.Year PortalX Platform. All rights reserved.
+                </p>
             </div>
         </div>
     </div>
 </div>
 
-@section Styles {
-    <style>
-        .hover-lift {
-            transition: var(--transition);
-        }
-
-            .hover-lift:hover {
-                transform: translateY(-10px);
-                box-shadow: var(--shadow-hover);
-            }
-
-        .list-unstyled li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-
-            .list-unstyled li:last-child {
-                border-bottom: none;
-            }
-
-        .table th {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            border: none;
-        }
-
-        .table tbody tr {
-            transition: var(--transition);
-        }
-
-            .table tbody tr:hover {
-                background: rgba(67, 97, 238, 0.05);
-            }
-
-        .feature-icon-sm {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-}
-
 @section Scripts {
     <script>
-        // Add animation to cards
         document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.card');
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${index * 0.1}s`;
-            });
+            // Initialize role cards with smooth animations
+            const roleCards = document.querySelectorAll('.portalx-role-card');
 
-            // Add click effect to role cards
-            const roleCards = document.querySelectorAll('.card.hover-lift');
-            roleCards.forEach(card => {
+            roleCards.forEach((card, index) => {
+                // Set initial state
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+
+                // Animate in with delay
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+
+                // Add click functionality for entire card (except buttons)
                 card.addEventListener('click', function(e) {
-                    if (!e.target.closest('a')) {
-                        const link = this.querySelector('.btn:not(.btn-outline)');
-                        if (link) {
-                            window.location.href = link.href;
+                    if (!e.target.closest('a') && !e.target.closest('button')) {
+                        const primaryBtn = this.querySelector('.portalx-btn-primary');
+                        if (primaryBtn) {
+                            // Add click feedback
+                            this.style.transform = 'scale(0.98)';
+                            setTimeout(() => {
+                                this.style.transform = '';
+                                window.location.href = primaryBtn.href;
+                            }, 200);
                         }
                     }
                 });
+            });
+
+            // Animate stats on scroll
+            const stats = document.querySelectorAll('.portalx-stat');
+            const observerOptions = {
+                threshold: 0.5,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            stats.forEach(stat => {
+                stat.style.opacity = '0';
+                stat.style.transform = 'translateY(20px)';
+                stat.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(stat);
+            });
+
+            // Add subtle animation to logo
+            const logo = document.querySelector('.portalx-logo');
+            if (logo) {
+                logo.style.transition = 'transform 0.5s ease';
+
+                window.addEventListener('scroll', () => {
+                    const scrolled = window.pageYOffset;
+                    logo.style.transform = `translateY(${scrolled * 0.05}px)`;
+                });
+            }
+
+            // Add keyboard navigation support
+            document.addEventListener('keydown', function(e) {
+                const roleCardsArray = Array.from(roleCards);
+
+                if (e.key === '1' || e.key === '2') {
+                    const index = parseInt(e.key) - 1;
+                    if (roleCardsArray[index]) {
+                        const primaryBtn = roleCardsArray[index].querySelector('.portalx-btn-primary');
+                        if (primaryBtn) {
+                            primaryBtn.focus();
+                        }
+                    }
+                }
+
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.portalx-btn').forEach(btn => {
+                        btn.blur();
+                    });
+                }
             });
         });
     </script>

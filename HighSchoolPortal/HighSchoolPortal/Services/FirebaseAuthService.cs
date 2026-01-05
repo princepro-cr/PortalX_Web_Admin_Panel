@@ -310,39 +310,8 @@ namespace HighSchoolPortal.Services
 
                 _logger.LogInformation($"✅ Firebase Auth registration successful for: {userEmail}");
 
-                // Save to appropriate Firestore collection based on role
-                if (model.Role == "student")
-                {
-                    var studentProfile = new StudentProfile
-                    {
-                        Id = userId,
-                        Email = userEmail,
-                        FullName = model.FullName,
-                        Role = "student",
-                        StudentId = model.StudentId ?? $"STU{DateTime.Now:yyyyMMddHHmmss}",
-                        GradeLevel = model.GradeLevel ?? "10",
-                        ParentName = model.ParentName ?? "",
-                        ParentEmail = model.ParentEmail ?? "",
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow,
-                        IsActive = true,
-                        AvatarUrl = "/images/default-avatar.png",
-                        AttendancePercentage = 100,
-                        GPA = 0.0m
-                    };
-
-                    var result = await _firestoreService.AddStudentAsync(studentProfile);
-                    if (result != null)
-                    {
-                        _logger.LogInformation($"✅ Student profile saved to Firestore: {userEmail}");
-                        _currentUser = studentProfile;
-                    }
-                    else
-                    {
-                        return (false, "Failed to create student profile. Please try again.", null);
-                    }
-                }
-                else if (model.Role == "teacher")
+                 
+                 if (model.Role == "teacher")
                 {
                     var teacherProfile = new TeacherProfile
                     {

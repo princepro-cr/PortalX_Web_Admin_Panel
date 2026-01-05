@@ -3,241 +3,255 @@
     ViewData["Title"] = "Register";
     var selectedRole = ViewBag.SelectedRole as string ?? "teacher";
 }
+<!-- Include the shared CSS file in your layout -->
+@section Styles {
+    <link rel="stylesheet" href="~/css/portalx.css" />
+    <style>
+        /* Page-specific overrides only if absolutely necessary */
+        .login-page-bg {
+            background: var(--gradient-light);
+        }
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card shadow-lg">
-                <div class="card-body p-5">
-                    <div class="text-center mb-5">
-                        <h1 class="h3 mb-3 fw-normal">
-                            <i class="fas fa-school text-primary me-2"></i>Staff Portal Registration
-                        </h1>
-                        <p class="text-muted">Create your staff account</p>
+        .login-card {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+    </style>
+}
 
-                        @if (!string.IsNullOrEmpty(selectedRole))
-                        {
-                            <div class="alert alert-info">
-                                <i class="fas fa-info-circle me-2"></i>
-                                Registering as <strong>
-                                    @(selectedRole == "hr" ? "HR Staff" : "Teacher")
-                                </strong>
-                            </div>
-                        }
+<div class="full-height" style="background: var(--gradient-light);">
+    <div class="container center-vertically py-4">
+        <div class="portalx-card shadow-lg">
+            <div class="portalx-card-header text-center">
+                <div class="d-flex justify-content-center mb-3">
+                    <div class="portalx-badge portalx-badge-primary p-3 rounded-round">
+                        <i class="fas fa-user-plus fa-2x"></i>
+                    </div>
+                </div>
+                <h3 class="mb-1 font-weight-semibold">Create Account</h3>
+                <p class="mb-0 opacity-75">Join PortalX</p>
+
+                @if (!string.IsNullOrEmpty(selectedRole))
+                {
+                    <div class="mt-3">
+                        <span class="portalx-badge @(selectedRole == "hr" ? "portalx-badge-primary" : "portalx-badge-success")">
+                            <i class="fas @(selectedRole == "hr" ? "fa-user-tie" : "fa-chalkboard-teacher") me-2"></i>
+                            @(selectedRole == "hr" ? "HR Staff" : "Teacher")
+                        </span>
+                    </div>
+                }
+            </div>
+
+            <div class="p-4">
+                @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
+                {
+                    <div class="portalx-alert portalx-alert-success animate-slide-in-left">
+                        <i class="fas fa-check-circle me-2"></i>
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+                {
+                    <div class="portalx-alert portalx-alert-warning animate-slide-in-left">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
+
+                <form method="post" asp-action="Register" asp-controller="Auth" id="registrationForm">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Hidden Role Field -->
+                    <input type="hidden" asp-for="Role" value="@selectedRole" id="roleField" />
+
+                    <!-- Basic Information -->
+                    <div class="portalx-form-group">
+                        <label asp-for="FullName" class="portalx-form-label">
+                            <i class="fas fa-user text-accent"></i>
+                            <span>Full Name *</span>
+                        </label>
+                        <input asp-for="FullName" class="portalx-form-input" placeholder="John Doe" required>
+                        <span asp-validation-for="FullName" class="text-danger small mt-1 d-block"></span>
                     </div>
 
-                    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"] as string))
-                    {
-                        <div class="alert alert-success">
-                            <i class="fas fa-check-circle me-2"></i>
-                            @TempData["SuccessMessage"]
-                        </div>
-                    }
+                    <div class="portalx-form-group">
+                        <label asp-for="Email" class="portalx-form-label">
+                            <i class="fas fa-envelope text-accent"></i>
+                            <span>Email Address *</span>
+                        </label>
+                        <input asp-for="Email" type="email" class="portalx-form-input" placeholder="name@school.edu" required>
+                        <span asp-validation-for="Email" class="text-danger small mt-1 d-block"></span>
+                    </div>
 
-                    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
-                    {
-                        <div class="alert alert-danger">
-                            <i class="fas fa-exclamation-circle me-2"></i>
-                            @TempData["ErrorMessage"]
-                        </div>
-                    }
-
-                    <form method="post" asp-action="Register" asp-controller="Auth" id="registrationForm">
-                        @Html.AntiForgeryToken()
-
-                        <!-- Hidden Role Field -->
-                        <input type="hidden" asp-for="Role" value="@selectedRole" />
-
-                        <!-- Basic Information -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="FullName" class="form-label">Full Name *</label>
-                                    <input asp-for="FullName" class="form-control" placeholder="John Doe" required>
-                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                    <!-- Password Fields -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="portalx-form-group">
+                                <label asp-for="Password" class="portalx-form-label">
+                                    <i class="fas fa-lock text-accent"></i>
+                                    <span>Password *</span>
+                                </label>
+                                <div class="portalx-input-group">
+                                    <span class="portalx-input-group-prepend">
+                                        <i class="fas fa-key"></i>
+                                    </span>
+                                    <input asp-for="Password" type="password" class="portalx-form-input" placeholder="At least 6 characters" required id="passwordInput">
+                                    <button class="portalx-btn portalx-btn-outline" type="button" id="togglePassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="Email" class="form-label">Email Address *</label>
-                                    <input asp-for="Email" type="email" class="form-control" placeholder="name@school.edu" required>
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
+                                <span asp-validation-for="Password" class="text-danger small mt-1 d-block"></span>
+                                <small class="form-text text-muted">Minimum 6 characters</small>
                             </div>
                         </div>
-
-                        <!-- Password Fields -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="Password" class="form-label">Password *</label>
-                                    <input asp-for="Password" type="password" class="form-control" placeholder="At least 6 characters" required>
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                    <small class="form-text text-muted">Minimum 6 characters</small>
+                        <div class="col-md-6">
+                            <div class="portalx-form-group">
+                                <label asp-for="ConfirmPassword" class="portalx-form-label">
+                                    <i class="fas fa-lock text-accent"></i>
+                                    <span>Confirm Password *</span>
+                                </label>
+                                <div class="portalx-input-group">
+                                    <span class="portalx-input-group-prepend">
+                                        <i class="fas fa-key"></i>
+                                    </span>
+                                    <input asp-for="ConfirmPassword" type="password" class="portalx-form-input" placeholder="Re-enter your password" required id="confirmPasswordInput">
+                                    <button class="portalx-btn portalx-btn-outline" type="button" id="toggleConfirmPassword">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="ConfirmPassword" class="form-label">Confirm Password *</label>
-                                    <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Re-enter your password" required>
-                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                                </div>
+                                <span asp-validation-for="ConfirmPassword" class="text-danger small mt-1 d-block"></span>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Role Selection -->
-                        <div class="mb-4">
-                            <h5 class="mb-3 border-bottom pb-2">
-                                <i class="fas fa-user-tag me-2 text-primary"></i>Select Role
-                            </h5>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <div class="form-check card p-3 h-100 @(selectedRole == "teacher" ? "border-success border-2" : "border")">
-                                        <input class="form-check-input" type="radio" name="RoleRadio" id="roleTeacherRadio" value="teacher" @(selectedRole == "teacher" ? "checked" : "")>
-                                        <label class="form-check-label w-100" for="roleTeacherRadio">
-                                            <div class="d-flex align-items-center mb-2">
-                                                <div class="feature-icon-sm bg-success me-3">
-                                                    <i class="fas fa-chalkboard-teacher text-white"></i>
-                                                </div>
-                                                <h6 class="mb-0">Teacher</h6>
-                                            </div>
-                                            <p class="text-muted small mb-0">For teaching staff to manage classes, grades, and attendance.</p>
-                                        </label>
-                                    </div>
+                    <!-- Role Selection -->
+                    <div class="portalx-form-group">
+                        <label class="portalx-form-label">
+                            <i class="fas fa-user-tag text-accent"></i>
+                            <span>Select Role *</span>
+                        </label>
+                        <div class="d-flex gap-3" id="roleSelection">
+                            <div class="portalx-role-option flex-fill @(selectedRole == "teacher" ? "active" : "")"
+                                 data-role="teacher">
+                                <input type="radio" class="d-none" name="RoleRadio" id="roleTeacherRadio" value="teacher" @(selectedRole == "teacher" ? "checked" : "")>
+                                <div class="text-center">
+                                    <i class="fas fa-chalkboard-teacher fa-2x mb-2 text-accent"></i>
+                                    <h6 class="mb-1">Teacher</h6>
+                                    <p class="small text-muted mb-0">Manage classes, grades, and attendance</p>
                                 </div>
+                            </div>
 
-                                <div class="col-md-6 mb-3">
-                                    <div class="form-check card p-3 h-100 @(selectedRole == "hr" ? "border-primary border-2" : "border")">
-                                        <input class="form-check-input" type="radio" name="RoleRadio" id="roleHRRadio" value="hr" @(selectedRole == "hr" ? "checked" : "")>
-                                        <label class="form-check-label w-100" for="roleHRRadio">
-                                            <div class="d-flex align-items-center mb-2">
-                                                <div class="feature-icon-sm bg-primary me-3">
-                                                    <i class="fas fa-user-tie text-white"></i>
-                                                </div>
-                                                <h6 class="mb-0">HR Staff</h6>
-                                            </div>
-                                            <p class="text-muted small mb-0">For administrative staff to manage records and reports.</p>
-                                        </label>
-                                    </div>
+                            <div class="portalx-role-option flex-fill @(selectedRole == "hr" ? "active" : "")"
+                                 data-role="hr">
+                                <input type="radio" class="d-none" name="RoleRadio" id="roleHRRadio" value="hr" @(selectedRole == "hr" ? "checked" : "")>
+                                <div class="text-center">
+                                    <i class="fas fa-user-tie fa-2x mb-2 text-accent"></i>
+                                    <h6 class="mb-1">HR Staff</h6>
+                                    <p class="small text-muted mb-0">Manage records and reports</p>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Teacher Specific Fields -->
-                        @if (selectedRole == "teacher")
-                        {
-                            <div class="mb-4">
-                                <h5 class="mb-3 border-bottom pb-2">
-                                    <i class="fas fa-chalkboard-teacher me-2 text-success"></i>Teacher Information
-                                </h5>
-
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label asp-for="TeacherId" class="form-label">Teacher ID *</label>
-                                            <input asp-for="TeacherId" class="form-control" placeholder="e.g., TCH2024001" required>
-                                            <span asp-validation-for="TeacherId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label asp-for="Department" class="form-label">Department *</label>
-                                            <select asp-for="Department" class="form-control" required>
-                                                <option value="">Select Department</option>
-                                                <option value="Mathematics">Mathematics</option>
-                                                <option value="Science">Science</option>
-                                                <option value="English">English</option>
-                                                <option value="History">History</option>
-                                                <option value="Arts">Arts</option>
-                                                <option value="Physical Education">Physical Education</option>
-                                                <option value="Technology">Technology</option>
-                                            </select>
-                                            <span asp-validation-for="Department" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <div class="form-group">
-                                        <label asp-for="Qualification" class="form-label">Qualification *</label>
-                                        <input asp-for="Qualification" class="form-control" placeholder="e.g., B.Ed, M.Sc" required>
-                                        <span asp-validation-for="Qualification" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-                        <!-- HR Specific Fields -->
-                        @if (selectedRole == "hr")
-                        {
-                            <div class="mb-4">
-                                <h5 class="mb-3 border-bottom pb-2">
-                                    <i class="fas fa-user-tie me-2 text-info"></i>HR Staff Information
-                                </h5>
-
-                                <div class="alert alert-info mb-3">
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    HR Staff accounts require administrative approval.
-                                </div>
-
-                                <div class="mb-3">
-                                    <div class="form-group">
-                                        <label asp-for="EmployeeId" class="form-label">Employee ID *</label>
-                                        <input asp-for="EmployeeId" class="form-control" placeholder="e.g., HR001" required>
-                                        <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-                        <!-- Optional Fields for All -->
-                        <div class="mb-4">
-                            <h5 class="mb-3 border-bottom pb-2">
-                                <i class="fas fa-address-card me-2 text-secondary"></i>Additional Information (Optional)
-                            </h5>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label asp-for="Phone" class="form-label">Phone Number</label>
-                                        <input asp-for="Phone" class="form-control" placeholder="(123) 456-7890">
-                                        <span asp-validation-for="Phone" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
-                                        <input asp-for="DateOfBirth" type="date" class="form-control">
-                                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <div class="form-group">
-                                    <label asp-for="Address" class="form-label">Address</label>
-                                    <input asp-for="Address" class="form-control" placeholder="123 Main St, City, State">
-                                    <span asp-validation-for="Address" class="text-danger"></span>
-                                </div>
-                            </div>
+                    <!-- Teacher Specific Fields -->
+                    <div id="teacherFields" class="@(selectedRole == "teacher" ? "" : "d-none")">
+                        <div class="portalx-form-group">
+                            <label asp-for="TeacherId" class="portalx-form-label">
+                                <i class="fas fa-id-card text-accent"></i>
+                                <span>Teacher ID *</span>
+                            </label>
+                            <input asp-for="TeacherId" class="portalx-form-input" placeholder="e.g., TCH2024001">
+                            <span asp-validation-for="TeacherId" class="text-danger small mt-1 d-block"></span>
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="d-grid gap-2 mb-4">
-                            <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
-                                <i class="fas fa-user-plus me-2"></i>Create Account
-                            </button>
+                        <div class="portalx-form-group">
+                            <label asp-for="Department" class="portalx-form-label">
+                                <i class="fas fa-building text-accent"></i>
+                                <span>Department *</span>
+                            </label>
+                            <select asp-for="Department" class="portalx-form-input">
+                                <option value="">Select Department</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Science">Science</option>
+                                <option value="English">English</option>
+                                <option value="History">History</option>
+                                <option value="Arts">Arts</option>
+                                <option value="Physical Education">Physical Education</option>
+                                <option value="Technology">Technology</option>
+                            </select>
+                            <span asp-validation-for="Department" class="text-danger small mt-1 d-block"></span>
                         </div>
 
-                        <div class="text-center">
-                            <p class="mb-0">
-                                Already have an account?
-                                <a href="/Auth/Login?role=@selectedRole" class="text-decoration-none fw-semibold">Sign in here</a>
-                            </p>
+                        <div class="portalx-form-group">
+                            <label asp-for="Qualification" class="portalx-form-label">
+                                <i class="fas fa-graduation-cap text-accent"></i>
+                                <span>Qualification *</span>
+                            </label>
+                            <input asp-for="Qualification" class="portalx-form-input" placeholder="e.g., B.Ed, M.Sc">
+                            <span asp-validation-for="Qualification" class="text-danger small mt-1 d-block"></span>
                         </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <!-- HR Specific Fields -->
+                    <div id="hrFields" class="@(selectedRole == "hr" ? "" : "d-none")">
+                        <div class="portalx-alert portalx-alert-warning mb-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            HR Staff accounts require administrative approval.
+                        </div>
+
+                        <div class="portalx-form-group">
+                            <label asp-for="EmployeeId" class="portalx-form-label">
+                                <i class="fas fa-id-badge text-accent"></i>
+                                <span>Employee ID *</span>
+                            </label>
+                            <input asp-for="EmployeeId" class="portalx-form-input" placeholder="e.g., HR001">
+                            <span asp-validation-for="EmployeeId" class="text-danger small mt-1 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- Optional Fields for All -->
+                    <div class="portalx-form-group">
+                        <label asp-for="Phone" class="portalx-form-label">
+                            <i class="fas fa-phone text-accent"></i>
+                            <span>Phone Number</span>
+                        </label>
+                        <input asp-for="Phone" class="portalx-form-input" placeholder="(123) 456-7890">
+                        <span asp-validation-for="Phone" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="portalx-form-group">
+                        <label asp-for="DateOfBirth" class="portalx-form-label">
+                            <i class="fas fa-calendar text-accent"></i>
+                            <span>Date of Birth</span>
+                        </label>
+                        <input asp-for="DateOfBirth" type="date" class="portalx-form-input">
+                        <span asp-validation-for="DateOfBirth" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <div class="portalx-form-group">
+                        <label asp-for="Address" class="portalx-form-label">
+                            <i class="fas fa-home text-accent"></i>
+                            <span>Address</span>
+                        </label>
+                        <input asp-for="Address" class="portalx-form-input" placeholder="123 Main St, City, State">
+                        <span asp-validation-for="Address" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-grid gap-2 mb-4">
+                        <button type="submit" class="portalx-btn portalx-btn-primary portalx-btn-lg" id="submitBtn">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="mb-2">Already have an account?</p>
+                        <a href="/Auth/Login?role=@selectedRole" class="portalx-btn portalx-btn-outline w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -247,72 +261,189 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        // Handle role selection via radio buttons
-        document.querySelectorAll('input[name="RoleRadio"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                const selectedRole = this.value;
+        // Toggle password visibility for both password fields
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('passwordInput');
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            this.innerHTML = type === 'password'
+                ? '<i class="fas fa-eye"></i>'
+                : '<i class="fas fa-eye-slash"></i>';
+        });
 
-                // Update hidden Role field
-                document.querySelector('input[name="Role"]').value = selectedRole;
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+            const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+            const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+            confirmPasswordInput.type = type;
+            this.innerHTML = type === 'password'
+                ? '<i class="fas fa-eye"></i>'
+                : '<i class="fas fa-eye-slash"></i>';
+        });
 
-                // Reload page with new role
-                window.location.href = `/Auth/Register?role=${selectedRole}`;
+        // Role selection functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const roleOptions = document.querySelectorAll('.portalx-role-option');
+            const roleField = document.getElementById('roleField');
+            const teacherFields = document.getElementById('teacherFields');
+            const hrFields = document.getElementById('hrFields');
+            const teacherIdInput = document.querySelector('input[name="TeacherId"]');
+            const departmentSelect = document.querySelector('select[name="Department"]');
+            const qualificationInput = document.querySelector('input[name="Qualification"]');
+            const employeeIdInput = document.querySelector('input[name="EmployeeId"]');
+            const loginLink = document.querySelector('a[href*="/Auth/Login"]');
+
+            // Function to update role selection
+            function updateRoleSelection(selectedRole) {
+                // Update hidden field
+                if (roleField) roleField.value = selectedRole;
+
+                // Update active state of role options
+                roleOptions.forEach(option => {
+                    const role = option.getAttribute('data-role');
+                    if (role === selectedRole) {
+                        option.classList.add('active');
+                        const radio = option.querySelector('input[type="radio"]');
+                        if (radio) radio.checked = true;
+                    } else {
+                        option.classList.remove('active');
+                        const radio = option.querySelector('input[type="radio"]');
+                        if (radio) radio.checked = false;
+                    }
+                });
+
+                // Show/hide role-specific fields
+                if (selectedRole === 'teacher') {
+                    if (teacherFields) teacherFields.classList.remove('d-none');
+                    if (hrFields) hrFields.classList.add('d-none');
+
+                    // Make teacher fields required
+                    if (teacherIdInput) teacherIdInput.setAttribute('required', 'required');
+                    if (departmentSelect) departmentSelect.setAttribute('required', 'required');
+                    if (qualificationInput) qualificationInput.setAttribute('required', 'required');
+
+                    // Remove required from HR fields
+                    if (employeeIdInput) employeeIdInput.removeAttribute('required');
+                } else {
+                    if (teacherFields) teacherFields.classList.add('d-none');
+                    if (hrFields) hrFields.classList.remove('d-none');
+
+                    // Make HR fields required
+                    if (employeeIdInput) employeeIdInput.setAttribute('required', 'required');
+
+                    // Remove required from teacher fields
+                    if (teacherIdInput) teacherIdInput.removeAttribute('required');
+                    if (departmentSelect) departmentSelect.removeAttribute('required');
+                    if (qualificationInput) qualificationInput.removeAttribute('required');
+                }
+
+                // Update badge in header
+                const badge = document.querySelector('.portalx-badge');
+                if (badge) {
+                    if (selectedRole === 'teacher') {
+                        badge.className = 'portalx-badge portalx-badge-success';
+                        badge.innerHTML = '<i class="fas fa-chalkboard-teacher me-2"></i>Teacher';
+                    } else {
+                        badge.className = 'portalx-badge portalx-badge-primary';
+                        badge.innerHTML = '<i class="fas fa-user-tie me-2"></i>HR Staff';
+                    }
+                }
+
+                // Update login link
+                if (loginLink) {
+                    loginLink.href = `/Auth/Login?role=${selectedRole}`;
+                }
+            }
+
+            // Set initial role
+            updateRoleSelection('@selectedRole');
+
+            // Add click handlers to role options
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const role = this.getAttribute('data-role');
+                    updateRoleSelection(role);
+                });
+            });
+
+            // Handle radio button change events
+            document.querySelectorAll('input[name="RoleRadio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    updateRoleSelection(this.value);
+                });
             });
         });
 
         // Form submission handling
         document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            // Client-side validation
+            const role = document.getElementById('roleField').value;
+            let isValid = true;
+            let errorMessage = '';
+
+            if (role === 'teacher') {
+                const teacherId = document.querySelector('input[name="TeacherId"]');
+                const department = document.querySelector('select[name="Department"]');
+                const qualification = document.querySelector('input[name="Qualification"]');
+
+                if (!teacherId || !teacherId.value.trim()) {
+                    isValid = false;
+                    errorMessage = 'Teacher ID is required for teacher registration.';
+                    if (teacherId) teacherId.focus();
+                } else if (!department || !department.value) {
+                    isValid = false;
+                    errorMessage = 'Department is required for teacher registration.';
+                    if (department) department.focus();
+                } else if (!qualification || !qualification.value.trim()) {
+                    isValid = false;
+                    errorMessage = 'Qualification is required for teacher registration.';
+                    if (qualification) qualification.focus();
+                }
+            } else if (role === 'hr') {
+                const employeeId = document.querySelector('input[name="EmployeeId"]');
+
+                if (!employeeId || !employeeId.value.trim()) {
+                    isValid = false;
+                    errorMessage = 'Employee ID is required for HR registration.';
+                    if (employeeId) employeeId.focus();
+                }
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+
+                // Show error alert
+                const existingAlert = document.querySelector('.portalx-alert.portalx-alert-warning');
+                if (existingAlert) {
+                    existingAlert.remove();
+                }
+
+                const errorAlert = document.createElement('div');
+                errorAlert.className = 'portalx-alert portalx-alert-warning animate-slide-in-left mb-3';
+                errorAlert.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i>${errorMessage}`;
+
+                const form = document.getElementById('registrationForm');
+                form.insertBefore(errorAlert, form.firstChild);
+
+                return false;
+            }
+
             // Add loading state
             const submitBtn = document.getElementById('submitBtn');
             if (submitBtn) {
+                const originalText = submitBtn.innerHTML;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating Account...';
                 submitBtn.disabled = true;
+
+                // Reset button after 5 seconds if submission fails
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }, 5000);
             }
-        });
 
-        // Conditionally validate fields based on role
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('registrationForm');
-
-            form.addEventListener('submit', function(e) {
-                const role = document.querySelector('input[name="Role"]').value;
-
-                if (role === 'teacher') {
-                    // Teacher-specific validation
-                    const teacherId = document.querySelector('input[name="TeacherId"]');
-                    const department = document.querySelector('select[name="Department"]');
-                    const qualification = document.querySelector('input[name="Qualification"]');
-
-                    if (!teacherId || !teacherId.value.trim()) {
-                        e.preventDefault();
-                        alert('Teacher ID is required for teacher registration.');
-                        return;
-                    }
-
-                    if (!department || !department.value) {
-                        e.preventDefault();
-                        alert('Department is required for teacher registration.');
-                        return;
-                    }
-
-                    if (!qualification || !qualification.value.trim()) {
-                        e.preventDefault();
-                        alert('Qualification is required for teacher registration.');
-                        return;
-                    }
-                }
-
-                if (role === 'hr') {
-                    // HR-specific validation
-                    const employeeId = document.querySelector('input[name="EmployeeId"]');
-
-                    if (!employeeId || !employeeId.value.trim()) {
-                        e.preventDefault();
-                        alert('Employee ID is required for HR registration.');
-                        return;
-                    }
-                }
-            });
+            return true;
         });
     </script>
 }

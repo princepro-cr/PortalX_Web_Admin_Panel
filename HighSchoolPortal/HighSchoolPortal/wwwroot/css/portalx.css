@@ -1,0 +1,437 @@
+﻿/* ============================================
+   PORTALX DESIGN SYSTEM - CSS Variables
+   ============================================ */
+
+:root {
+    /* Primary Color Palette */
+    --main-color: #1a1a2e;
+    --accent-color: #0f3460;
+    --secondary-color: #16213e;
+    --highlight-color: #e94560;
+    --light-accent: #3498db;
+    /* Status Colors */
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --info-color: #3498db;
+    /* Neutral Colors */
+    --light-bg: #f8f9fa;
+    --light-border: #e9ecef;
+    --medium-gray: #6c757d;
+    --dark-gray: #343a40;
+    --white: #ffffff;
+    --black: #000000;
+    /* Background Gradients */
+    --gradient-primary: linear-gradient(135deg, var(--main-color) 0%, var(--accent-color) 100%);
+    --gradient-secondary: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+    --gradient-light: linear-gradient(135deg, var(--light-bg) 0%, #e9ecef 100%);
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(26, 26, 46, 0.05);
+    --shadow-md: 0 4px 8px rgba(26, 26, 46, 0.1);
+    --shadow-lg: 0 10px 30px rgba(26, 26, 46, 0.15);
+    --shadow-hover: 0 15px 40px rgba(26, 26, 46, 0.2);
+    /* Border Radius */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-round: 50%;
+    /* Spacing Scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-xxl: 3rem;
+    /* Typography */
+    --font-primary: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    /* Transitions */
+    --transition-fast: all 0.15s ease;
+    --transition-normal: all 0.3s ease;
+    --transition-slow: all 0.5s ease;
+    --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ============================================
+   UTILITY CLASSES (Reusable across all pages)
+   ============================================ */
+
+/* Color Utilities */
+.bg-main {
+    background-color: var(--main-color) !important;
+}
+
+.bg-accent {
+    background-color: var(--accent-color) !important;
+}
+
+.bg-secondary {
+    background-color: var(--secondary-color) !important;
+}
+
+.bg-highlight {
+    background-color: var(--highlight-color) !important;
+}
+
+.text-main {
+    color: var(--main-color) !important;
+}
+
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+.text-highlight {
+    color: var(--highlight-color) !important;
+}
+
+.text-light-accent {
+    color: var(--light-accent) !important;
+}
+
+/* Gradient Utilities */
+.bg-gradient-primary {
+    background: var(--gradient-primary) !important;
+}
+
+.bg-gradient-secondary {
+    background: var(--gradient-secondary) !important;
+}
+
+.bg-gradient-light {
+    background: var(--gradient-light) !important;
+}
+
+/* Shadow Utilities */
+.shadow-sm {
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.shadow-md {
+    box-shadow: var(--shadow-md) !important;
+}
+
+.shadow-lg {
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.shadow-hover:hover {
+    box-shadow: var(--shadow-hover) !important;
+}
+
+/* Border Radius Utilities */
+.rounded-sm {
+    border-radius: var(--radius-sm) !important;
+}
+
+.rounded-md {
+    border-radius: var(--radius-md) !important;
+}
+
+.rounded-lg {
+    border-radius: var(--radius-lg) !important;
+}
+
+.rounded-xl {
+    border-radius: var(--radius-xl) !important;
+}
+
+.rounded-round {
+    border-radius: var(--radius-round) !important;
+}
+
+/* Transition Utilities */
+.transition-fast {
+    transition: var(--transition-fast) !important;
+}
+
+.transition-normal {
+    transition: var(--transition-normal) !important;
+}
+
+.transition-slow {
+    transition: var(--transition-slow) !important;
+}
+
+.transition-bounce {
+    transition: var(--transition-bounce) !important;
+}
+
+/* Typography Utilities */
+.font-primary {
+    font-family: var(--font-primary) !important;
+}
+
+.font-mono {
+    font-family: var(--font-mono) !important;
+}
+
+.font-weight-light {
+    font-weight: var(--font-weight-light) !important;
+}
+
+.font-weight-medium {
+    font-weight: var(--font-weight-medium) !important;
+}
+
+.font-weight-semibold {
+    font-weight: var(--font-weight-semibold) !important;
+}
+
+/* ============================================
+   COMPONENT STYLES (Reusable components)
+   ============================================ */
+
+/* Card Components */
+.portalx-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--light-border);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+}
+
+    .portalx-card:hover {
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-4px);
+    }
+
+.portalx-card-header {
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: var(--space-lg) var(--space-xl);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* Button Components */
+.portalx-btn {
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-medium);
+    font-size: 0.95rem;
+    border: 2px solid transparent;
+    transition: var(--transition-normal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    cursor: pointer;
+}
+
+.portalx-btn-primary {
+    background: var(--gradient-primary);
+    color: var(--white);
+    border-color: transparent;
+}
+
+    .portalx-btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-hover);
+    }
+
+.portalx-btn-outline {
+    background: transparent;
+    color: var(--main-color);
+    border-color: var(--main-color);
+}
+
+    .portalx-btn-outline:hover {
+        background: var(--main-color);
+        color: var(--white);
+    }
+
+/* Form Components */
+.portalx-form-group {
+    margin-bottom: var(--space-lg);
+}
+
+.portalx-form-label {
+    color: var(--main-color);
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--space-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.portalx-form-input {
+    padding: var(--space-md) var(--space-lg);
+    border: 2px solid var(--light-border);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    font-size: 1rem;
+    transition: var(--transition-normal);
+    width: 100%;
+}
+
+    .portalx-form-input:focus {
+        outline: none;
+        border-color: var(--light-accent);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+.portalx-input-group {
+    display: flex;
+    align-items: stretch;
+}
+
+.portalx-input-group-prepend {
+    background: var(--gradient-primary);
+    color: var(--white);
+    padding: var(--space-md) var(--space-lg);
+    border: 2px solid var(--light-border);
+    border-right: none;
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+/* Role Selection Components */
+.portalx-role-option {
+    display: flex;
+    align-items: center;
+    padding: var(--space-md);
+    border: 2px solid var(--light-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition-normal);
+    background: var(--white);
+}
+
+    .portalx-role-option:hover {
+        border-color: var(--light-accent);
+        background: var(--light-bg);
+    }
+
+    .portalx-role-option.active {
+        border-color: var(--light-accent);
+        background: rgba(52, 152, 219, 0.05);
+    }
+
+/* Badge Components */
+.portalx-badge {
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: var(--font-weight-medium);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.portalx-badge-primary {
+    background: var(--accent-color);
+    color: var(--white);
+}
+
+.portalx-badge-success {
+    background: var(--success-color);
+    color: var(--white);
+}
+
+/* Alert Components */
+.portalx-alert {
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-lg);
+    border-left: 4px solid;
+}
+
+.portalx-alert-success {
+    background: rgba(39, 174, 96, 0.1);
+    border-left-color: var(--success-color);
+    color: #155724;
+}
+
+.portalx-alert-warning {
+    background: rgba(243, 156, 18, 0.1);
+    border-left-color: var(--warning-color);
+    color: #856404;
+}
+
+/* ============================================
+   LAYOUT UTILITIES
+   ============================================ */
+
+.full-height {
+    min-height: 100vh;
+}
+
+.center-vertically {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-narrow {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.4s ease-out;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+@media (max-width: 768px) {
+    :root {
+        --space-xl: 1.5rem;
+        --space-xxl: 2rem;
+    }
+
+    .portalx-card {
+        border-radius: var(--radius-md);
+        margin: 0 var(--space-md);
+    }
+
+    .portalx-btn {
+        padding: var(--space-md) var(--space-lg);
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    :root {
+        --radius-lg: var(--radius-md);
+        --radius-xl: var(--radius-lg);
+    }
+}

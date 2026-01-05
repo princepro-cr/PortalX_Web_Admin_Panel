@@ -76,60 +76,7 @@ namespace HighSchoolPortal.Controllers
             };
         }
 
-        [HttpGet]
-        public IActionResult About()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Contact()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Terms()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Help()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Error(string code = null)
-        {
-            ViewBag.ErrorCode = code;
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Maintenance()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult ComingSoon()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Features()
-        {
-            return View();
-        }
+       
 
         [HttpGet]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -158,31 +105,7 @@ namespace HighSchoolPortal.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> DirectFirebaseTest()
-        {
-            var apiKey = "AIzaSyCM6F_uaLlwF6aYrlNJ75QRlwlGdH0jDzk";
-            var email = "test" + DateTime.Now.Ticks + "@test.com";
-            var password = "Test123!";
-
-            using var httpClient = new HttpClient();
-
-            var requestData = new
-            {
-                email = email,
-                password = password,
-                returnSecureToken = true
-            };
-
-            var response = await httpClient.PostAsJsonAsync(
-                $"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={apiKey}",
-                requestData
-            );
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            return Content($"✅ Direct Firebase Test\nStatus: {response.StatusCode}\nEmail: {email}\nPassword: {password}\n\nResponse:\n{content}");
-        }
+        
 
         [HttpGet]
         public IActionResult CheckAuth()

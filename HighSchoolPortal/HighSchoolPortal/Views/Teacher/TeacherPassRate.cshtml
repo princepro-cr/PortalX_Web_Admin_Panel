@@ -1,0 +1,139 @@
+﻿@{
+    ViewData["Title"] = "Teacher Pass Rate";
+    var teacher = ViewBag.Teacher as TeacherProfile;
+    var totalStudents = ViewBag.TotalStudents;
+    var passingStudents = ViewBag.PassingStudents;
+    var passRate = ViewBag.PassRate;
+    var subjectPassRates = ViewBag.SubjectPassRates as Dictionary<string, decimal>;
+}
+
+<div class="container-fluid px-4">
+    <div class="card card-teacher">
+        <div class="card-header teacher-gradient-bg text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>
+                Pass Rate Analysis
+            </h5>
+        </div>
+        <div class="card-body">
+            <!-- Overview Card -->
+            <div class="card bg-light mb-4">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="mb-1">Overall Pass Rate</h4>
+                            <p class="text-muted mb-0">
+                                Based on @totalStudents students in your classes
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="display-1 fw-bold @GetPassRateColor(passRate)">
+                                @passRate%
+                            </div>
+                            <small class="text-muted">
+                                @passingStudents of @totalStudents students passing (GPA ≥ 2.0)
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject-wise Pass Rates -->
+            <h5 class="mb-3">Subject-wise Pass Rates</h5>
+            @if (subjectPassRates?.Any() == true)
+            {
+                <div class="row g-3 mb-4">
+                    @foreach (var subject in subjectPassRates.OrderByDescending(s => s.Value))
+                    {
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h6 class="card-title">@subject.Key</h6>
+                                    <div class="mt-3">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="fw-bold fs-4 @GetPassRateColor(subject.Value)">
+                                                @subject.Value%
+                                            </span>
+                                            <span class="badge @GetPassRateBadge(subject.Value)">
+                                                @GetPassRateLabel(subject.Value)
+                                            </span>
+                                        </div>
+                                        <div class="progress" style="height: 10px;">
+                                            <div class="progress-bar @GetPassRateProgressBar(subject.Value)"
+                                                 role="progressbar"
+                                                 style="width: @subject.Value%"
+                                                 aria-valuenow="@subject.Value"
+                                                 aria-valuemin="0"
+                                                 aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4">
+                    <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No subject pass rate data available</p>
+                </div>
+            }
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between mt-4">
+                <a href="/Teacher/Dashboard" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                </a>
+                <button class="btn btn-teacher-primary" onclick="printPassRate()">
+                    <i class="fas fa-print me-1"></i>Print Report
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function printPassRate() {
+            window.print();
+        }
+
+        // Auto-refresh data every 5 minutes
+        setTimeout(function() {
+            window.location.reload();
+        }, 300000); // 5 minutes
+    </script>
+}
+
+@functions {
+    public string GetPassRateColor(decimal rate)
+    {
+        if (rate >= 80) return "text-success";
+        if (rate >= 60) return "text-warning";
+        return "text-danger";
+    }
+
+    public string GetPassRateBadge(decimal rate)
+    {
+        if (rate >= 80) return "badge-present";
+        if (rate >= 60) return "badge-late";
+        return "badge-absent";
+    }
+
+    public string GetPassRateLabel(decimal rate)
+    {
+        if (rate >= 80) return "Excellent";
+        if (rate >= 60) return "Good";
+        return "Needs Improvement";
+    }
+
+    public string GetPassRateProgressBar(decimal rate)
+    {
+        if (rate >= 80) return "bg-success";
+        if (rate >= 60) return "bg-warning";
+        return "bg-danger";
+    }
+}

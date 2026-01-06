@@ -115,14 +115,7 @@ namespace HighSchoolPortal.Models
         public List<SubjectPerformance> SubjectPerformance { get; set; } = new List<SubjectPerformance>();
     }
 
-    public class SubjectPerformance
-    {
-        public string Subject { get; set; }
-        public decimal AverageScore { get; set; }
-        public double PassRate { get; set; }
-        public int TotalStudents { get; set; }
-    }
- 
+   
 
     public class ProfessionalDevelopment
     {

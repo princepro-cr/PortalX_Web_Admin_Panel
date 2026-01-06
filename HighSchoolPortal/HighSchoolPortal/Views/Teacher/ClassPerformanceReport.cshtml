@@ -1,0 +1,284 @@
+﻿@model ClassPerformanceReportViewModel
+@{
+    ViewData["Title"] = $"Class Performance Report - {Model.Report.ClassName}";
+}
+
+<div class="container-fluid px-4">
+    <!-- Report Header -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-0">Class Performance Report</h4>
+                    <p class="mb-0 opacity-75">
+                        @Model.Report.ClassName • @Model.Report.Subject • @Model.Report.Term Term @Model.Report.Year
+                    </p>
+                </div>
+                <div class="text-end">
+                    <button class="btn btn-light btn-sm" onclick="window.print()">
+                        <i class="fas fa-print me-1"></i>Print Report
+                    </button>
+                    <small class="d-block mt-1">Generated: @Model.GeneratedAt.ToString("MMM dd, yyyy HH:mm")</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Average Score</h6>
+                    <h2 class="@GetScoreColorClass(Model.Report.AverageScore)">@Model.Report.AverageScore</h2>
+                    <small class="text-muted">/ 100 points</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Pass Rate</h6>
+                    <h2 class="@GetPassRateColorClass(Model.Report.PassRate)">@Model.Report.PassRate%</h2>
+                    <small class="text-muted">@GetPassingCount(Model.Report) students passing</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Attendance</h6>
+                    <h2 class="@GetAttendanceColorClass(Model.Report.AttendanceRate)">@Model.Report.AttendanceRate%</h2>
+                    <small class="text-muted">@Model.Report.PresentStudents of @Model.Report.TotalStudents present</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Class Size</h6>
+                    <h2>@Model.Report.TotalStudents</h2>
+                    <small class="text-muted">Students enrolled</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grade Distribution -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Grade Distribution</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Grade</th>
+                                <th>Count</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-success">
+                                <td>A (90-100)</td>
+                                <td>@Model.Report.GradeDistribution.ACount</td>
+                                <td>@Model.Report.GradeDistribution.APercentage%</td>
+                            </tr>
+                            <tr class="table-primary">
+                                <td>B (80-89)</td>
+                                <td>@Model.Report.GradeDistribution.BCount</td>
+                                <td>@Model.Report.GradeDistribution.BPercentage%</td>
+                            </tr>
+                            <tr class="table-warning">
+                                <td>C (70-79)</td>
+                                <td>@Model.Report.GradeDistribution.CCount</td>
+                                <td>@Model.Report.GradeDistribution.CPercentage%</td>
+                            </tr>
+                            <tr class="table-info">
+                                <td>D (60-69)</td>
+                                <td>@Model.Report.GradeDistribution.DCount</td>
+                                <td>@Model.Report.GradeDistribution.DPercentage%</td>
+                            </tr>
+                            <tr class="table-danger">
+                                <td>F (Below 60)</td>
+                                <td>@Model.Report.GradeDistribution.FCount</td>
+                                <td>@Model.Report.GradeDistribution.FPercentage%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <!-- You can add a pie chart here using Chart.js -->
+                    <canvas id="gradeDistributionChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Performers -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Top Performers</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Student</th>
+                            <th>Average Score</th>
+                            <th>GPA</th>
+                            <th>Attendance</th>
+                            <th>Performance Trend</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Report.TopPerformers.Count; i++)
+                        {
+                            var student = Model.Report.TopPerformers[i];
+                            <tr>
+                                <td>#@(i + 1)</td>
+                                <td>@student.StudentName</td>
+                                <td>
+                                    <span class="badge @GetScoreBadgeClass(student.AverageScore)">
+                                        @student.AverageScore
+                                    </span>
+                                </td>
+                                <td>@student.GPA.ToString("0.00")</td>
+                                <td>@student.AttendancePercentage%</td>
+                                <td>
+                                    <span class="badge @GetTrendBadgeClass(student.PerformanceTrend)">
+                                        @student.PerformanceTrend
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations -->
+    @if (Model.Report.Recommendations.Any())
+    {
+        <div class="card mb-4">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0 text-white">Recommendations & Action Items</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    @foreach (var recommendation in Model.Report.Recommendations)
+                    {
+                        <li class="list-group-item">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            @recommendation
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+
+    <!-- Overall Remarks -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Overall Remarks</h5>
+        </div>
+        <div class="card-body">
+            <p>@Model.Report.OverallRemarks</p>
+            <div class="text-muted small">
+                Report generated by: @Model.GeneratedBy
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize grade distribution chart
+        var ctx = document.getElementById('gradeDistributionChart').getContext('2d');
+        var gradeChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['A', 'B', 'C', 'D', 'F'],
+                datasets: [{
+                    data: [
+                        @Model.Report.GradeDistribution.APercentage,
+                        @Model.Report.GradeDistribution.BPercentage,
+                        @Model.Report.GradeDistribution.CPercentage,
+                        @Model.Report.GradeDistribution.DPercentage,
+                        @Model.Report.GradeDistribution.FPercentage
+                    ],
+                    backgroundColor: [
+                        '#28a745', // Green for A
+                        '#007bff', // Blue for B
+                        '#ffc107', // Yellow for C
+                        '#17a2b8', // Cyan for D
+                        '#dc3545'  // Red for F
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
+                }
+            }
+        });
+    </script>
+}
+
+@functions {
+    public string GetScoreColorClass(decimal score)
+    {
+        if (score >= 80) return "text-success";
+        if (score >= 70) return "text-primary";
+        if (score >= 60) return "text-warning";
+        return "text-danger";
+    }
+
+    public string GetScoreBadgeClass(decimal score)
+    {
+        if (score >= 80) return "badge-present";
+        if (score >= 60) return "badge-late";
+        return "badge-absent";
+    }
+
+    public string GetPassRateColorClass(decimal rate)
+    {
+        if (rate >= 80) return "text-success";
+        if (rate >= 60) return "text-warning";
+        return "text-danger";
+    }
+
+    public string GetAttendanceColorClass(decimal rate)
+    {
+        if (rate >= 90) return "text-success";
+        if (rate >= 75) return "text-warning";
+        return "text-danger";
+    }
+
+    public string GetTrendBadgeClass(string trend)
+    {
+        return trend switch
+        {
+            "Improving" => "badge-success",
+            "Declining" => "badge-danger",
+            _ => "badge-secondary"
+        };
+    }
+
+    public string GetPassingCount(ClassPerformanceReport report)
+    {
+        var totalGrades = report.GradeDistribution.Total;
+        var failingGrades = report.GradeDistribution.FCount;
+        return (totalGrades - failingGrades).ToString();
+    }
+}

@@ -1,0 +1,365 @@
+﻿@model WeightedGrade
+@{
+    ViewData["Title"] = "Add Weighted Grade";
+    var student = ViewBag.Student as StudentProfile;
+}
+
+<div class="container-fluid px-4">
+    <div class="card card-teacher">
+        <div class="card-header teacher-gradient-bg text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-balance-scale me-2"></i>
+                Add Weighted Grade
+                @if (student != null)
+                {
+                    <span class="opacity-75">- @student.FullName</span>
+                }
+            </h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="AddWeightedGrade" method="post" id="weightedGradeForm">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="TeacherId" />
+
+                <!-- Student Info -->
+                @if (student != null)
+                {
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <img src="@student.AvatarUrl"
+                                         class="rounded-circle"
+                                         style="width: 60px; height: 60px; object-fit: cover;"
+                                         onerror="this.src='/images/default-avatar.png'">
+                                </div>
+                                <div class="col">
+                                    <h6 class="mb-1">@student.FullName</h6>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fas fa-id-card me-1"></i>@student.StudentId
+                                        <span class="mx-2">•</span>
+                                        <i class="fas fa-school me-1"></i>@student.ClassId
+                                        <span class="mx-2">•</span>
+                                        Current GPA: <strong>@student.GPA.ToString("0.00")</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <input type="hidden" asp-for="StudentId" />
+
+                <!-- Basic Info -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="Subject" class="form-label">Subject *</label>
+                        <select asp-for="Subject" class="form-select" required>
+                            <option value="">Select Subject</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="English">English</option>
+                            <option value="Science">Science</option>
+                            <option value="History">History</option>
+                            <option value="Geography">Geography</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Biology">Biology</option>
+                        </select>
+                        <span asp-validation-for="Subject" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Term" class="form-label">Term *</label>
+                        <select asp-for="Term" class="form-select" required>
+                            <option value="First">First Term</option>
+                            <option value="Second">Second Term</option>
+                            <option value="Third">Third Term</option>
+                            <option value="Final">Final Term</option>
+                        </select>
+                        <span asp-validation-for="Term" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Year" class="form-label">Year *</label>
+                        <input asp-for="Year" class="form-control" min="2020" max="2030" required />
+                        <span asp-validation-for="Year" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Assessment Scores -->
+                <h6 class="mb-3">Assessment Scores (0-100)</h6>
+                <div class="row g-3">
+                    <!-- Test 1 -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <label asp-for="Test1" class="form-label">Test 1</label>
+                                <input asp-for="Test1" class="form-control score-input"
+                                       type="number" step="0.01" min="0" max="100"
+                                       oninput="calculateTotal()" />
+                                <div class="mt-2">
+                                    <small class="text-muted">Weight: </small>
+                                    <input asp-for="Test1Weight" class="form-control weight-input"
+                                           type="number" step="0.1" min="0" max="100"
+                                           oninput="calculateTotal()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Test 2 -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <label asp-for="Test2" class="form-label">Test 2</label>
+                                <input asp-for="Test2" class="form-control score-input"
+                                       type="number" step="0.01" min="0" max="100"
+                                       oninput="calculateTotal()" />
+                                <div class="mt-2">
+                                    <small class="text-muted">Weight: </small>
+                                    <input asp-for="Test2Weight" class="form-control weight-input"
+                                           type="number" step="0.1" min="0" max="100"
+                                           oninput="calculateTotal()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Midterm -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <label asp-for="Midterm" class="form-label">Midterm</label>
+                                <input asp-for="Midterm" class="form-control score-input"
+                                       type="number" step="0.01" min="0" max="100"
+                                       oninput="calculateTotal()" />
+                                <div class="mt-2">
+                                    <small class="text-muted">Weight: </small>
+                                    <input asp-for="MidtermWeight" class="form-control weight-input"
+                                           type="number" step="0.1" min="0" max="100"
+                                           oninput="calculateTotal()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final Exam -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <label asp-for="FinalExam" class="form-label">Final Exam</label>
+                                <input asp-for="FinalExam" class="form-control score-input"
+                                       type="number" step="0.01" min="0" max="100"
+                                       oninput="calculateTotal()" />
+                                <div class="mt-2">
+                                    <small class="text-muted">Weight: </small>
+                                    <input asp-for="FinalExamWeight" class="form-control weight-input"
+                                           type="number" step="0.1" min="0" max="100"
+                                           oninput="calculateTotal()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <label asp-for="Project" class="form-label">Project</label>
+                                <input asp-for="Project" class="form-control score-input"
+                                       type="number" step="0.01" min="0" max="100"
+                                       oninput="calculateTotal()" />
+                                <div class="mt-2">
+                                    <small class="text-muted">Weight: </small>
+                                    <input asp-for="ProjectWeight" class="form-control weight-input"
+                                           type="number" step="0.1" min="0" max="100"
+                                           oninput="calculateTotal()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Class Participation -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <label asp-for="ClassParticipation" class="form-label">Participation</label>
+                                <input asp-for="ClassParticipation" class="form-control score-input"
+                                       type="number" step="0.01" min="0" max="100"
+                                       oninput="calculateTotal()" />
+                                <div class="mt-2">
+                                    <small class="text-muted">Weight: </small>
+                                    <input asp-for="ParticipationWeight" class="form-control weight-input"
+                                           type="number" step="0.1" min="0" max="100"
+                                           oninput="calculateTotal()" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weight Total Check -->
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Total Weight: <strong id="totalWeight">0</strong>%
+                    <span id="weightStatus" class="ms-2"></span>
+                </div>
+
+                <!-- Calculated Total -->
+                <div class="card bg-light mt-4">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="mb-0">Calculated Grade</h6>
+                                <small class="text-muted">Based on weighted scores</small>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <div class="me-3 text-center">
+                                        <div class="display-6 fw-bold" id="totalScoreDisplay">0.00</div>
+                                        <small class="text-muted">Out of 100</small>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-secondary fs-6" id="gradeLetterDisplay">F</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" asp-for="TotalScore" id="totalScoreInput" />
+                <input type="hidden" asp-for="GradeLetter" id="gradeLetterInput" />
+
+                <!-- Remarks -->
+                <div class="mt-4">
+                    <label asp-for="Remarks" class="form-label">Teacher's Remarks</label>
+                    <textarea asp-for="Remarks" class="form-control" rows="3"
+                              placeholder="Add comments about student's performance..."></textarea>
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="/Teacher/StudentDetails/@Model.StudentId" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>Back
+                    </a>
+                    <div>
+                        <button type="reset" class="btn btn-secondary me-2">
+                            <i class="fas fa-redo me-1"></i>Reset
+                        </button>
+                        <button type="submit" class="btn btn-teacher-primary">
+                            <i class="fas fa-save me-1"></i>Save Weighted Grade
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function calculateTotal() {
+            // Get all scores
+            const test1 = parseFloat($('#Test1').val()) || 0;
+            const test2 = parseFloat($('#Test2').val()) || 0;
+            const midterm = parseFloat($('#Midterm').val()) || 0;
+            const finalExam = parseFloat($('#FinalExam').val()) || 0;
+            const project = parseFloat($('#Project').val()) || 0;
+            const participation = parseFloat($('#ClassParticipation').val()) || 0;
+
+            // Get weights
+            const test1Weight = parseFloat($('#Test1Weight').val()) || 0;
+            const test2Weight = parseFloat($('#Test2Weight').val()) || 0;
+            const midtermWeight = parseFloat($('#MidtermWeight').val()) || 0;
+            const finalExamWeight = parseFloat($('#FinalExamWeight').val()) || 0;
+            const projectWeight = parseFloat($('#ProjectWeight').val()) || 0;
+            const participationWeight = parseFloat($('#ParticipationWeight').val()) || 0;
+
+            // Calculate weighted total
+            const weightedTotal =
+                (test1 * test1Weight / 100) +
+                (test2 * test2Weight / 100) +
+                (midterm * midtermWeight / 100) +
+                (finalExam * finalExamWeight / 100) +
+                (project * projectWeight / 100) +
+                (participation * participationWeight / 100);
+
+            // Update display
+            $('#totalScoreDisplay').text(weightedTotal.toFixed(2));
+            $('#totalScoreInput').val(weightedTotal.toFixed(2));
+
+            // Calculate grade letter
+            let gradeLetter = 'F';
+            if (weightedTotal >= 93) gradeLetter = 'A';
+            else if (weightedTotal >= 90) gradeLetter = 'A-';
+            else if (weightedTotal >= 87) gradeLetter = 'B+';
+            else if (weightedTotal >= 83) gradeLetter = 'B';
+            else if (weightedTotal >= 80) gradeLetter = 'B-';
+            else if (weightedTotal >= 77) gradeLetter = 'C+';
+            else if (weightedTotal >= 73) gradeLetter = 'C';
+            else if (weightedTotal >= 70) gradeLetter = 'C-';
+            else if (weightedTotal >= 67) gradeLetter = 'D+';
+            else if (weightedTotal >= 63) gradeLetter = 'D';
+            else if (weightedTotal >= 60) gradeLetter = 'D-';
+
+            // Update grade letter
+            $('#gradeLetterDisplay').text(gradeLetter).removeClass().addClass('badge');
+
+            // Add appropriate color
+            if (gradeLetter.startsWith('A')) {
+                $('#gradeLetterDisplay').addClass('badge-present');
+            } else if (gradeLetter.startsWith('B')) {
+                $('#gradeLetterDisplay').addClass('bg-primary text-white');
+            } else if (gradeLetter.startsWith('C')) {
+                $('#gradeLetterDisplay').addClass('badge-late');
+            } else {
+                $('#gradeLetterDisplay').addClass('badge-absent');
+            }
+
+            $('#gradeLetterInput').val(gradeLetter);
+
+            // Calculate total weight
+            const totalWeight = test1Weight + test2Weight + midtermWeight +
+                              finalExamWeight + projectWeight + participationWeight;
+
+            $('#totalWeight').text(totalWeight.toFixed(1));
+
+            // Check weight status
+            const weightStatus = $('#weightStatus');
+            weightStatus.removeClass().addClass('ms-2');
+
+            if (Math.abs(totalWeight - 100) < 0.1) {
+                weightStatus.html('<i class="fas fa-check-circle text-success"></i> Perfect!');
+            } else if (Math.abs(totalWeight - 100) < 5) {
+                weightStatus.html('<i class="fas fa-exclamation-triangle text-warning"></i> Close');
+            } else {
+                weightStatus.html('<i class="fas fa-times-circle text-danger"></i> Adjust weights');
+            }
+        }
+
+        $(document).ready(function() {
+            // Calculate on page load
+            calculateTotal();
+
+            // Form validation
+            $('#weightedGradeForm').on('submit', function(e) {
+                const totalWeight = parseFloat($('#totalWeight').text());
+
+                if (Math.abs(totalWeight - 100) > 5) {
+                    e.preventDefault();
+                    if (!confirm(`Total weight is ${totalWeight.toFixed(1)}% (should be 100%). Continue anyway?`)) {
+                        return false;
+                    }
+                }
+
+                // Show loading
+                const submitBtn = $(this).find('button[type="submit"]');
+                const originalText = submitBtn.html();
+                submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i>Saving...');
+
+                return true;
+            });
+        });
+    </script>
+}

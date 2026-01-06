@@ -425,6 +425,335 @@ namespace HighSchoolPortal.Controllers
                 return View();
             }
         }
+        // Add to TeacherController
+
+        [HttpGet]
+        public async Task<IActionResult> AddWeightedGrade(string studentId = "", string subject = "")
+        {
+            var grade = new WeightedGrade
+            {
+                StudentId = studentId,
+                Subject = subject,
+                Term = "First",
+                Year = DateTime.Now.Year,
+                DateRecorded = DateTime.Now,
+                TeacherId = _teacherId
+            };
+
+            // Get student for verification
+            if (!string.IsNullOrEmpty(studentId))
+            {
+                var student = await _schoolService.GetStudentByIdAsync(studentId);
+                if (student != null)
+                {
+                    ViewBag.Student = student;
+                }
+            }
+
+            ViewBag.Terms = new List<string> { "First", "Second", "Third", "Final" };
+            ViewBag.Subjects = GetSubjectList();
+            ViewBag.CurrentYear = DateTime.Now.Year;
+
+            return View(grade);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddWeightedGrade(WeightedGrade grade)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    ViewBag.Terms = new List<string> { "First", "Second", "Third", "Final" };
+                    ViewBag.Subjects = GetSubjectList();
+                    ViewBag.CurrentYear = DateTime.Now.Year;
+                    return View(grade);
+                }
+
+                // Verify student exists and is in teacher's class
+                var student = await _schoolService.GetStudentByIdAsync(grade.StudentId);
+                if (student == null)
+                {
+                    TempData["ErrorMessage"] = "Student not found.";
+                    return RedirectToAction("MyStudents");
+                }
+
+                // Check if student is in teacher's class
+                var teacher = await _schoolService.GetTeacherByIdAsync(_teacherId);
+                if (!teacher?.Classes?.Contains(student.ClassId) == true)
+                {
+                    TempData["ErrorMessage"] = "You can only add grades for students in your classes.";
+                    return RedirectToAction("MyStudents");
+                }
+
+                // Calculate weighted total
+                grade.CalculateWeightedTotal();
+
+                // Set teacher ID
+                grade.TeacherId = _teacherId;
+
+                // Save grade (you'll need to implement this method in FirebaseSchoolService)
+                var result = await _schoolService.AddWeightedGradeAsync(grade);
+
+                if (result != null)
+                {
+                    TempData["SuccessMessage"] = $"Weighted grade added successfully for {student.FullName}!";
+                    return RedirectToAction("StudentDetails", new { id = student.Id });
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Failed to add grade. Please try again.";
+                    ViewBag.Terms = new List<string> { "First", "Second", "Third", "Final" };
+                    ViewBag.Subjects = GetSubjectList();
+                    ViewBag.CurrentYear = DateTime.Now.Year;
+                    return View(grade);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding weighted grade");
+                TempData["ErrorMessage"] = $"Error adding grade: {ex.Message}";
+                ViewBag.Terms = new List<string> { "First", "Second", "Third", "Final" };
+                ViewBag.Subjects = GetSubjectList();
+                ViewBag.CurrentYear = DateTime.Now.Year;
+                return View(grade);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GenerateStudentReport(string studentId, string term = "", int year = 0)
+        {
+            if (string.IsNullOrEmpty(studentId))
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                // Verify student is in teacher's class
+                var student = await _schoolService.GetStudentByIdAsync(studentId);
+                if (student == null)
+                {
+                    return NotFound();
+                }
+
+                var teacher = await _schoolService.GetTeacherByIdAsync(_teacherId);
+                if (!teacher?.Classes?.Contains(student.ClassId) == true)
+                {
+                    TempData["ErrorMessage"] = "You can only generate reports for students in your classes.";
+                    return RedirectToAction("MyStudents");
+                }
+
+                // Use current term/year if not specified
+                term = string.IsNullOrEmpty(term) ? "First" : term;
+                year = year == 0 ? DateTime.Now.Year : year;
+
+                // Get student report
+                var report = await _schoolService.GetStudentReportAsync(studentId, term, year);
+
+                // Get teacher's pass rate
+                var passRate = await _schoolService.GetTeacherPassRateAsync(_teacherId);
+
+                ViewBag.Report = report;
+                ViewBag.TeacherPassRate = passRate;
+                ViewBag.Student = student;
+                ViewBag.Term = term;
+                ViewBag.Year = year;
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error generating report for student: {studentId}");
+                TempData["ErrorMessage"] = "Error generating report.";
+                return RedirectToAction("StudentDetails", new { id = studentId });
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> ClassPerformanceReport(string classId, string term = "", int year = 0)
+        {
+            try
+            {
+                term = string.IsNullOrEmpty(term) ? "First" : term;
+                year = year == 0 ? DateTime.Now.Year : year;
+
+                // Generate the report
+                var report = await _schoolService.GetClassPerformanceReportAsync(classId, term, year);
+
+                // Get class details for display
+                var classDetails = await _schoolService.GetClassByIdAsync(classId);
+
+                var viewModel = new ClassPerformanceReportViewModel
+                {
+                    Report = report,
+                    GeneratedAt = DateTime.Now,
+                    GeneratedBy = User.Identity?.Name ?? "System"
+                };
+
+                ViewBag.ClassDetails = classDetails;
+                ViewBag.Term = term;
+                ViewBag.Year = year;
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error generating class performance report for class {classId}");
+                TempData["ErrorMessage"] = "Error generating report.";
+                return RedirectToAction("MyClasses");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TeacherPassRate()
+        {
+            try
+            {
+                var teacher = await _schoolService.GetTeacherByIdAsync(_teacherId);
+                var teacherStudents = await _schoolService.GetStudentsByTeacherAsync(_teacherId);
+
+                // Calculate pass rate
+                int totalStudents = teacherStudents.Count;
+                int passingStudents = teacherStudents.Count(s => s.GPA >= 2.0m);
+                decimal passRate = totalStudents > 0 ? Math.Round((decimal)passingStudents / totalStudents * 100, 2) : 0;
+
+                // Calculate by subject if available
+                var subjectPassRates = new Dictionary<string, decimal>();
+                foreach (var student in teacherStudents)
+                {
+                    var grades = await _schoolService.GetStudentGradesAsync(student.Id);
+                    if (grades != null)
+                    {
+                        var subjectGroups = grades.GroupBy(g => g.Subject);
+                        foreach (var group in subjectGroups)
+                        {
+                            var subject = group.Key;
+                            var subjectGrades = group.ToList();
+                            var avgScore = subjectGrades.Average(g => g.TotalScore);
+                            var isPassing = avgScore >= 60; // 60% is passing
+
+                            if (!subjectPassRates.ContainsKey(subject))
+                            {
+                                subjectPassRates[subject] = 0;
+                            }
+
+                            if (isPassing)
+                            {
+                                subjectPassRates[subject]++;
+                            }
+                        }
+                    }
+                }
+
+                // Convert counts to percentages
+                foreach (var subject in subjectPassRates.Keys.ToList())
+                {
+                    var studentCount = teacherStudents.Count(s =>
+                        s.EnrolledSubjects?.Contains(subject) == true);
+                    if (studentCount > 0)
+                    {
+                        subjectPassRates[subject] = Math.Round(subjectPassRates[subject] / studentCount * 100, 2);
+                    }
+                }
+
+                ViewBag.Teacher = teacher;
+                ViewBag.TotalStudents = totalStudents;
+                ViewBag.PassingStudents = passingStudents;
+                ViewBag.PassRate = passRate;
+                ViewBag.SubjectPassRates = subjectPassRates;
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error calculating teacher pass rate");
+                TempData["ErrorMessage"] = "Error calculating pass rate.";
+                return View();
+            }
+        }
+
+        // Helper method for report card view
+        [HttpGet]
+        public async Task<IActionResult> ViewReportCard(string studentId)
+        {
+            if (string.IsNullOrEmpty(studentId))
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                var student = await _schoolService.GetStudentByIdAsync(studentId);
+                if (student == null)
+                {
+                    return NotFound();
+                }
+
+                // Verify access
+                var teacher = await _schoolService.GetTeacherByIdAsync(_teacherId);
+                if (!teacher?.Classes?.Contains(student.ClassId) == true)
+                {
+                    TempData["ErrorMessage"] = "You don't have access to this student's report card.";
+                    return RedirectToAction("MyStudents");
+                }
+
+                // Get all grades for the student
+                var grades = await _schoolService.GetStudentGradesAsync(studentId);
+
+                // Group by term and year
+                var termGrades = grades?.GroupBy(g => new { g.Term, g.Year })
+                    .Select(g => new
+                    {
+                        Term = g.Key.Term,
+                        Year = g.Key.Year,
+                        Grades = g.ToList(),
+                        Average = g.Average(x => x.TotalScore)
+                    })
+                    .OrderByDescending(g => g.Year)
+                    .ThenBy(g => g.Term)
+                    .ToList();
+
+                // Calculate statistics
+                var stats = new
+                {
+                    TotalGrades = grades?.Count() ?? 0,
+                    AverageScore = grades?.Any() == true ? Math.Round(grades.Average(g => g.TotalScore), 2) : 0,
+                    BestSubject = grades?.GroupBy(g => g.Subject)
+                        .Select(g => new
+                        {
+                            Subject = g.Key,
+                            Average = Math.Round(g.Average(x => x.TotalScore), 2)
+                        })
+                        .OrderByDescending(g => g.Average)
+                        .FirstOrDefault(),
+                    NeedsImprovement = grades?.GroupBy(g => g.Subject)
+                        .Select(g => new
+                        {
+                            Subject = g.Key,
+                            Average = Math.Round(g.Average(x => x.TotalScore), 2)
+                        })
+                        .OrderBy(g => g.Average)
+                        .FirstOrDefault()
+                };
+
+                ViewBag.Student = student;
+                ViewBag.TermGrades = termGrades;
+                ViewBag.Stats = stats;
+                ViewBag.CurrentTerm = "First"; // Default term
+                ViewBag.CurrentYear = DateTime.Now.Year;
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error loading report card for student: {studentId}");
+                TempData["ErrorMessage"] = "Error loading report card.";
+                return RedirectToAction("StudentDetails", new { id = studentId });
+            }
+        }
+
+
 
         // My Classes - New page showing teacher's assigned classes
         [HttpGet]

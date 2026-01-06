@@ -942,28 +942,72 @@ namespace HighSchoolPortal.Services
         {
             try
             {
-                // Get teacher profile
+                // Get teacher's classes
                 var teacher = await GetTeacherByIdAsync(teacherId);
-                if (teacher == null || teacher.Classes == null || !teacher.Classes.Any())
-                {
+                if (teacher?.Classes == null || !teacher.Classes.Any())
                     return new List<StudentProfile>();
-                }
 
-                // Get all students
+                // Get all students and filter by teacher's classes
                 var allStudents = await GetAllStudentsAsync();
-
-                // Filter students who are in teacher's classes
-                var teacherStudents = allStudents
-                    .Where(s => !string.IsNullOrEmpty(s.ClassId) &&
-                               teacher.Classes.Contains(s.ClassId))
+                return allStudents
+                    .Where(s => teacher.Classes.Contains(s.ClassId))
                     .ToList();
-
-                return teacherStudents;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error getting students for teacher: {teacherId}");
+                _logger.LogError(ex, $"Error getting students for teacher {teacherId}");
                 return new List<StudentProfile>();
+            }
+        }
+
+        public async Task<decimal> GetTeacherPassRateAsync(string teacherId)
+        {
+            try
+            {
+                var teacherStudents = await GetStudentsByTeacherAsync(teacherId);
+                if (!teacherStudents.Any())
+                    return 0;
+
+                var passingStudents = teacherStudents.Count(s => s.GPA >= 2.0m);
+                return Math.Round((decimal)passingStudents / teacherStudents.Count * 100, 2);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error calculating pass rate for teacher {teacherId}");
+                return 0;
+            }
+        }
+
+        public async Task<Grade> AddWeightedGradeAsync(WeightedGrade grade)
+        {
+            try
+            {
+                // Convert WeightedGrade to regular Grade for compatibility
+                var regularGrade = new Grade
+                {
+                    Id = grade.Id,
+                    StudentId = grade.StudentId,
+                    Subject = grade.Subject,
+                    Term = grade.Term,
+                    Year = grade.Year,
+                    Test1 = grade.Test1,
+                    Test2 = grade.Test2,
+                    Exam = grade.FinalExam,
+                    Assignment = grade.Project, // Using Project as Assignment for compatibility
+                    TotalScore = grade.TotalScore,
+                    GradeLetter = grade.GradeLetter,
+                    Remarks = grade.Remarks,
+                    DateRecorded = grade.DateRecorded,
+                    TeacherId = grade.TeacherId
+                };
+
+                regularGrade.CalculateTotal(); // Ensure total is calculated
+                return await AddGradeAsync(regularGrade);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error adding weighted grade for student {grade.StudentId}");
+                return null;
             }
         }
 
@@ -1569,7 +1613,323 @@ namespace HighSchoolPortal.Services
 
             return statistics;
         }
-        #endregion
+        // In FirebaseSchoolService.cs - Add these methods
+        public async Task<ClassPerformanceReport> GenerateClassPerformanceReportAsync(string classId, string term, int year)
+        {
+            try
+            {
+                var report = new ClassPerformanceReport
+                {
+                    ClassId = classId,
+                    Term = term,
+                    Year = year,
+                    ReportDate = DateTime.UtcNow
+                };
+
+                // Get class details
+                var classDetails = await GetClassByIdAsync(classId);
+                if (classDetails != null)
+                {
+                    report.ClassName = classDetails.Name;
+                    report.TeacherId = classDetails.TeacherId;
+                    report.TeacherName = classDetails.TeacherName;
+                    report.Subject = classDetails.Subject;
+                }
+
+                // Get students in this class
+                var students = await GetStudentsByClassIdAsync(classId);
+                report.TotalStudents = students.Count;
+
+                if (report.TotalStudents == 0)
+                {
+                    return report; // Return empty report if no students
+                }
+
+                // Collect grades for all students in this class and subject
+                var allGrades = new List<Grade>();
+                foreach (var student in students)
+                {
+                    var studentGrades = await GetStudentGradesAsync(student.Id);
+                    if (studentGrades != null)
+                    {
+                        // Filter by subject and term/year if specified
+                        var filteredGrades = studentGrades
+                            .Where(g => g.Subject == report.Subject &&
+                                        g.Term == term &&
+                                        g.Year == year)
+                            .ToList();
+
+                        allGrades.AddRange(filteredGrades);
+                    }
+                }
+
+                // Calculate statistics if we have grades
+                if (allGrades.Any())
+                {
+                    report.AverageScore = Math.Round(allGrades.Average(g => g.TotalScore), 2);
+
+                    // Calculate grade distribution
+                    report.GradeDistribution = new GradeDistribution
+                    {
+                        ACount = allGrades.Count(g => g.TotalScore >= 90),
+                        BCount = allGrades.Count(g => g.TotalScore >= 80 && g.TotalScore < 90),
+                        CCount = allGrades.Count(g => g.TotalScore >= 70 && g.TotalScore < 80),
+                        DCount = allGrades.Count(g => g.TotalScore >= 60 && g.TotalScore < 70),
+                        FCount = allGrades.Count(g => g.TotalScore < 60)
+                    };
+
+                    // Calculate pass rate
+                    var passingGrades = allGrades.Count(g => g.TotalScore >= 60);
+                    report.PassRate = Math.Round((decimal)passingGrades / allGrades.Count * 100, 2);
+                    report.FailRate = 100 - report.PassRate;
+
+                    // Calculate average GPA for the class
+                    report.AverageGPA = students.Any() ?
+                        Math.Round(students.Average(s => s.GPA), 2) : 0;
+                }
+
+                // Get attendance data for the class
+                try
+                {
+                    // Get recent attendance (last 30 days)
+                    var thirtyDaysAgo = DateTime.Today.AddDays(-30);
+                    var recentAttendance = new List<Attendance>();
+
+                    // You might need to implement GetClassAttendanceByDateRangeAsync
+                    // For now, let's get today's attendance as a sample
+                    var todayAttendance = await GetClassAttendanceAsync(classId, DateTime.Today);
+                    if (todayAttendance != null)
+                    {
+                        recentAttendance.AddRange(todayAttendance);
+                    }
+
+                    if (recentAttendance.Any())
+                    {
+                        var presentCount = recentAttendance.Count(a => a.Status == "Present");
+                        report.PresentStudents = presentCount;
+                        report.AbsentStudents = report.TotalStudents - presentCount;
+                        report.AttendanceRate = Math.Round((decimal)presentCount / (recentAttendance.Count) * 100, 2);
+                    }
+                }
+                catch (Exception attendanceEx)
+                {
+                    _logger.LogWarning(attendanceEx, "Could not load attendance data for class {ClassId}", classId);
+                    // Continue without attendance data
+                }
+
+                // Identify top performers (students with highest average scores)
+                var studentAverages = new List<(StudentProfile student, decimal avgScore)>();
+                foreach (var student in students)
+                {
+                    var studentGrades = allGrades.Where(g => g.StudentId == student.Id).ToList();
+                    if (studentGrades.Any())
+                    {
+                        var avgScore = Math.Round(studentGrades.Average(g => g.TotalScore), 2);
+                        studentAverages.Add((student, avgScore));
+                    }
+                }
+
+                // Top 5 performers
+                report.TopPerformers = studentAverages
+                    .OrderByDescending(x => x.avgScore)
+                    .Take(5)
+                    .Select((x, index) => new StudentRanking
+                    {
+                        StudentId = x.student.Id,
+                        StudentName = x.student.FullName,
+                        AverageScore = x.avgScore,
+                        GPA = x.student.GPA,
+                        AttendancePercentage = x.student.AttendancePercentage,
+                        Rank = $"#{index + 1}",
+                        PerformanceTrend = "Stable" // You could calculate trend by comparing with previous terms
+                    })
+                    .ToList();
+
+                // Students needing improvement (bottom 5)
+                report.NeedImprovement = studentAverages
+                    .OrderBy(x => x.avgScore)
+                    .Take(5)
+                    .Select((x, index) => new StudentRanking
+                    {
+                        StudentId = x.student.Id,
+                        StudentName = x.student.FullName,
+                        AverageScore = x.avgScore,
+                        GPA = x.student.GPA,
+                        AttendancePercentage = x.student.AttendancePercentage,
+                        Rank = "Needs Improvement",
+                        AreasToImprove = new List<string> { "Focus on key concepts", "Complete all assignments" }
+                    })
+                    .ToList();
+
+                // Generate recommendations based on performance
+                report.Recommendations = GeneratePerformanceRecommendations(report);
+
+                // Overall remarks
+                report.OverallRemarks = GenerateOverallRemarks(report);
+
+                return report;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating class performance report for class {ClassId}", classId);
+                throw;
+            }
+        }
+
+        public async Task<ClassPerformanceReport> GenerateClassPerformanceReportAsync(ClassPerformanceReportRequest request)
+        {
+            return await GenerateClassPerformanceReportAsync(request.ClassId, request.Term, request.Year);
+        }
+
+        
+
+     
+
+        // Helper method to get class grades
+        public async Task<List<Grade>> GetClassGradesAsync(string classId, string subject, string term, int year)
+        {
+            try
+            {
+                var students = await GetStudentsByClassIdAsync(classId);
+                var allGrades = new List<Grade>();
+
+                foreach (var student in students)
+                {
+                    var studentGrades = await GetStudentGradesAsync(student.Id);
+                    if (studentGrades != null)
+                    {
+                        var filteredGrades = studentGrades
+                            .Where(g => g.Subject == subject &&
+                                        g.Term == term &&
+                                        g.Year == year)
+                            .ToList();
+
+                        allGrades.AddRange(filteredGrades);
+                    }
+                }
+
+                return allGrades;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting class grades for class {ClassId}", classId);
+                return new List<Grade>();
+            }
+        }
+
+        // Helper methods for recommendations
+        private List<string> GeneratePerformanceRecommendations(ClassPerformanceReport report)
+        {
+            var recommendations = new List<string>();
+
+            if (report.PassRate < 70)
+            {
+                recommendations.Add("Consider additional review sessions for key concepts.");
+                recommendations.Add("Provide extra practice materials for struggling students.");
+            }
+
+            if (report.GradeDistribution.FPercentage > 20)
+            {
+                recommendations.Add("Implement one-on-one tutoring sessions for students with F grades.");
+                recommendations.Add("Review assessment difficulty and provide more formative assessments.");
+            }
+
+            if (report.AttendanceRate < 85)
+            {
+                recommendations.Add("Address attendance concerns - contact parents of frequently absent students.");
+                recommendations.Add("Implement attendance incentives for improved participation.");
+            }
+
+            if (report.AverageScore < 70)
+            {
+                recommendations.Add("Break down complex topics into smaller, more manageable lessons.");
+                recommendations.Add("Incorporate more hands-on activities and interactive learning.");
+            }
+
+            // Add positive reinforcement for good performance
+            if (report.PassRate > 85 && report.AverageScore > 75)
+            {
+                recommendations.Add("Maintain current teaching strategies - class is performing well.");
+                recommendations.Add("Challenge top performers with advanced materials or projects.");
+            }
+
+            return recommendations;
+        }
+
+        private string GenerateOverallRemarks(ClassPerformanceReport report)
+        {
+            if (report.TotalStudents == 0)
+            {
+                return "No students enrolled in this class.";
+            }
+
+            if (report.PassRate >= 85 && report.AverageScore >= 80)
+            {
+                return $"Excellent performance! Class is achieving strong results with {report.PassRate}% pass rate and {report.AverageScore} average score.";
+            }
+            else if (report.PassRate >= 70 && report.AverageScore >= 70)
+            {
+                return $"Good performance overall. Consider focusing on the {report.NeedImprovement.Count} students who need additional support.";
+            }
+            else if (report.PassRate >= 60 && report.AverageScore >= 60)
+            {
+                return $"Satisfactory performance. Areas for improvement identified. Implement recommendations to boost performance.";
+            }
+            else
+            {
+                return $"Performance needs attention. Focus on core concepts and provide additional support to struggling students.";
+            }
+        }
+        private GradeDistribution CalculateGradeDistribution(List<Grade> grades)
+        {
+            var distribution = new GradeDistribution
+            {
+                ACount = grades.Count(g => g.TotalScore >= 90),
+                BCount = grades.Count(g => g.TotalScore >= 80 && g.TotalScore < 90),
+                CCount = grades.Count(g => g.TotalScore >= 70 && g.TotalScore < 80),
+                DCount = grades.Count(g => g.TotalScore >= 60 && g.TotalScore < 70),
+                FCount = grades.Count(g => g.TotalScore < 60)
+            };
+
+            return distribution;
+        }
+
+        private List<string> GenerateRecommendations(ClassPerformanceReport report)
+        {
+            var recommendations = new List<string>();
+
+            if (report.PassRate < 70)
+            {
+                recommendations.Add("Implement additional tutoring sessions for struggling students.");
+            }
+
+            if (report.AttendanceRate < 85)
+            {
+                recommendations.Add("Address attendance issues - contact parents of frequently absent students.");
+            }
+
+            if (report.GradeDistribution.FPercentage > 20)
+            {
+                recommendations.Add("Review assessment methods - consider alternative evaluation approaches.");
+            }
+
+            if (report.AverageScore < 70)
+            {
+                recommendations.Add("Provide more practice materials and review sessions.");
+            }
+
+            return recommendations;
+        }
+
+        public Task<List<Class>> GetClassesByTeacherAsync(string teacherId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<StudentReport> GetStudentReportAsync(string studentId, string term, int year)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     #region Additional Models
@@ -1598,3 +1958,4 @@ namespace HighSchoolPortal.Services
     }
     #endregion
 }
+#endregion

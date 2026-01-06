@@ -57,5 +57,30 @@ namespace HighSchoolPortal.Interfaces
 
        // HR can assign teachers to classes and subjects
     Task<TeacherAssignment> AssignTeacherToClassesAsync(string teacherId, List<string> classIds, List<string> subjects);
-    }
+
+         
+
+        // Get classes by teacher
+        Task<List<Class>> GetClassesByTeacherAsync(string teacherId);
+
+        // Get teacher's pass rate
+        Task<decimal> GetTeacherPassRateAsync(string teacherId);
+
+        // Add weighted grade
+        Task<Grade> AddWeightedGradeAsync(WeightedGrade grade);
+
+        // Get student report
+        Task<StudentReport> GetStudentReportAsync(string studentId, string term, int year);
+
+        Task<ClassPerformanceReport> GenerateClassPerformanceReportAsync(string classId, string term, int year);
+        Task<ClassPerformanceReport> GenerateClassPerformanceReportAsync(ClassPerformanceReportRequest request);
+
+        // Helper methods
+         Task<List<Grade>> GetClassGradesAsync(string classId, string subject, string term, int year);
+ 
+        public Task<ClassPerformanceReport> GetClassPerformanceReportAsync(string classId, string term, int year)
+        {
+            throw new NotImplementedException();
+        }
+     }
 }
